@@ -1,5 +1,6 @@
 'use strict';
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 // import Screen from './Screen';
 import { Container } from 'semantic-ui-react';
 
@@ -9,6 +10,11 @@ import Footer from '../includes/Footer';
 // const logo = require('../img/rayasem-logo-color.png');
 
 export default function () {
+  const { redirect } = this.state;
+
+  if (redirect) {
+    return <Redirect to='/login' />;
+  }
   return (
       <div>
         <Header />

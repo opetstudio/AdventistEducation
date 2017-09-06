@@ -46,3 +46,6 @@ Adventist Education Digital Assistant for School Reporting
       case 4: return 'xxxhdpi';
     }
   }
+
+### References
+  https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-a-css-preprocessor-sass-less-etc

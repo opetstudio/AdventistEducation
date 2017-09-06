@@ -1,11 +1,11 @@
 {
-	"name": "AdventistEducation",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"test": "jest",
-		"start-web": "NODE_ENV=development PORT=3006 react-scripts start",
+  "name": "AdventistEducation",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest",
+    "start-web": "NODE_ENV=development PORT=3006 react-scripts start",
     "start-web-prod": "NODE_ENV=production PORT=3006 react-scripts start",
     "build-web": "react-scripts build",
     "test-web": "react-scripts test --env=jsdom",
@@ -13,23 +13,34 @@
     "electron": "NODE_ENV=development electron .",
     "electron-prod": "NODE_ENV=production electron .",
     "react-devtools": "react-devtools",
-    "android-bundle": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android"
-	},
-	"dependencies": {
-		"react": "16.0.0-alpha.12",
-		"react-native": "0.48.1",
-		"@shoutem/ui": "^0.21.3",
+    "android-bundle": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android",
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+    "start-webdesk": "npm-run-all -p watch-css start-web",
+    "build-webdesk": "npm run build-css && react-scripts build",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron Tutorial App\"",
+    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
+  },
+  "dependencies": {
+    "@shoutem/ui": "^0.21.3",
     "base-64": "^0.1.0",
+    "bootstrap": "^3.3.7",
+    "classnames": "^2.2.5",
     "electron": "~1.6.2",
+    "electronify-server": "^0.6.2",
     "eslint-config-rallycoding": "^3.2.0",
     "firebase": "^4.3.0",
     "history": "^4.7.1",
     "lodash": "^4.17.4",
+    "node-sass-chokidar": "0.0.3",
+    "npm-run-all": "^4.1.1",
     "object-assign": "^4.1.1",
     "prop-types": "^15.5.10",
-    "react": "16.0.0-alpha.12",
-    "react-dom": "16.0.0-alpha.12",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
     "react-hot-loader": "^1.3.1",
+    "react-native": "0.48.1",
     "react-native-contacts": "^0.9.0",
     "react-native-device-info": "^0.11.0",
     "react-native-fcm": "^9.1.0",
@@ -46,20 +57,22 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^4.9.1",
     "redux-thunk": "^2.2.0",
-    "semantic-ui-react": "^0.71.5"
-	},
-	"devDependencies": {
-		"babel-jest": "21.0.0",
-		"babel-preset-react-native": "3.0.2",
-		"jest": "21.0.0",
-		"react-test-renderer": "16.0.0-alpha.12",
-		"react-devtools": "^2.5.0",
-    "react-scripts": "^1.0.11"
-	},
-	"main": "src/electron-starter.js",
-	"jest": {
-		"preset": "react-native"
-	},
-	"author": "opetstudio",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.72.0"
+  },
+  "devDependencies": {
+    "babel-jest": "21.0.0",
+    "babel-preset-react-native": "3.0.2",
+    "electron-packager": "^9.0.1",
+    "jest": "21.0.0",
+    "react-devtools": "^2.5.0",
+    "react-scripts": "1.0.13",
+    "react-test-renderer": "16.0.0-alpha.12"
+  },
+  "main": "src/electron-starter.js",
+  "jest": {
+    "preset": "react-native"
+  },
+  "author": "opetstudio",
   "license": "MIT"
 }
