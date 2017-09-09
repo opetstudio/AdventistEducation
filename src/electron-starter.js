@@ -5,7 +5,7 @@ const electron = require('electron');
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
-const env = 'production';
+const env = process.env.NODE_ENV;
 // const env = 'development';
 
 // document.getElementById('close-btn').addEventListener("click", function (e) {

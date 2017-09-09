@@ -1,0 +1,30 @@
+
+$profilepicture-width: 135px;
+
+.profileInfoRightMenuWrapper {
+  background-color: #fff;
+  height: 40px;
+}
+.profileInfoRightMenuleft {
+  display: inline-block;
+  width: 50%;
+}
+.profileInfoRightMenuRight{
+  position: relative;
+  display: inline-block;
+  width: 50%;
+}
+.profileInfoRightMenuRight .button:hover {
+  opacity: 0.8 !important;
+}
+.menuVerticalWrapper {
+  width: 100%;
+}
+.menuVerticalLeft {
+  display: inline-block;
+  width: 50%;
+}
+.menuVerticalRight {
+  display: inline-block;
+  width: 50%;
+}

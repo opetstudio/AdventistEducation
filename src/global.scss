@@ -1,0 +1,14 @@
+/*
+* global.scss
+*/
+
+$leftside-width: 210px;
+
+.headerMenuWrapper {
+  color: #333;
+  //height: 50px;
+}
+
+.containerWrapper {
+  margin-left: $leftside-width;
+}

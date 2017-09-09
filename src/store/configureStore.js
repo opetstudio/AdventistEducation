@@ -10,7 +10,8 @@ import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 
 import rootReducer from '../reducers';
-import * as fetchDataActions from '../actions/fetchData';
+// import * as fetchDataActions from '../actions/fetchData';
+import * as AdminAction from '../actions/AdminAction';
 
 // import type { dataReducerStateType } from '../reducers/dataReducer';
 
@@ -47,7 +48,7 @@ const configureStore = (initialState?: counterStateType) => {
 
   // Redux DevTools Configuration
   const actionCreators = {
-    ...fetchDataActions,
+    ...AdminAction,
     ...routerActions,
   };
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose

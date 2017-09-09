@@ -1,0 +1,25 @@
+
+.profileInfoRight {
+  background-color: #00bff3;
+  white-space: nowrap;
+  height: 147px;
+}
+.profileInfoRight h1{
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 3.5em;
+}
+.profileInfoRight h3{
+  padding-top: 10px;
+  margin-bottom: 0;
+}
+.profileInfoRight h1, .profileInfoRight h3, .profileInfoRight span {
+  padding-left: 10px;
+}
+.profileInfoRight h1, .profileInfoRight h3{
+  color: #fff;
+}
+.profileInfoRight span {
+  color: red;
+  font-size: 3em;
+}

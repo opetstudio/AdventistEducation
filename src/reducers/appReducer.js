@@ -6,9 +6,19 @@ import {
   ADD_CONTACT_SUCCESS,
   LIST_USER_CONTACTS,
   MODIFICATION_MESSAGE,
-  SEND_MESSAGE_SUCCESS } from '../constants';
+  SEND_MESSAGE_SUCCESS,
+  MODIFICATION_TITLE_ADMIN,
+  GOTO_SUB_ADMIN_PAGE,
+  SUCCESS_LOGIN_SESSION } from '../constants';
+
+
+const initial_admin_page = {
+  title_admin: '',
+  current_sub_admin_path: 'admin' //page default untuk admin
+};
 
 const INITIAL_STATE = {
+  ...initial_admin_page,
   add_contact_email: '',
   add_contact_name: '',
   account_result_error_message: '',
@@ -22,6 +32,21 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         add_contact_email: action.payload
+      };
+    case GOTO_SUB_ADMIN_PAGE:
+      return {
+        ...state,
+        current_sub_admin_path: action.payload
+      };
+    case SUCCESS_LOGIN_SESSION:
+      return {
+        ...state,
+        current_sub_admin_path: 'admin'
+      };
+    case MODIFICATION_TITLE_ADMIN:
+      return {
+        ...state,
+        title_admin: action.payload
       };
     case MODIFICATION_CONTACT_NAME:
       return {

@@ -1,0 +1,16 @@
+$statusbar-height: 45px;
+$leftside-width: 210px;
+$profilepicture-width: 135px;
+$profilepicture-height: 187px;
+
+.contentTop {
+  background-color: #00bff3;
+  position: relative;
+  height: $profilepicture-height;
+}
+.sideBarWrapper{
+  background: #232c33;
+  width: $leftside-width;
+  float: left;
+  height: 100vh;
+}

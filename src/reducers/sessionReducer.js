@@ -6,11 +6,28 @@ import {
   RE_ENTER_PHONE_NUMBER,
   RE_SMS_VERIFICATION_CODE_IN_PROGRESS,
   RE_SMS_VERIFICATION_CODE_SUCCESS,
-  RESET_INPUT_VERIFICATION_CODE_FORM
+  RESET_INPUT_VERIFICATION_CODE_FORM,
+  MODIFICATION_DATETIMELOGIN_SESSION,
+  SUCCESS_LOGIN_SESSION,
+  MODIFICATION_PASSWORD_SESSION,
+  MODIFICATION_USERNAME_SESSION,
+  SESSION_LOGIN_IN_PROGRESS,
+  FAILED_LOGIN_SESSION,
+  SESSION_LOG_OUT
 } from '../constants';
 
 const initialSession = {
   sessionPhoneNumber: ''
+};
+
+//for webdesktop
+const initialSessionWebDesk = {
+  dateTimeLogin: 0,
+  isLogin: false,
+  username: '',
+  password: '',
+  submitLoginUserPassInProgress: false,
+  loginErrorMessage: ''
 };
 
 const initialLoginWithPhoneNumberState = {
@@ -20,12 +37,13 @@ const initialLoginWithPhoneNumberState = {
   submitVerificationCodeInProgress: false,
   reSmsVerificationCodeInProgress: false,
   submitPhoneNumberErrorMessage: '',
-  submitVerificationCodeErrorMessage: ''
+  submitVerificationCodeErrorMessage: '',
 };
 
 const INITIAL_STATE = {
   ...initialSession,
-  ...initialLoginWithPhoneNumberState
+  ...initialLoginWithPhoneNumberState,
+  ...initialSessionWebDesk
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -41,6 +59,11 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         submitPhoneNumberInProgress: true
       };
+    case SESSION_LOGIN_IN_PROGRESS:
+      return {
+        ...state,
+        submitLoginUserPassInProgress: true
+      };
     case RE_SMS_VERIFICATION_CODE_IN_PROGRESS:
       return {
         ...state,
@@ -52,29 +75,45 @@ export default (state = INITIAL_STATE, action) => {
         reSmsVerificationCodeInProgress: false
       };
     case SUBMIT_PHONE_NUMBER_SUCCESS:
-      return {
-        ...state,
+      return { ...state,
         submitPhoneNumberInProgress: false,
         sessionPhoneNumber: action.payload,
-        submitPhoneNumberErrorMessage: ''
-      };
+        submitPhoneNumberErrorMessage: '' };
     case RE_ENTER_PHONE_NUMBER:
+      return { ...state, sessionPhoneNumber: '' };
+    case MODIFICATION_DATETIMELOGIN_SESSION:
+      return { ...state, dateTimeLogin: action.payload };
+    case MODIFICATION_PASSWORD_SESSION:
+      return { ...state, password: action.payload };
+    case MODIFICATION_USERNAME_SESSION:
+      return { ...state, username: action.payload };
+    case SUCCESS_LOGIN_SESSION:
       return {
         ...state,
-        sessionPhoneNumber: ''
-      };
+        dateTimeLogin: new Date().getTime(),
+        isLogin: true,
+        loginErrorMessage: '',
+        submitLoginUserPassInProgress: false };
+    case SESSION_LOG_OUT:
+      return {
+        ...state,
+        dateTimeLogin: 0,
+        isLogin: false,
+        loginErrorMessage: '',
+        username: '',
+        password: '',
+        submitLoginUserPassInProgress: false };
+    case FAILED_LOGIN_SESSION:
+      return {
+        ...state,
+        dateTimeLogin: new Date().getTime(),
+        isLogin: false,
+        loginErrorMessage: 'Invalid username or password',
+        submitLoginUserPassInProgress: false };
     case MODIFICATION_PHONE_NUMBER:
-      // console.log(`auth reducer ${action.payload}`);
-      return {
-        ...state,
-        phoneNumber: action.payload
-      };
+      return { ...state, phoneNumber: action.payload };
     case MODIFICATION_VERIFY_CODE:
-      // console.log(`auth reducer ${action.payload}`);
-      return {
-        ...state,
-        verifyCode: action.payload
-      };
+      return { ...state, verifyCode: action.payload };
     default:
       return state;
   }
