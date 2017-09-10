@@ -10,8 +10,16 @@ import { setCurrentPagePath } from '../actions/AdminAction';
 import './Header.css';
 
 let remote = null;
+let ipcRenderer = null;
 if (window.require) {
     remote = window.require('electron').remote;
+    ipcRenderer = window.require('electron').ipcRenderer;
+    ipcRenderer.on('message', (event, message) => {
+        console.log(message); // logs out "Hello second window!"
+    });
+    // console.log('remmmmoooooootottt===>', remote.getCurrentWindow());
+
+    //main = remote.require('../electron-starter.js');
 }
 
 
@@ -61,6 +69,8 @@ class Header extends Component {
   }
   showModal() {
     if (remote !== null) {
+      // main.pong(6);
+      // ipcRenderer.send('/user-detail', 1, 2, 3);
       this.setState({
         openCloseWindowConfirm: true
       });

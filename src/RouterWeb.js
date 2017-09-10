@@ -11,6 +11,10 @@ import SplashPage from './pages/Splash';
 import AdminPage from './pages/Admin';
 import AbsendigitalPage from './pages/Absendigital';
 import AbsenPage from './pages/Absen';
+import SettingPage from './pages/Setting';
+import DaftarSiswaPage from './pages/DaftarSiswa';
+
+import './global.css';
 
 const store = configureStore();
 persistStore(store);
@@ -29,6 +33,8 @@ class RouterWeb extends Component {
               <Route path="/admin" component={AdminPage} />
               <Route path="/absendigital" component={AbsendigitalPage} />
               <Route path="/absen" component={AbsenPage} />
+              <Route path="/setting" component={SettingPage} />
+              <Route path="/daftar-siswa" component={DaftarSiswaPage} />
             </div>
          </HashRouter>
      </Provider>

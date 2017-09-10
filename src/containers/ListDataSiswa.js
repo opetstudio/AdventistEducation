@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import ListAbsenTable from '../components/ListAbsenTable';
-import ListAbsen from '../components/ListAbsen';
+import ListData from '../components/ListData';
 import * as AdminAction from '../actions/AdminAction';
 // import './ContentTop.css';
 
-class LiveReportSiswa extends Component {
+class ListDataSiswa extends Component {
   constructor() {
     super();
     this.state = {
@@ -44,19 +44,19 @@ class LiveReportSiswa extends Component {
   }
   render() {
     return (
-      <ListAbsen
+      <ListData
         title="Siswa"
         headerTitleBackgroundColor='#00bff3'
         filterTextInput='filterTextInputSiswa'
         onUserInput={this.handleUserInput}
         filterTextValue={this.state.filterText}
-        dataAbsen={this.state.data}
+        listData={this.state.data}
       >
         <ListAbsenTable
           listData={this.state.data}
           filterTextValue={this.state.filterText}
         />
-      </ListAbsen>
+      </ListData>
     );
   }
 }
@@ -85,4 +85,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LiveReportSiswa);
+)(ListDataSiswa);

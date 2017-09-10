@@ -18,7 +18,6 @@ import Header from '../containers/Header';
 import KickInIfLogin from '../containers/KickInIfLogin';
 
 import './Login.css';
-import '../global.css';
 
 const big_title = require('../img/big_title.png');
 const button_with_right_arrow = require('../img/button_with_right_arrow.png');

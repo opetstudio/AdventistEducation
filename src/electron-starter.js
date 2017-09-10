@@ -1,5 +1,6 @@
 
 const electron = require('electron');
+const ipcMain = electron.ipcMain;
 // const remote = electron.remote;
 // Module to control application life.
 const app = electron.app;
@@ -15,6 +16,8 @@ const env = process.env.NODE_ENV;
 
 const path = require('path');
 const url = require('url');
+const route_users = require('./server/electron/routes/UsersRoute');
+const route_absen = require('./server/electron/routes/AbsenRoute');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -39,6 +42,9 @@ function createWindow() {
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.send('message', 'Hello second window!');
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -73,3 +79,12 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// Make method externaly visible
+exports.pong = arg => {
+    //Print 6
+    console.log(arg);
+};
+ipcMain.on('/user-detail', route_users.userDetail);
+ipcMain.on('/save-user', route_users.saveUser);
+ipcMain.on('/save-absen', route_absen.saveAbsen);

@@ -4,12 +4,29 @@ import { Container, Form, Button, Loader, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import ListAbsenTable from '../components/ListAbsenTable';
 import ListAbsen from '../components/ListAbsen';
 import * as AdminAction from '../actions/AdminAction';
 // import '../stylesheets/containers/ContentTop.css';
 
 class LiveReportGuru extends Component {
+  constructor() {
+    super();
+    this.state = {
+      filterText: '',
+      inStockOnly: false,
+      data: [
+        { name: 'Opet', kelas: '1-IPA-A', jam: '07:00' },
+        { name: 'Revina', kelas: '1-IPA-A', jam: '07:00' },
+        { name: 'Avigail', kelas: '1-IPA-A', jam: '07:00' },
+        { name: 'Gavriel', kelas: '1-IPA-A', jam: '07:00' },
+      ]
+    };
+    this.handleUserInput = this.handleUserInput.bind(this);
+  }
+
   componentWillMount() {
+
     // this.setState({
     //   menuVerticalLeftVisibility: 'hidden',
     //   menuVerticalRightVisibility: 'hidden'
@@ -19,9 +36,28 @@ class LiveReportGuru extends Component {
     // this.props.modificationTitleAdmin('ABSENSI DIGITAL');
     // console.log('list contacts via props==>', this.props.contacts);
   }
+  handleUserInput(filterText, inStockOnly) {
+    this.setState({
+      filterText,
+      inStockOnly,
+    });
+  }
+
   render() {
     return (
-      <ListAbsen title="List Absen" />
+      <ListAbsen
+        title="Guru"
+        headerTitleBackgroundColor='#c26bd7'
+        filterTextInput='filterTextInputGuru'
+        onUserInput={this.handleUserInput}
+        filterTextValue={this.state.filterText}
+        dataAbsen={this.state.data}
+      >
+        <ListAbsenTable
+          listData={this.state.data}
+          filterTextValue={this.state.filterText}
+        />
+      </ListAbsen>
     );
   }
 }

@@ -62,10 +62,22 @@ class Sidebar extends Component {
           style={style.sideMenu}
         />
         <Menu.Item
+          name='Daftar Siswa'
+          active={activeItem === '/daftar-siswa'}
+          onClick={() => this.gotoPage('/daftar-siswa')}
+          style={style.sideMenu}
+        />
+        <Menu.Item
           name='Absen Digital'
           active={activeItem === '/absendigital'}
-          // onClick={() => this.props.gotoSubAdminPage('absendigital')}
           onClick={() => this.gotoPage('/absendigital')}
+          style={style.sideMenu}
+        />
+        <Menu.Item
+          name='Pengaturan'
+          active={activeItem === '/setting'}
+          // onClick={() => this.props.gotoSubAdminPage('absendigital')}
+          onClick={() => this.gotoPage('/setting')}
           style={style.sideMenu}
         />
         <Menu.Item

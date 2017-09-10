@@ -1,7 +1,7 @@
-$statusbar-height: 45px;
-$leftside-width: 210px;
-$profilepicture-width: 135px;
-$profilepicture-height: 187px;
+/*
+* Sidebar.scss
+*/
+@import "../variable.scss";
 
 .contentTop {
   background-color: #00bff3;

@@ -1,13 +1,13 @@
-/* components/ListAbsen.scss */
+/* components/ListData.scss */
 @import "../variable.scss";
 
 $header-height: 30px;
-.listAbsenHeader {
+.listDataHeader {
   background-color: #cbd2d7;
   height: $header-height;
   margin-bottom: 4px;
 }
-.listAbsenHeaderTitle {
+.listDataHeaderTitle {
   height: $header-height;
   line-height: $header-height;
   width: 130px;
@@ -23,7 +23,7 @@ $header-height: 30px;
   //   line-height: normal;
   // }
 }
-.listAbsenTotalCheckin {
+.listDataTotal {
   height: $header-height;
   line-height: $header-height;
   width: 50%;
@@ -31,7 +31,7 @@ $header-height: 30px;
   float: right;
   padding: 0 10px;
 }
-.listAbsenWrapper {
+.listDataWrapper {
   margin: 20px;
   input{
     height: $header-height;

@@ -2,7 +2,7 @@
 * global.scss
 */
 
-$leftside-width: 210px;
+@import "./variable.scss";
 
 .headerMenuWrapper {
   color: #333;
@@ -11,4 +11,7 @@ $leftside-width: 210px;
 
 .containerWrapper {
   margin-left: $leftside-width;
+}
+.ContentWrapper {
+  padding: 10px;
 }

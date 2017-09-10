@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { Container, Form, Button, Loader, Message } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 // import { Link, Redirect } from 'react-router-dom';
 // import moment from 'moment';
 // import { connect } from 'react-redux';
@@ -13,10 +13,12 @@ import Header from '../containers/Header';
 import Sidebar from '../containers/Sidebar';
 // import RedirectIfNotLogin from '../containers/RedirectIfNotLogin';
 import KickOutIfNotLogin from '../containers/KickOutIfNotLogin';
+import SettingForm from '../containers/SettingForm';
+import './Setting.css';
 // import '../stylesheets/pages/login/Login.css';
 
 
-export default class Admin extends Component {
+export default class Setting extends Component {
   // constructor(props) {
   //   super(props);
   //   // this.setState({
@@ -51,10 +53,15 @@ export default class Admin extends Component {
     return (
       <div>
         <KickOutIfNotLogin />
-        <Header currentPagePath='/admin' adminTitle={'DASHBOARD'} />
+        <Header currentPagePath='/setting' adminTitle='PENGATURAN' />
         <Sidebar />
         <div className={'containerWrapper'}>
           <ContentTop withProfilePicture withContentTopMenu />
+          <div className='ContentWrapper'>
+            <div className='SettingFormSpace'>
+              <SettingForm />
+            </div>
+          </div>
         </div>
       </div>
     );

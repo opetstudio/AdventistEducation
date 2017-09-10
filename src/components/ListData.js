@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import './ListAbsen.css';
+import './ListData.css';
 
-class ListAbsen extends Component {
+class ListData extends Component {
   constructor() {
     super();
     this.handleChange = this.handleChange.bind(this);
@@ -13,19 +13,19 @@ class ListAbsen extends Component {
     this.props.onUserInput(this.refs[this.props.filterTextInput].value, '');
   }
   render() {
-    const totalCheckIn = this.props.dataAbsen.length;
+    const total = this.props.listData.length;
     return (
-      <div className='listAbsenWrapper'>
+      <div className='listDataWrapper'>
 
-        <div className='listAbsenHeader'>
+        <div className='listDataHeader'>
           <div
-            className='listAbsenHeaderTitle'
+            className='listDataHeaderTitle'
             style={{ backgroundColor: this.props.headerTitleBackgroundColor }}
           >
               <span>{this.props.title}</span>
           </div>
-          <div className='listAbsenTotalCheckin'>
-              <span>Total Check In: {totalCheckIn}</span>
+          <div className='listDataTotal'>
+              <span>Total: {total}</span>
           </div>
         </div>
 
@@ -52,7 +52,7 @@ class ListAbsen extends Component {
 //       <View>{children}</View>
 //     </View>
 // );
-ListAbsen.propTypes = {
+ListData.propTypes = {
   listData: PropTypes.array,
   title: PropTypes.string.isRequired,
   onUserInput: PropTypes.func.isRequired,
@@ -60,4 +60,4 @@ ListAbsen.propTypes = {
 };
 
 // export default UsersListRender;
-export default ListAbsen;
+export default ListData;

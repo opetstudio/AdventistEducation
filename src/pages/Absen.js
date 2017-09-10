@@ -11,14 +11,14 @@ import ContentTop from '../containers/ContentTop';
 // import { remote } from 'electron';
 import Header from '../containers/Header';
 import Sidebar from '../containers/Sidebar';
+import AbsenListener from '../containers/AbsenListener';
 // import RedirectIfNotLogin from '../components/RedirectIfNotLogin/RedirectIfNotLogin';
 // import ContentTopMenu from '../components/ContentTopMenu';
 // import ContentTopCaption from '../components/ContentTopCaption';
 import AbsenDateTime from '../components/AbsenDateTime';
 
-// import '../stylesheets/pages/login/Login.css';
+import './Absen.css';
 // import '../stylesheets/containers/ContentTop.css';
-import '../global.css';
 
 export default class Absen extends Component {
   // constructor(props) {
@@ -52,6 +52,9 @@ export default class Absen extends Component {
         <div className={'containerWrapper'}>
           <ContentTop withProfilePicture={false} withContentTopMenu={false} withAbsenMessageError />
           <AbsenDateTime />
+          <div className='absenListenerWrapper'>
+            <AbsenListener />
+          </div>
         </div>
       </div>
     );

@@ -14,7 +14,7 @@ import LiveReportSiswa from '../containers/LiveReportSiswa';
 import LiveReportGuru from '../containers/LiveReportGuru';
 import ContentTop from '../containers/ContentTop';
 import KickOutIfNotLogin from '../containers/KickOutIfNotLogin';
-import '../global.css';
+import './Absendigital.css';
 // import '../stylesheets/pages/login/Login.css';
 
 export default class Absendigital extends Component {
@@ -55,11 +55,21 @@ export default class Absendigital extends Component {
         <div className={'containerWrapper'}>
           <ContentTop withProfilePicture withContentTopMenu />
           <div className='liveReportAbsensiWrapper'>
-            <LiveReportSiswa />
-            <LiveReportGuru />
+            <div className='liveReportSiswaWrapper'>
+              <LiveReportSiswa />
+            </div>
+            <div className='liveReportGuruWrapper'>
+              <LiveReportGuru style={styles.LiveReport} />
+            </div>
           </div>
         </div>
       </div>
     );
   }
 }
+
+const styles = {
+  LiveReport: {
+    display: 'inline-block'
+  }
+};
