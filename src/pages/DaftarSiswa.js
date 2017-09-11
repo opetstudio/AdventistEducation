@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container, Divider } from 'semantic-ui-react';
 // import { Link, Redirect } from 'react-router-dom';
 // import moment from 'moment';
 // import { connect } from 'react-redux';
@@ -14,6 +14,7 @@ import Sidebar from '../containers/Sidebar';
 // import RedirectIfNotLogin from '../containers/RedirectIfNotLogin';
 import KickOutIfNotLogin from '../containers/KickOutIfNotLogin';
 import ListDataSiswa from '../containers/ListDataSiswa';
+import FormInputSiswaPopUp from '../containers/FormInputSiswaPopUp';
 import './Setting.css';
 // import '../stylesheets/pages/login/Login.css';
 
@@ -56,8 +57,11 @@ export default class DaftarSiswa extends Component {
         <Header currentPagePath='/daftar-siswa' adminTitle='DAFTAR SISWA' />
         <Sidebar />
         <div className={'containerWrapper'}>
-          <ContentTop withProfilePicture withContentTopMenu />
+          {/* <ContentTop withProfilePicture withContentTopMenu /> */}
           <div className='ContentWrapper'>
+            <Divider />
+            <FormInputSiswaPopUp />
+            <Divider />
             <ListDataSiswa />
           </div>
         </div>

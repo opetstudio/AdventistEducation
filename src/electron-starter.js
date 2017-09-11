@@ -16,8 +16,7 @@ const env = process.env.NODE_ENV;
 
 const path = require('path');
 const url = require('url');
-const route_users = require('./server/electron/routes/UsersRoute');
-const route_absen = require('./server/electron/routes/AbsenRoute');
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -85,6 +84,11 @@ exports.pong = arg => {
     //Print 6
     console.log(arg);
 };
+const route_users = require('./server/electron/routes/UsersRoute');
+const route_absen = require('./server/electron/routes/AbsenRoute');
+const route_siswa = require('./server/electron/routes/SiswaRoute');
+
 ipcMain.on('/user-detail', route_users.userDetail);
 ipcMain.on('/save-user', route_users.saveUser);
 ipcMain.on('/save-absen', route_absen.saveAbsen);
+ipcMain.on('/save-siswa', route_siswa.saveSiswa);

@@ -47,3 +47,18 @@ export const saveAbsen = (data, neDBDataPath) =>
 
     resolve({ status: 'success', message: 'success save data' });
   });
+export const saveSiswa = (data, neDBDataPath) =>
+  new Promise((resolve) => {
+    console.log('save data siswa: ', data);
+    if (ipcRenderer !== null) {
+        ipcRenderer.send('/save-siswa', data, neDBDataPath);
+    }
+    ipcRenderer.on('/save-siswa-response', (event, status, message) => {
+        console.log(message); // logs out "Hello second window!"
+        if (status === '1') {
+            resolve({ status: true, message });
+        } else {
+          resolve({ status: false, message });
+        }
+    });
+  });
