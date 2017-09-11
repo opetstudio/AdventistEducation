@@ -54,11 +54,24 @@ export const saveSiswa = (data, neDBDataPath) =>
         ipcRenderer.send('/save-siswa', data, neDBDataPath);
     }
     ipcRenderer.on('/save-siswa-response', (event, status, message) => {
-        console.log(message); // logs out "Hello second window!"
+        // console.log(message); // logs out "Hello second window!"
         if (status === '1') {
             resolve({ status: true, message });
         } else {
           resolve({ status: false, message });
         }
+    });
+  });
+
+export const fetchAllDataSiswaApi = neDBDataPath =>
+  new Promise((resolve) => {
+    if (ipcRenderer !== null) {
+        ipcRenderer.send('/fetchAllDataSiswaApi', neDBDataPath);
+    }
+    ipcRenderer.on('/fetchAllDataSiswaApi-response', (event, e, o) => {
+        // console.log(message); // logs out "Hello second window!"
+        console.log('e==>', e);
+        console.log('o==>', o);
+        resolve({ e, o: JSON.parse(o) });
     });
   });

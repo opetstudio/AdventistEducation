@@ -14,6 +14,7 @@ class FormInputSiswaPopUp extends Component {
     this._onClickButtonSaveData = this._onClickButtonSaveData.bind(this);
   }
   componentWillMount() {
+    console.log('FormInputSiswaPopUp.componentWillMount props==>', this.props);
     this.setState({
       neDBDataPath: this.props.SettingReducer.neDBDataPath,
       isSuccess: false,
@@ -22,13 +23,17 @@ class FormInputSiswaPopUp extends Component {
     });
   }
   _onClickButtonSaveData(data, callback) {
-    this.props.saveDataSiswa(data, this.state.neDBDataPath, callback);
+    // if (this.props.isCreateNew) {
+        this.props.saveDataSiswa(data, this.state.neDBDataPath, callback);
+    // }
   }
   render() {
+    console.log('FormInputSiswaPopUp Render');
     return (
       <FormInputPopUp buttonTitle="Input Data Siswa">
         <FormInputSiswa
           onClickButtonSaveData={this._onClickButtonSaveData}
+          isCreateNew={this.props.isCreateNew}
         />
       </FormInputPopUp>
     );

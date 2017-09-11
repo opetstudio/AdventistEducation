@@ -60,7 +60,7 @@ export default class DaftarSiswa extends Component {
           {/* <ContentTop withProfilePicture withContentTopMenu /> */}
           <div className='ContentWrapper'>
             <Divider />
-            <FormInputSiswaPopUp />
+            <FormInputSiswaPopUp isCreateNew alt='FormInputSiswaPopUp' />
             <Divider />
             <ListDataSiswa />
           </div>

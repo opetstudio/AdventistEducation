@@ -92,3 +92,4 @@ ipcMain.on('/user-detail', route_users.userDetail);
 ipcMain.on('/save-user', route_users.saveUser);
 ipcMain.on('/save-absen', route_absen.saveAbsen);
 ipcMain.on('/save-siswa', route_siswa.saveSiswa);
+ipcMain.on('/fetchAllDataSiswaApi', route_siswa.fetchAllDataSiswaApi);

@@ -33,13 +33,19 @@ export default class FormInputSiswa extends Component {
     }
   }
   _onClickButtonSaveData() {
-    this.props.onClickButtonSaveData({
-      name: this.state.name,
-      last_name: this.state.last_name,
-      kelas: this.state.kelas,
-      nis: this.state.nis,
-      id: this.state.id,
-    }, this._saveDataResponse);
+    const newData = {};
+    const createdon = new Date().getTime();
+    newData.modifiedon = createdon;
+    console.log('this.props===>', this.props);
+    if (this.props.isCreateNew) {
+      newData.createdon = createdon;
+      newData.name = this.state.name;
+      newData.last_name = this.state.last_name;
+      newData.kelas = this.state.kelas;
+      newData.nis = this.state.nis;
+      newData.id = this.state.id;
+    }
+    this.props.onClickButtonSaveData(newData, this._saveDataResponse);
   }
   _saveDataResponse(status, message) {
     const msg = message;
@@ -50,6 +56,7 @@ export default class FormInputSiswa extends Component {
     });
   }
   render() {
+    console.log('FormInputSiswa Render');
     return (
         <Form success={this.state.isSuccess} error={this.state.isError}>
           <Message

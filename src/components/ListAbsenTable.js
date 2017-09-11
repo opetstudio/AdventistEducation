@@ -9,7 +9,7 @@ class ListAbsenTable extends Component {
         return;
       }
       rows.push(
-        <tr key={row.name} ><td>{row.name}</td><td>{row.kelas}</td><td>{row.jam}</td></tr>
+        <tr key={row.nis} ><td>{row.name}</td><td>{row.kelas}</td><td>{row.nis}</td></tr>
       );
     });
     return (
@@ -18,7 +18,7 @@ class ListAbsenTable extends Component {
           <tr>
             <th>Nama</th>
             <th>Kelas</th>
-            <th>Jam</th>
+            <th>Nis</th>
           </tr>
         </thead>
         <tbody>

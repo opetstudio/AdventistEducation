@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 
 import ListAbsenTable from '../components/ListAbsenTable';
 import ListData from '../components/ListData';
-import * as AdminAction from '../actions/AdminAction';
+import { fetchAllDataSiswa } from '../actions/DataSiswaAction';
 // import './ContentTop.css';
 
 class ListDataSiswa extends Component {
@@ -16,15 +16,21 @@ class ListDataSiswa extends Component {
       filterText: '',
       inStockOnly: false,
       data: [
-        { name: 'Nofrets', kelas: '1-IPA-A', jam: '07:00' },
-        { name: 'Vina', kelas: '1-IPA-A', jam: '07:00' },
-        { name: 'Avi', kelas: '1-IPA-A', jam: '07:00' },
-        { name: 'Aca', kelas: '1-IPA-A', jam: '07:00' },
+        { name: 'Nofrets', kelas: '1-IPA-A', nis: '35343434' },
       ]
     };
     this.handleUserInput = this.handleUserInput.bind(this);
+    this._fetchAllDataSiswaResponse = this._fetchAllDataSiswaResponse.bind(this);
   }
   componentWillMount() {
+    console.log('[ListDataSiswa.componentWillMount]');
+    console.log('[neDBDataPath]', this.props.SettingReducer.neDBDataPath);
+    this.props.fetchAllDataSiswa(
+      this.props.SettingReducer.neDBDataPath,
+      this._fetchAllDataSiswaResponse
+    );
+    console.log('this.props.DataSiswaReducer.ListDataSiswa===>',
+    this.props);
     // this.setState({
     //   menuVerticalLeftVisibility: 'hidden',
     //   menuVerticalRightVisibility: 'hidden'
@@ -34,6 +40,10 @@ class ListDataSiswa extends Component {
     // this.props.modificationTitleAdmin('ABSENSI DIGITAL');
     // console.log('list contacts via props==>', this.props.contacts);
   }
+  componentWillReceiveProps(nextProps) {
+    // this.setState({ data: nextProps.DataSiswaReducer.ListDataSiswa });
+  }
+
   handleUserInput(filterText, inStockOnly) {
     //select * from data where name like 'filterText'
 
@@ -42,7 +52,16 @@ class ListDataSiswa extends Component {
       inStockOnly,
     });
   }
+  _fetchAllDataSiswaResponse(e, o) {
+    console.log('[ListDataSiswa._fetchAllDataSiswaResponse] ', o);
+    // if (o) {
+    //   this.setState({ data: o });
+    // } else {
+    //   this.setState({ data: [] });
+    // }
+  }
   render() {
+    console.log('ListDataSiswa Render');
     return (
       <ListData
         title="Siswa"
@@ -50,10 +69,10 @@ class ListDataSiswa extends Component {
         filterTextInput='filterTextInputSiswa'
         onUserInput={this.handleUserInput}
         filterTextValue={this.state.filterText}
-        listData={this.state.data}
+        listData={this.props.DataSiswaReducer.ListDataSiswa}
       >
         <ListAbsenTable
-          listData={this.state.data}
+          listData={this.props.DataSiswaReducer.ListDataSiswa}
           filterTextValue={this.state.filterText}
         />
       </ListData>
@@ -67,15 +86,18 @@ function mapStateToProps(state) {
   //   return { ...val, uid };
   // });
   return {
-    dataUsersReducer: state.dataUsersReducer,
-    sessionReducer: state.sessionReducer,
-    appReducer: state.appReducer
+    DataSiswaReducer: state.DataSiswaReducer,
+    SettingReducer: state.SettingReducer
+    // dataUsersReducer: state.dataUsersReducer,
+    // sessionReducer: state.sessionReducer,
+    // appReducer: state.appReducer
   };
 }
 
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(AdminAction, dispatch);
+  return bindActionCreators(
+    { fetchAllDataSiswa }, dispatch);
 
   // return {
   //   fetchData: () => dispatch(fetchData())
