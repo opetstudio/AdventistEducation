@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { Container, Form, Button, Loader, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import ListAbsenTable from '../components/ListAbsenTable';
-import ListAbsen from '../components/ListAbsen';
+import AbsenTable from '../components/AbsenTable';
+import ListData from '../components/ListData';
 import * as AdminAction from '../actions/AdminAction';
-// import '../stylesheets/containers/ContentTop.css';
+// import './ContentTop.css';
 
-class LiveReportGuru extends Component {
+class AbsenSiswaListData extends Component {
   constructor() {
     super();
     this.state = {
@@ -24,9 +22,7 @@ class LiveReportGuru extends Component {
     };
     this.handleUserInput = this.handleUserInput.bind(this);
   }
-
   componentWillMount() {
-
     // this.setState({
     //   menuVerticalLeftVisibility: 'hidden',
     //   menuVerticalRightVisibility: 'hidden'
@@ -37,27 +33,28 @@ class LiveReportGuru extends Component {
     // console.log('list contacts via props==>', this.props.contacts);
   }
   handleUserInput(filterText, inStockOnly) {
+    //select * from data where name like 'filterText'
+
     this.setState({
       filterText,
       inStockOnly,
     });
   }
-
   render() {
     return (
-      <ListAbsen
-        title="Guru"
-        headerTitleBackgroundColor='#c26bd7'
-        filterTextInput='filterTextInputGuru'
+      <ListData
+        title="Siswa"
+        headerTitleBackgroundColor='#00bff3'
+        filterTextInput='filterTextInputSiswa'
         onUserInput={this.handleUserInput}
         filterTextValue={this.state.filterText}
         dataAbsen={this.state.data}
       >
-        <ListAbsenTable
+        <AbsenTable
           listData={this.state.data}
           filterTextValue={this.state.filterText}
         />
-      </ListAbsen>
+      </ListData>
     );
   }
 }
@@ -86,4 +83,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LiveReportGuru);
+)(AbsenSiswaListData);

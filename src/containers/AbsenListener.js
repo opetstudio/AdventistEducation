@@ -1,7 +1,6 @@
 'use strict';
 import React, { Component } from 'react';
-import { Menu, Input } from 'semantic-ui-react';
-import { Link, Redirect } from 'react-router-dom';
+import { Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 

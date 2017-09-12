@@ -13,7 +13,7 @@ import Header from '../containers/Header';
 import Sidebar from '../containers/Sidebar';
 // import RedirectIfNotLogin from '../containers/RedirectIfNotLogin';
 import KickOutIfNotLogin from '../containers/KickOutIfNotLogin';
-import ListDataSiswa from '../containers/ListDataSiswa';
+import SiswaListData from '../containers/SiswaListData';
 import FormInputSiswaPopUp from '../containers/FormInputSiswaPopUp';
 import './Setting.css';
 // import '../stylesheets/pages/login/Login.css';
@@ -62,7 +62,7 @@ export default class DaftarSiswa extends Component {
             <Divider />
             <FormInputSiswaPopUp isCreateNew alt='FormInputSiswaPopUp' />
             <Divider />
-            <ListDataSiswa />
+            <SiswaListData />
           </div>
         </div>
       </div>

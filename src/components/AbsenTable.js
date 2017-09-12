@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class ListAbsenTable extends Component {
+class AbsenTable extends Component {
   render() {
     const rows = [];
     this.props.listData.forEach((row) => {
@@ -29,9 +29,9 @@ class ListAbsenTable extends Component {
   }
 }
 
-ListAbsenTable.propTypes = {
+AbsenTable.propTypes = {
   listData: PropTypes.array,
   filterTextValue: PropTypes.string.isRequired,
 };
 
-export default ListAbsenTable;
+export default AbsenTable;

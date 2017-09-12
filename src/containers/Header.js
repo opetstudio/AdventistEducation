@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
-import { Header as Head, Container, Confirm, Button, Modal } from 'semantic-ui-react';
+import { Button, Modal } from 'semantic-ui-react';
 import { logOut } from '../actions/LoginAction';
 import { setCurrentPagePath } from '../actions/AdminAction';
 

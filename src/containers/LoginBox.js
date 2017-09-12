@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Form, Button, Loader, Message } from 'semantic-ui-react';
-import moment from 'moment';
+import { Form, Button, Loader, Message } from 'semantic-ui-react';
+// import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 
 // import { remote } from 'electron';
 import {

@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { Container, Form, Button, Loader, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import ListDataSiswaTable from '../components/ListDataSiswaTable';
+import SiswaTable from '../components/SiswaTable';
 import ListData from '../components/ListData';
 import { fetchAllDataSiswa } from '../actions/DataSiswaAction';
 // import './ContentTop.css';
 
-class ListDataSiswa extends Component {
+class SiswaListData extends Component {
   constructor() {
     super();
     this.state = {
@@ -40,9 +38,9 @@ class ListDataSiswa extends Component {
     // this.props.modificationTitleAdmin('ABSENSI DIGITAL');
     // console.log('list contacts via props==>', this.props.contacts);
   }
-  componentWillReceiveProps(nextProps) {
-    // this.setState({ data: nextProps.DataSiswaReducer.ListDataSiswa });
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   // this.setState({ data: nextProps.DataSiswaReducer.ListDataSiswa });
+  // }
 
   handleUserInput(filterText, inStockOnly) {
     //select * from data where name like 'filterText'
@@ -71,7 +69,7 @@ class ListDataSiswa extends Component {
         filterTextValue={this.state.filterText}
         listData={this.props.DataSiswaReducer.ListDataSiswa}
       >
-        <ListDataSiswaTable
+        <SiswaTable
           listData={this.props.DataSiswaReducer.ListDataSiswa}
           filterTextValue={this.state.filterText}
         />
@@ -107,4 +105,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ListDataSiswa);
+)(SiswaListData);

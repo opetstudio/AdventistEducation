@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { Container, Form, Button, Loader, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import ListAbsenTable from '../components/ListAbsenTable';
-import ListAbsen from '../components/ListAbsen';
+import AbsenTable from '../components/AbsenTable';
+import ListData from '../components/ListData';
 import * as AdminAction from '../actions/AdminAction';
 // import './ContentTop.css';
 
-class LiveReportSiswa extends Component {
+class AbsenGuruListData extends Component {
   constructor() {
     super();
     this.state = {
@@ -44,19 +42,19 @@ class LiveReportSiswa extends Component {
   }
   render() {
     return (
-      <ListAbsen
-        title="Siswa"
-        headerTitleBackgroundColor='#00bff3'
-        filterTextInput='filterTextInputSiswa'
+      <ListData
+        title="Guru"
+        headerTitleBackgroundColor='#c26bd7'
+        filterTextInput='filterTextInputGuru'
         onUserInput={this.handleUserInput}
         filterTextValue={this.state.filterText}
         dataAbsen={this.state.data}
       >
-        <ListAbsenTable
+        <AbsenTable
           listData={this.state.data}
           filterTextValue={this.state.filterText}
         />
-      </ListAbsen>
+      </ListData>
     );
   }
 }
@@ -85,4 +83,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LiveReportSiswa);
+)(AbsenGuruListData);
