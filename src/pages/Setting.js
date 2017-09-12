@@ -56,7 +56,7 @@ export default class Setting extends Component {
         <Header currentPagePath='/setting' adminTitle='PENGATURAN' />
         <Sidebar />
         <div className={'containerWrapper'}>
-          <ContentTop withProfilePicture withContentTopMenu />
+          {/* <ContentTop withProfilePicture withContentTopMenu /> */}
           <div className='ContentWrapper'>
             <div className='SettingFormSpace'>
               <SettingForm />

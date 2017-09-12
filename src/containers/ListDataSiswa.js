@@ -4,7 +4,7 @@ import { Container, Form, Button, Loader, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import ListAbsenTable from '../components/ListAbsenTable';
+import ListDataSiswaTable from '../components/ListDataSiswaTable';
 import ListData from '../components/ListData';
 import { fetchAllDataSiswa } from '../actions/DataSiswaAction';
 // import './ContentTop.css';
@@ -71,7 +71,7 @@ class ListDataSiswa extends Component {
         filterTextValue={this.state.filterText}
         listData={this.props.DataSiswaReducer.ListDataSiswa}
       >
-        <ListAbsenTable
+        <ListDataSiswaTable
           listData={this.props.DataSiswaReducer.ListDataSiswa}
           filterTextValue={this.state.filterText}
         />

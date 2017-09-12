@@ -16,10 +16,10 @@ class LiveReportSiswa extends Component {
       filterText: '',
       inStockOnly: false,
       data: [
-        { name: 'Nofrets', kelas: '1-IPA-A', jam: '07:00' },
-        { name: 'Vina', kelas: '1-IPA-A', jam: '07:00' },
-        { name: 'Avi', kelas: '1-IPA-A', jam: '07:00' },
-        { name: 'Aca', kelas: '1-IPA-A', jam: '07:00' },
+        { nis: 223232, name: 'Opet', kelas: '1-IPA-A', jam: '07:00' },
+        { nis: 223233, name: 'Revina', kelas: '1-IPA-A', jam: '07:00' },
+        { nis: 223234, name: 'Avigail', kelas: '1-IPA-A', jam: '07:00' },
+        { nis: 223235, name: 'Gavriel', kelas: '1-IPA-A', jam: '07:00' },
       ]
     };
     this.handleUserInput = this.handleUserInput.bind(this);

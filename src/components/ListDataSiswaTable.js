@@ -5,11 +5,16 @@ class ListAbsenTable extends Component {
   render() {
     const rows = [];
     this.props.listData.forEach((row) => {
-      if (row.name.indexOf(this.props.filterTextValue) === -1) {
+      if (
+        row.name.indexOf(this.props.filterTextValue) === -1
+        && row.last_name.indexOf(this.props.filterTextValue) === -1
+      ) {
         return;
       }
       rows.push(
-        <tr key={row.nis} ><td>{row.name}</td><td>{row.kelas}</td><td>{row.jam}</td></tr>
+        <tr key={row.nis} >
+          <td>{row.name} {row.last_name}</td><td>{row.kelas}</td><td>{row.nis}</td>
+        </tr>
       );
     });
     return (
@@ -18,7 +23,7 @@ class ListAbsenTable extends Component {
           <tr>
             <th>Nama</th>
             <th>Kelas</th>
-            <th>Jam</th>
+            <th>Nis</th>
           </tr>
         </thead>
         <tbody>

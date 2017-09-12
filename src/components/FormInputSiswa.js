@@ -17,7 +17,8 @@ export default class FormInputSiswa extends Component {
       last_name: '',
       kelas: '',
       nis: '',
-      id: ''
+      id: '',
+      photo: ''
     });
     this._onChangeInputText = this._onChangeInputText.bind(this);
   }
@@ -28,6 +29,7 @@ export default class FormInputSiswa extends Component {
       case 'kelas': this.setState({ kelas: value }); break;
       case 'nis': this.setState({ nis: value }); break;
       case 'id': this.setState({ id: value }); break;
+      case 'photo': this.setState({ photo: value }); break;
       default:
         return true;
     }
@@ -44,6 +46,7 @@ export default class FormInputSiswa extends Component {
       newData.kelas = this.state.kelas;
       newData.nis = this.state.nis;
       newData.id = this.state.id;
+      newData.photo = this.state.photo;
     }
     this.props.onClickButtonSaveData(newData, this._saveDataResponse);
   }
@@ -58,7 +61,11 @@ export default class FormInputSiswa extends Component {
   render() {
     console.log('FormInputSiswa Render');
     return (
-        <Form success={this.state.isSuccess} error={this.state.isError}>
+        <Form
+          success={this.state.isSuccess}
+          error={this.state.isError}
+          enctype="multipart/form-data"
+        >
           <Message
             success={this.state.isSuccess}
             error={this.state.isError}
@@ -98,7 +105,7 @@ export default class FormInputSiswa extends Component {
           <Form.Field>
             <label>NIS</label>
             <input
-              placeholder='NIS masukan 6 digit'
+              placeholder='NIS'
               value={this.state.nis}
               name='nis'
               ref='nis'
@@ -113,6 +120,21 @@ export default class FormInputSiswa extends Component {
               name='id'
               ref='id'
               onChange={e => this._onChangeInputText('id', e.target.value)}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>Photo</label>
+            <input
+              type="file"
+              name="photo"
+              id="photo"
+              ref='photo'
+              onChange={
+                e => {
+                  console.log('e.target.files[0]==>', e.target.value);
+                  this._onChangeInputText('photo', URL.createObjectURL(e.target.files[0]));
+                }
+              }
             />
           </Form.Field>
           {/* <Form.Field>

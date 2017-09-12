@@ -53,7 +53,7 @@ export default class Absendigital extends Component {
         <Header currentPagePath='/absendigital' adminTitle='ABSENSI DIGITAL' />
         <Sidebar />
         <div className={'containerWrapper'}>
-          <ContentTop withProfilePicture withContentTopMenu />
+          {/* <ContentTop withProfilePicture withContentTopMenu /> */}
           <div className='liveReportAbsensiWrapper'>
             <div className='liveReportSiswaWrapper'>
               <LiveReportSiswa />
