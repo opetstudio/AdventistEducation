@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react';
 
-class SiswaTable extends Component {
+class GurustaffTable extends Component {
   constructor(props) {
     super(props);
     this._onClickEditSiswa = this._onClickEditSiswa.bind(this);
@@ -55,9 +55,9 @@ class SiswaTable extends Component {
   }
 }
 
-SiswaTable.propTypes = {
+GurustaffTable.propTypes = {
   listData: PropTypes.array,
   filterTextValue: PropTypes.string.isRequired,
 };
 
-export default SiswaTable;
+export default GurustaffTable;

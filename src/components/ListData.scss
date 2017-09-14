@@ -10,7 +10,7 @@ $header-height: 30px;
 .listDataHeaderTitle {
   height: $header-height;
   line-height: $header-height;
-  width: 130px;
+  min-width: 130px;
   color: #fff;
   font-size: 25px;
   text-align: left;

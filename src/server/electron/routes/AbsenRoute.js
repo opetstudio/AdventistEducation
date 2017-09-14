@@ -22,3 +22,20 @@ module.exports.saveAbsen = function (event, arg1, neDBDataPath) {
     console.log('newDoc', newDoc);
   });
 };
+
+module.exports.fetchAllDataAbsenSiswaApi = function (event, neDBDataPath) {
+  console.log('fetchAllDataAbsenSiswaApi==>', neDBDataPath);
+  const storage = new Datastore({ filename: `${neDBDataPath}absens.db`, autoload: true });
+  storage.find({}, (err, doc) => {
+    // console.log('doc==>', doc);
+    event.sender.send('/fetchAllDataAbsenSiswaApi-response', err, JSON.stringify(doc));
+  });
+};
+module.exports.fetchAllDataAbsenGuruApi = function (event, neDBDataPath) {
+  console.log('fetchAllDataAbsenGuruApi==>', neDBDataPath);
+  const storage = new Datastore({ filename: `${neDBDataPath}absens.db`, autoload: true });
+  storage.find({}, (err, doc) => {
+    // console.log('doc==>', doc);
+    event.sender.send('/fetchAllDataAbsenGuruApi-response', err, JSON.stringify(doc));
+  });
+};

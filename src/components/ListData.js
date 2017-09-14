@@ -10,10 +10,13 @@ class ListData extends Component {
   }
   handleChange() {
     // console.log('filterTextInput='+this.refs.filterTextInput.value);
-    this.props.onUserInput(this.refs[this.props.filterTextInput].value, '');
+    this.props.onUserInput(this.refs[this.props.filterTextInput].value);
   }
   render() {
-    const total = this.props.listData.length;
+    let total = 0;
+    if (this.props.listData) {
+      total = this.props.listData.length;
+    }
     return (
       <div className='listDataWrapper'>
 

@@ -9,27 +9,27 @@ import Header from '../containers/Header';
 import Sidebar from '../containers/Sidebar';
 // import RedirectIfNotLogin from '../containers/RedirectIfNotLogin';
 import KickOutIfNotLogin from '../containers/KickOutIfNotLogin';
-import SiswaListData from '../containers/SiswaListData';
-import FormInputSiswaPopUpContainer from '../containers/FormInputSiswaPopUpContainer';
+import GurustaffListDataContainer from '../containers/GurustaffListDataContainer';
+import GurustaffFormpopupContainer from '../containers/GurustaffFormpopupContainer';
 import './Setting.css';
 // import '../stylesheets/pages/login/Login.css';
 
 // const photoProfile = require('../img/photoProfile.png');
 
-export default class DaftarSiswa extends Component {
+export default class GurustaffScene extends Component {
   render() {
     return (
       <div>
         <KickOutIfNotLogin />
-        <Header currentPagePath='/daftar-siswa' adminTitle='DAFTAR SISWA' />
+        <Header currentPagePath='/daftar-gurustaff' adminTitle='PROFILE GURU DAN STAFF' />
         <Sidebar />
         <div className={'containerWrapper'}>
           {/* <ContentTop withProfilePicture withContentTopMenu /> */}
           <div className='ContentWrapper'>
             <Divider />
-            <FormInputSiswaPopUpContainer />
+            <GurustaffFormpopupContainer />
             <Divider />
-            <SiswaListData />
+            <GurustaffListDataContainer />
           </div>
         </div>
       </div>

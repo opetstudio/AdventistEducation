@@ -28,7 +28,7 @@ const INITIAL_STATE = {
   new_photo_path: ''
 };
 
-export default class FormInputSiswa extends Component {
+export default class GurustaffForm extends Component {
   constructor(props) {
     super(props);
     this._onChangeInputText = this._onChangeInputText.bind(this);

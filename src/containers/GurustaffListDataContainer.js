@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 
-import SiswaTable from '../components/SiswaTable';
+import GurustaffTable from '../components/GurustaffTable';
 import ListData from '../components/ListData';
 import {
   fetchAllDataSiswa,
@@ -11,7 +11,7 @@ import {
 } from '../actions/DataSiswaAction';
 // import './ContentTop.css';
 
-class SiswaListData extends Component {
+class GurustaffListDataContainer extends Component {
   constructor(props) {
     super(props);
     this.handleUserInput = this.handleUserInput.bind(this);
@@ -56,14 +56,14 @@ class SiswaListData extends Component {
     console.log('ListDataSiswa Render');
     return (
       <ListData
-        title="Siswa"
+        title="Guru dan Staff"
         headerTitleBackgroundColor='#00bff3'
-        filterTextInput='filterTextInputSiswa'
+        filterTextInput='filterTextInputGurustaff'
         onUserInput={this.handleUserInput}
         filterTextValue={this.state.filterText}
         listData={this.state.students}
       >
-        <SiswaTable
+        <GurustaffTable
           listData={this.state.students}
           filterTextValue={this.state.filterText}
           onClickEditSiswa={this._onClickEditSiswa}
@@ -102,4 +102,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SiswaListData);
+)(GurustaffListDataContainer);

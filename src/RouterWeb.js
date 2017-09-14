@@ -13,6 +13,7 @@ import AbsendigitalPage from './pages/Absendigital';
 import AbsenPage from './pages/Absen';
 import SettingPage from './pages/Setting';
 import DaftarSiswaPage from './pages/DaftarSiswa';
+import GurustaffScene from './pages/GurustaffScene';
 
 import './global.css';
 
@@ -35,6 +36,7 @@ class RouterWeb extends Component {
               <Route path="/absen" component={AbsenPage} />
               <Route path="/setting" component={SettingPage} />
               <Route path="/daftar-siswa" component={DaftarSiswaPage} />
+              <Route path="/daftar-gurustaff" component={GurustaffScene} />
             </div>
          </HashRouter>
      </Provider>

@@ -51,18 +51,18 @@ class Sidebar extends Component {
         />
         <Menu.Item
           name='Profil Guru'
-          active={activeItem === 'friends'}
-          onClick={this.handleItemClick}
+          active={activeItem === '/daftar-gurustaff'}
+          onClick={() => this.gotoPage('/daftar-gurustaff')}
           style={style.sideMenu}
         />
-        <Menu.Item
+        {/* <Menu.Item
           name='Profil Siswa'
           active={activeItem === 'friends'}
           onClick={this.handleItemClick}
           style={style.sideMenu}
-        />
+        /> */}
         <Menu.Item
-          name='Daftar Siswa'
+          name='Profil Siswa'
           active={activeItem === '/daftar-siswa'}
           onClick={() => this.gotoPage('/daftar-siswa')}
           style={style.sideMenu}
