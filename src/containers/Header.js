@@ -93,7 +93,7 @@ class Header extends Component {
   render() {
     const { openCloseWindowConfirm } = this.state;
     return (
-      <div className={'contentWrapper'}>
+      <div className={'contentHeaderWrapper'}>
         <Modal open={openCloseWindowConfirm}>
           <Modal.Header>Konfirmasi</Modal.Header>
           <Modal.Content>
@@ -159,8 +159,8 @@ function mapStateToProps(state) {
   //   return { ...val, uid };
   // });
   return {
-    dataUsersReducer: state.dataUsersReducer,
-    sessionReducer: state.sessionReducer,
+    // dataUsersReducer: state.dataUsersReducer,
+    // sessionReducer: state.sessionReducer,
     appReducer: state.appReducer
   };
 }

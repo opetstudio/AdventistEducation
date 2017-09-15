@@ -1,75 +1,82 @@
 import {
-  SAVE_DATA_SISWA,
-  SAVE_DATA_SISWA_ERROR,
-  SAVE_DATA_SISWA_INTERNAL_ERROR,
-  SAVE_DATA_SISWA_IN_PROGRESS,
-  FETCH_ALL_DATA_SISWA,
-  FETCH_ONE_DATA_SISWA,
-  UPDATE_DATA_SISWA_IN_PROGRESS,
-  UPDATE_DATA_SISWA,
-  UPDATE_DATA_SISWA_ERROR,
-  UPDATE_DATA_SISWA_INTERNAL_ERROR,
-  OPEN_MODAL_FORM_UPDATE_DATA_SISWA,
-  CLOSE_MODAL_FORM,
-  OPEN_MODAL_FORM,
-  SET_MODAL_FORM_PHOTO
+  GURUSTAFF_SAVE_DATA_SUCCESS,
+  GURUSTAFF_SAVE_DATA_ERROR,
+  GURUSTAFF_SAVE_DATA_INTERNAL_ERROR,
+  GURUSTAFF_SAVE_DATA_IN_PROGRESS,
+  GURUSTAFF_FETCH_ALL,
+  GURUSTAFF_FETCH_ONE,
+  GURUSTAFF_UPDATE_DATA_IN_PROGRESS,
+  GURUSTAFF_UPDATE_DATA_SUCCESS,
+  GURUSTAFF_UPDATE_DATA_ERROR,
+  GURUSTAFF_UPDATE_DATA_INTERNAL_ERROR,
+
+  GURUSTAFF_DELETE_DATA_IN_PROGRESS,
+  GURUSTAFF_DELETE_DATA_SUCCESS,
+  GURUSTAFF_DELETE_DATA_ERROR,
+  GURUSTAFF_DELETE_DATA_INTERNAL_ERROR,
+
+  GURUSTAFF_OPEN_MODAL_FORM_UPDATE,
+  GURUSTAFF_CLOSE_MODAL_FORM,
+  GURUSTAFF_OPEN_MODAL_FORM,
+  GURUSTAFF_SET_MODAL_FORM_PHOTO
 } from '../constants';
 import {
-  saveSiswa,
-  fetchAllDataSiswaApi,
-  updateSiswaApi,
+  createDataApi,
+  fetchAllApi,
+  updateDataApi,
+  deleteDataApi,
   openImageApi
-} from '../api';
+} from '../api/GurustaffApi';
 
-export const saveDataSiswa = (data, neDBDataPath, callback) => {
+export const createData = (data, neDBDataPath) => {
   console.log('');
   return (dispatch) => {
-    dispatch({ type: SAVE_DATA_SISWA_IN_PROGRESS, payload: data });
+    dispatch({ type: GURUSTAFF_SAVE_DATA_IN_PROGRESS, payload: data });
     const dataStringJson = JSON.stringify(data);
     console.log('dataStringJson: ', dataStringJson);
-    saveSiswa(dataStringJson, neDBDataPath).then((saveDataResponse) => {
+    createDataApi(dataStringJson, neDBDataPath).then((saveDataResponse) => {
         console.log('saveDataResponse: ', saveDataResponse);
         if (saveDataResponse.status) {
-            dispatch({ type: SAVE_DATA_SISWA, payload: saveDataResponse });
+            dispatch({ type: GURUSTAFF_SAVE_DATA_SUCCESS, payload: saveDataResponse });
             openImageApi(saveDataResponse.newDoc.new_photo_path).then((response) => {
-                dispatch({ type: SET_MODAL_FORM_PHOTO, payload: response.message });
+                dispatch({ type: GURUSTAFF_SET_MODAL_FORM_PHOTO, payload: response.message });
             });
         } else {
-          dispatch({ type: SAVE_DATA_SISWA_ERROR, payload: saveDataResponse });
+          dispatch({ type: GURUSTAFF_SAVE_DATA_ERROR, payload: saveDataResponse });
         }
 
         // callback(saveDataResponse.status, saveDataResponse.message);
     }).catch((err) => {
       console.log('err:', err);
       dispatch({
-        type: SAVE_DATA_SISWA_INTERNAL_ERROR,
+        type: GURUSTAFF_SAVE_DATA_INTERNAL_ERROR,
         payload: { status: false, message: err, newDoc: data }
       });
       // callback(false, err);
     });
   };
 };
-export const updateDataSiswa = (_id, oldData, data, neDBDataPath, callback) => {
-  console.log('updateDataSiswa');
+export const updateData = (_id, oldData, data, neDBDataPath) => {
+  console.log('updateData');
   return (dispatch) => {
-    dispatch({ type: UPDATE_DATA_SISWA_IN_PROGRESS, payload: data });
+    dispatch({ type: GURUSTAFF_UPDATE_DATA_IN_PROGRESS, payload: data });
     const dataStringJson = JSON.stringify(data);
     console.log('dataStringJson: ', dataStringJson);
-    updateSiswaApi(dataStringJson, _id, neDBDataPath).then((saveDataResponse) => {
+    updateDataApi(dataStringJson, _id, neDBDataPath).then((saveDataResponse) => {
         console.log('saveDataResponse: ', saveDataResponse);
         if (saveDataResponse.status) {
-            dispatch({ type: UPDATE_DATA_SISWA,
+            dispatch({ type: GURUSTAFF_UPDATE_DATA_SUCCESS,
               payload: saveDataResponse,
               oldData
             });
             openImageApi(saveDataResponse.updatedData.new_photo_path).then((response) => {
-                dispatch({ type: SET_MODAL_FORM_PHOTO, payload: response.message });
+                dispatch({ type: GURUSTAFF_SET_MODAL_FORM_PHOTO, payload: response.message });
             });
-            // dispatch({ type: SET_MODAL_FORM_PHOTO,
+            // dispatch({ type: GURUSTAFF_SET_MODAL_FORM_PHOTO,
             //   payload: saveDataResponse,
             //   oldData });
         } else {
-            dispatch({ type: UPDATE_DATA_SISWA_ERROR, payload: saveDataResponse });
+            dispatch({ type: GURUSTAFF_UPDATE_DATA_ERROR, payload: saveDataResponse });
         }
         // callback({
         //   status: saveDataResponse.status,
@@ -79,7 +86,7 @@ export const updateDataSiswa = (_id, oldData, data, neDBDataPath, callback) => {
     }).catch((err) => {
       console.log('err:', err);
       dispatch({
-        type: UPDATE_DATA_SISWA_INTERNAL_ERROR,
+        type: GURUSTAFF_UPDATE_DATA_INTERNAL_ERROR,
         payload: { status: false, message: err, updatedData: data }
       });
     });
@@ -89,28 +96,63 @@ export const onChangeInputPhoto = (photoPath) => {
   console.log('onChangeInputPhoto');
   return (dispatch) => {
     openImageApi(photoPath).then((response) => {
-        dispatch({ type: SET_MODAL_FORM_PHOTO, payload: response.message });
+        dispatch({ type: GURUSTAFF_SET_MODAL_FORM_PHOTO, payload: response.message });
     });
   };
 };
 
-export const fetchAllDataSiswa = (neDBDataPath, callback) => {
-  console.log('[fetchAllDataSiswa.', neDBDataPath);
+export const fetchAll = (neDBDataPath) => {
+  console.log('[fetchAll.', neDBDataPath);
   return (dispatch) => {
-    dispatch({ type: 'fetchAllDataSiswaInProgress' });
-    fetchAllDataSiswaApi(neDBDataPath).then((response) => {
-      dispatch({ type: FETCH_ALL_DATA_SISWA, payload: response.o });
-      callback(response.e, response.o);
+    dispatch({ type: 'fetchAll' });
+    fetchAllApi(neDBDataPath).then((response) => {
+      dispatch({ type: GURUSTAFF_FETCH_ALL, payload: response.o });
+      // callback(response.e, response.o);
     }).catch((err) => {
       console.log('err:', err);
-      callback(err, null);
+      // callback(err, null);
     });
   };
 };
-export const fetchOneDataSiswa = (row) => {
+export const fetchOne = (row) => {
   console.log('[fetchOneDataSiswa.', row);
   return (dispatch) => {
-    dispatch({ type: FETCH_ONE_DATA_SISWA, payload: row });
+    dispatch({ type: GURUSTAFF_FETCH_ONE, payload: row });
+  };
+};
+
+//DELETE
+export const deleteData = (oldData, neDBDataPath) => {
+  console.log('deleteData');
+  return (dispatch) => {
+    dispatch({ type: GURUSTAFF_DELETE_DATA_IN_PROGRESS, payload: oldData });
+    deleteDataApi(oldData, neDBDataPath).then((deleteDataApiResponse) => {
+        if (deleteDataApiResponse.status) {
+            dispatch({ type: GURUSTAFF_DELETE_DATA_SUCCESS,
+              payload: deleteDataApiResponse,
+              oldData
+            });
+            // openImageApi(deleteDataApiResponse.updatedData.new_photo_path).then((response) => {
+            //     dispatch({ type: GURUSTAFF_SET_MODAL_FORM_PHOTO, payload: response.message });
+            // });
+            // dispatch({ type: GURUSTAFF_SET_MODAL_FORM_PHOTO,
+            //   payload: saveDataResponse,
+            //   oldData });
+        } else {
+            dispatch({ type: GURUSTAFF_DELETE_DATA_ERROR, payload: deleteDataApiResponse });
+        }
+        // callback({
+        //   status: saveDataResponse.status,
+        //   message: saveDataResponse.message,
+        //   updatedData: saveDataResponse.updatedData
+        // });
+    }).catch((err) => {
+      console.log('err:', err);
+      dispatch({
+        type: GURUSTAFF_DELETE_DATA_INTERNAL_ERROR,
+        payload: { status: false, message: err, updatedData: oldData }
+      });
+    });
   };
 };
 
@@ -118,12 +160,12 @@ export const openModalFormUpdateData = (row) => {
   console.log('openModalFormUpdateData.', row);
   return (dispatch) => {
     if (row) {
-      dispatch({ type: OPEN_MODAL_FORM_UPDATE_DATA_SISWA, payload: row });
+      dispatch({ type: GURUSTAFF_OPEN_MODAL_FORM_UPDATE, payload: row });
       openImageApi(row.new_photo_path).then((response) => {
-          dispatch({ type: SET_MODAL_FORM_PHOTO, payload: response.message });
+          dispatch({ type: GURUSTAFF_SET_MODAL_FORM_PHOTO, payload: response.message });
       });
     }
   };
 };
-export const closeModalForm = () => ({ type: CLOSE_MODAL_FORM });
-export const openModalForm = () => ({ type: OPEN_MODAL_FORM });
+export const closeModalForm = () => ({ type: GURUSTAFF_CLOSE_MODAL_FORM });
+export const openModalForm = () => ({ type: GURUSTAFF_OPEN_MODAL_FORM });

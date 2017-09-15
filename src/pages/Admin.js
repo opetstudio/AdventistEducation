@@ -54,7 +54,10 @@ export default class Admin extends Component {
         <Header currentPagePath='/admin' adminTitle={'DASHBOARD'} />
         <Sidebar />
         <div className={'containerWrapper'}>
-          <ContentTop withProfilePicture withContentTopMenu />
+          <ContentTop
+            withProfilePicture
+            withContentTopMenu
+          />
         </div>
       </div>
     );

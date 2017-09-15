@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as SplashAction from '../actions/SplashAction';
+import { settingSetNoPhoto } from '../actions/SettingAction';
 
 class Splash extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class Splash extends Component {
   componentWillMount() {
     this.props.modifyLoadingDataUsersInProgress(true);
     this.props.loadingDataUsers();
+    this.props.settingSetNoPhoto();
   }
   componentWillReceiveProps(nextProps) {
     console.log('[Splash.componentWillReceiveProps] ==>', nextProps);
@@ -34,12 +36,18 @@ class Splash extends Component {
 
 function mapStateToProps(state) {
   return {
-    dataUsersReducer: state.dataUsersReducer
+    dataUsersReducer: state.dataUsersReducer,
+    SettingReducer: state.SettingReducer
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(SplashAction, dispatch);
+  return bindActionCreators(
+    {
+      ...SplashAction,
+      settingSetNoPhoto
+    },
+    dispatch);
 
   // return {
   //   fetchData: () => dispatch(fetchData())

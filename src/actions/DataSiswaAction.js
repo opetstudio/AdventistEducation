@@ -9,6 +9,12 @@ import {
   UPDATE_DATA_SISWA,
   UPDATE_DATA_SISWA_ERROR,
   UPDATE_DATA_SISWA_INTERNAL_ERROR,
+
+  SISWA_DELETE_DATA_IN_PROGRESS,
+  SISWA_DELETE_DATA_SUCCESS,
+  SISWA_DELETE_DATA_ERROR,
+  SISWA_DELETE_DATA_INTERNAL_ERROR,
+
   OPEN_MODAL_FORM_UPDATE_DATA_SISWA,
   CLOSE_MODAL_FORM,
   OPEN_MODAL_FORM,
@@ -18,7 +24,8 @@ import {
   saveSiswa,
   fetchAllDataSiswaApi,
   updateSiswaApi,
-  openImageApi
+  openImageApi,
+  deleteDataApi
 } from '../api';
 
 export const saveDataSiswa = (data, neDBDataPath, callback) => {
@@ -85,6 +92,42 @@ export const updateDataSiswa = (_id, oldData, data, neDBDataPath, callback) => {
     });
   };
 };
+
+//DELETE
+export const deleteData = (oldData, neDBDataPath) => {
+  console.log('deleteData');
+  return (dispatch) => {
+    dispatch({ type: SISWA_DELETE_DATA_IN_PROGRESS, payload: oldData });
+    deleteDataApi(oldData, neDBDataPath).then((deleteDataApiResponse) => {
+        if (deleteDataApiResponse.status) {
+            dispatch({ type: SISWA_DELETE_DATA_SUCCESS,
+              payload: deleteDataApiResponse,
+              oldData
+            });
+            // openImageApi(deleteDataApiResponse.updatedData.new_photo_path).then((response) => {
+            //     dispatch({ type: GURUSTAFF_SET_MODAL_FORM_PHOTO, payload: response.message });
+            // });
+            // dispatch({ type: GURUSTAFF_SET_MODAL_FORM_PHOTO,
+            //   payload: saveDataResponse,
+            //   oldData });
+        } else {
+            dispatch({ type: SISWA_DELETE_DATA_ERROR, payload: deleteDataApiResponse });
+        }
+        // callback({
+        //   status: saveDataResponse.status,
+        //   message: saveDataResponse.message,
+        //   updatedData: saveDataResponse.updatedData
+        // });
+    }).catch((err) => {
+      console.log('err:', err);
+      dispatch({
+        type: SISWA_DELETE_DATA_INTERNAL_ERROR,
+        payload: { status: false, message: err, updatedData: oldData }
+      });
+    });
+  };
+};
+
 export const onChangeInputPhoto = (photoPath) => {
   console.log('onChangeInputPhoto');
   return (dispatch) => {
@@ -94,16 +137,16 @@ export const onChangeInputPhoto = (photoPath) => {
   };
 };
 
-export const fetchAllDataSiswa = (neDBDataPath, callback) => {
+export const fetchAllDataSiswa = (neDBDataPath) => {
   console.log('[fetchAllDataSiswa.', neDBDataPath);
   return (dispatch) => {
     dispatch({ type: 'fetchAllDataSiswaInProgress' });
     fetchAllDataSiswaApi(neDBDataPath).then((response) => {
       dispatch({ type: FETCH_ALL_DATA_SISWA, payload: response.o });
-      callback(response.e, response.o);
+      // callback(response.e, response.o);
     }).catch((err) => {
       console.log('err:', err);
-      callback(err, null);
+      // callback(err, null);
     });
   };
 };

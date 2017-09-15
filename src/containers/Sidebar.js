@@ -6,22 +6,33 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { logOut } from '../actions/LoginAction';
+import { settingSetNoPhoto } from '../actions/SettingAction';
 import ProfilePicture from '../components/ProfilePicture';
 import { gotoSubAdminPage } from '../actions/AdminAction';
 import './Sidebar.css';
 
 
 class Sidebar extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   // this.setState({ redirect: false, pagePath: '/', activeItem: 'home' });
-  // }
+  constructor(props) {
+    super(props);
+    // this.setState({ redirect: false, pagePath: '/', activeItem: 'home' });
+    this.gotoPage = this.gotoPage.bind(this);
+    this.handleItemClick = this.handleItemClick.bind(this);
+    this.renderSideMenu = this.renderSideMenu.bind(this);
+  }
   componentWillMount() {
-    // console.log('stateeeeee====>>', this.state);
+    console.log('sidebar.js componentWillMount ====>>', this.props.SettingReducer);
      this.setState({
+       noPhoto: this.props.SettingReducer.photo_profile,
        redirect: false,
        pagePath: '/',
        activeItem: this.props.appReducer.current_sub_admin_path });
+       if (this.props.profilePictOnly) this.props.settingSetNoPhoto();
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log('sidebar.js componentWillReceiveProps ====>>', nextProps.SettingReducer);
+    this.setState({
+      noPhoto: nextProps.SettingReducer.photo_profile });
   }
   handleItemClick() {
 
@@ -91,16 +102,31 @@ class Sidebar extends Component {
   }
 
   render() {
-    // console.log('proooooooop====>>', this);
+    // console.log('Sidebar.js proooooooop====>>', this.props.SettingReducer);
+    // let photoProfile = this.state.noPhoto;
+    // if (this.props.photoBuffer && this.props.photoBuffer !== '') {
+    //     photoProfile = this.props.photoBuffer;
+    // }
     const { activeItem } = this.state;
     // console.log('activeItem====>', activeItem);
+
+    let photo = this.state.noPhoto;
+    if (this.props.photoBuffer && this.props.photoBuffer !== '') {
+      photo = this.props.photoBuffer;
+    }
+
     if (this.state.redirect) {
       return <Redirect push to={this.state.pagePath} />;
     }
     let sidebarContent;
     let backButton;
     if (this.props.profilePictOnly) {
-        sidebarContent = <ProfilePicture widthPicture={this.props.widthPicture} />;
+        sidebarContent = (
+            <ProfilePicture
+              widthPicture={this.props.widthPicture}
+              photoBuffer={photo}
+            />
+          );
         backButton = (
           <Button
               fluid
@@ -136,14 +162,17 @@ function mapStateToProps(state) {
   return {
     dataUsersReducer: state.dataUsersReducer,
     sessionReducer: state.sessionReducer,
-    appReducer: state.appReducer
+    appReducer: state.appReducer,
+    SettingReducer: state.SettingReducer
   };
 }
 
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    logOut, gotoSubAdminPage
+    logOut,
+    gotoSubAdminPage,
+    settingSetNoPhoto
   }, dispatch);
 
   // return {

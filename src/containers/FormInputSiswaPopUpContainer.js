@@ -8,6 +8,7 @@ import FormInputSiswa from '../components/FormInputSiswa';
 import {
   saveDataSiswa,
   updateDataSiswa,
+  deleteData,
   closeModalForm,
   openModalForm,
   onChangeInputPhoto
@@ -23,6 +24,7 @@ class FormInputSiswaPopUpContainer extends Component {
     this._onClickButtonTrigger = this._onClickButtonTrigger.bind(this);
     this._onCloseModal = this._onCloseModal.bind(this);
     this._onChangeInputPhoto = this._onChangeInputPhoto.bind(this);
+    this._onClickButtonDeleteData = this._onClickButtonDeleteData.bind(this);
   }
   componentWillMount() {
     // console.log('FormInputSiswaPopUp.componentWillMount props==>', this.props);
@@ -70,6 +72,9 @@ class FormInputSiswaPopUpContainer extends Component {
     );
     // }
   }
+  _onClickButtonDeleteData(oldData) {
+    this.props.deleteData(oldData, this.state.neDBDataPath);
+  }
   _onClickButtonTrigger() {
     this.props.openModalForm();
     // this.props.onClickCreateSiswa();
@@ -104,6 +109,7 @@ class FormInputSiswaPopUpContainer extends Component {
         <FormInputSiswa
           onClickButtonSaveData={this._onClickButtonSaveData}
           onClickButtonUpdateData={this._onClickButtonUpdateData}
+          onClickButtonDeleteData={this._onClickButtonDeleteData}
           // isCreateNew={this.props.isCreateNew}
           isFormModalSuccess={this.state.isFormModalSuccess}
           isFormError={this.state.isFormError}
@@ -134,6 +140,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     saveDataSiswa,
     updateDataSiswa,
+    deleteData,
     closeModalForm,
     openModalForm,
     onChangeInputPhoto

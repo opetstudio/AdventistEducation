@@ -10,8 +10,8 @@ import React, { Component } from 'react';
 // import { remote } from 'electron';
 import Header from '../containers/Header';
 import Sidebar from '../containers/Sidebar';
-import AbsenSiswaListData from '../containers/AbsenSiswaListData';
-import AbsenGuruListData from '../containers/AbsenGuruListData';
+import AbsenSiswaListDataContainer from '../containers/AbsenSiswaListDataContainer';
+import AbsenGurustaffListDataContainer from '../containers/AbsenGurustaffListDataContainer';
 
 import KickOutIfNotLogin from '../containers/KickOutIfNotLogin';
 import './Absendigital.css';
@@ -56,10 +56,10 @@ export default class Absendigital extends Component {
           {/* <ContentTop withProfilePicture withContentTopMenu /> */}
           <div className='liveReportAbsensiWrapper'>
             <div className='liveReportSiswaWrapper'>
-              <AbsenSiswaListData />
+              <AbsenSiswaListDataContainer />
             </div>
             <div className='liveReportGuruWrapper'>
-              <AbsenGuruListData />
+              <AbsenGurustaffListDataContainer />
             </div>
           </div>
         </div>

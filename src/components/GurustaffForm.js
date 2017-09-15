@@ -1,31 +1,36 @@
 import React, { Component } from 'react';
-import { Button, Header, Image, Modal, Form, Checkbox, Message } from 'semantic-ui-react';
+import { Button, Form, Message, Confirm, Dropdown } from 'semantic-ui-react';
 
-import {
-  openImageApi
-} from '../api';
+import { jabatanOptions } from '../common';
 
+const FIELDS = {
+  name: '',
+  last_name: '',
+  jabatan: '',
+  nip: '',
+  id: '',
+  _id: '',
+  photo: '',
+  new_photo_path: ''
+};
+const FIELDS_ERROR_FLAG = {
+  name_error: false,
+  last_name_error: false,
+  jabatan_error: false,
+  nip_error: false,
+  id_error: false
+};
 const INITIAL_STATE = {
+  ...FIELDS,
+  ...FIELDS_ERROR_FLAG,
   detailData: {},
   newData: {},
   isFormOk: true,
   isSuccess: false,
   isError: false,
   formMessage: 'Masukan data dengan baik dan benar.',
-  name: '',
-  name_error: false,
-  last_name: '',
-  last_name_error: false,
-  kelas: '',
-  kelas_error: false,
-  nis: '',
-  nis_error: false,
-  id: '',
-  _id: '',
-  id_error: false,
-  photo: '',
   photo_path: '',
-  new_photo_path: ''
+  openConfirmDelete: false
 };
 
 export default class GurustaffForm extends Component {
@@ -34,13 +39,18 @@ export default class GurustaffForm extends Component {
     this._onChangeInputText = this._onChangeInputText.bind(this);
     this._onClickButtonSaveData = this._onClickButtonSaveData.bind(this);
     this._onClickButtonUpdateData = this._onClickButtonUpdateData.bind(this);
-    this._saveDataResponse = this._saveDataResponse.bind(this);
+
     this._checkField = this._checkField.bind(this);
     this._setError = this._setError.bind(this);
     this._setDataDetail = this._setDataDetail.bind(this);
     this._renderButtonSubmit = this._renderButtonSubmit.bind(this);
     this._resetState = this._resetState.bind(this);
     this._onChangeInputPhoto = this._onChangeInputPhoto.bind(this);
+
+    this._onClickButtonDeleteData = this._onClickButtonDeleteData.bind(this);
+    this._openConfirmDelete = this._openConfirmDelete.bind(this);
+    this._onCancelConfirmDelete = this._onCancelConfirmDelete.bind(this);
+    this._onOkConfirmDelete = this._onOkConfirmDelete.bind(this);
   }
   componentWillMount() {
     this._resetState();
@@ -72,10 +82,10 @@ export default class GurustaffForm extends Component {
         name_error: false,
         last_name: dataDetail.last_name,
         last_name_error: false,
-        kelas: dataDetail.kelas,
-        kelas_error: false,
-        nis: dataDetail.nis,
-        nis_error: false,
+        jabatan: dataDetail.jabatan,
+        jabatan_error: false,
+        nip: dataDetail.nip,
+        nip_error: false,
         id: dataDetail.id,
         _id: dataDetail._id,
         photo: dataDetail.photo,
@@ -88,17 +98,11 @@ export default class GurustaffForm extends Component {
     switch (key) {
       case 'name': this.setState({ name: value, name_error: false }); break;
       case 'last_name': this.setState({ last_name: value, last_name_error: false }); break;
-      case 'kelas': this.setState({ kelas: value, kelas_error: false }); break;
-      case 'nis': this.setState({ nis: value, nis_error: false }); break;
+      case 'jabatan': this.setState({ jabatan: value, jabatan_error: false }); break;
+      case 'nip': this.setState({ nip: value, nip_error: false }); break;
       case 'id': this.setState({ id: value, id_error: false }); break;
       case 'photo':
-
-        // this._onChangeInputPhoto(value.path);
-        // openImageApi(value.path).then((response) => {
           this.setState({ photo: value.name, photo_path: value.path });
-        //     // dispatch({ type: SET_MODAL_FORM_PHOTO, payload: response.message });
-        //     // `data:image/png;base64, ${action.payload}`
-        // });
       break;
       default:
         return true;
@@ -119,8 +123,8 @@ export default class GurustaffForm extends Component {
     isFormOk = this._checkField(isFormOk, newData, 'name', this.state.name, 'NAMA');
     isFormOk = this._checkField(isFormOk, newData, 'last_name',
                                 this.state.last_name, 'NAMA AKHIR');
-    isFormOk = this._checkField(isFormOk, newData, 'kelas', this.state.kelas, 'KELAS');
-    isFormOk = this._checkField(isFormOk, newData, 'nis', this.state.nis, 'NIS');
+    isFormOk = this._checkField(isFormOk, newData, 'jabatan', this.state.jabatan, 'JABATAN');
+    isFormOk = this._checkField(isFormOk, newData, 'nip', this.state.nip, 'NIP');
     isFormOk = this._checkField(isFormOk, newData, 'id', this.state.id, 'ID');
     return isFormOk;
   }
@@ -143,8 +147,21 @@ export default class GurustaffForm extends Component {
         this.setState({
           newData
         });
-        this.props.onClickButtonSaveData(newData, this._saveDataResponse);
+        this.props.onClickButtonSaveData(newData);
     }
+  }
+  _onClickButtonDeleteData() {
+    this._openConfirmDelete();
+  }
+  _openConfirmDelete() {
+    this.setState({ openConfirmDelete: true });
+  }
+  _onCancelConfirmDelete() {
+    this.setState({ openConfirmDelete: false });
+  }
+  _onOkConfirmDelete() {
+    // this.setState({ openConfirmDelete: false });
+    this.props.onClickButtonDeleteData(this.state.detailData);
   }
   _onClickButtonUpdateData() {
     const newData = {};
@@ -180,15 +197,15 @@ export default class GurustaffForm extends Component {
     st[fieldKey + '_error'] = true;
     this.setState(st);
   }
-  _saveDataResponse(status, message) {
-    const msg = message;
-    this.setState({
-      isSuccess: status,
-      isError: !status,
-      formMessage: msg
-    });
-    this.props.onUpdateSiswaSuccess(this.state.newData);
-  }
+  // _saveDataResponse(status, message) {
+  //   const msg = message;
+  //   this.setState({
+  //     isSuccess: status,
+  //     isError: !status,
+  //     formMessage: msg
+  //   });
+  //   this.props.onUpdateSiswaSuccess(this.state.newData);
+  // }
   _onChangeInputPhoto(photoPath) {
     this.props.onChangeInputPhoto(photoPath);
   }
@@ -196,25 +213,40 @@ export default class GurustaffForm extends Component {
     // alert(this.state._id);
     if (this.state._id && this.state._id !== '') {
       return (
-        <Button
-          type='submit'
-          onClick={() => this._onClickButtonUpdateData()}
-        >
-          Update
-        </Button>
+        <div>
+          <Button
+            type='submit'
+            onClick={() => this._onClickButtonUpdateData()}
+            positive
+          >
+            Update
+          </Button>
+          <Button
+            type='submit'
+            onClick={() => this._onClickButtonDeleteData()}
+            negative
+          >
+            Hapus
+          </Button>
+          <Confirm
+            open={this.state.openConfirmDelete}
+            onCancel={this._onCancelConfirmDelete}
+            onConfirm={this._onOkConfirmDelete}
+          />
+        </div>
       );
     }
     return (
       <Button
         type='submit'
         onClick={() => this._onClickButtonSaveData()}
+        positive
       >
         Submit
       </Button>
     );
   }
   render() {
-    console.log('FormInputSiswa Render');
     return (
         <Form
           success={this.state.isSuccess}
@@ -223,7 +255,7 @@ export default class GurustaffForm extends Component {
           <Message
             success={this.state.isSuccess}
             error={this.state.isError}
-            header='Form Input Siswa'
+            header='Form Input Data'
             content={this.state.formMessage}
           />
           <Form.Field>
@@ -247,23 +279,36 @@ export default class GurustaffForm extends Component {
             />
           </Form.Field>
           <Form.Field>
-            <Form.Input
-              label='Kelas'
-              placeholder='Kelas'
-              value={this.state.kelas}
-              name='kelas'
-              onChange={e => this._onChangeInputText('kelas', e.target.value)}
-              error={this.state.kelas_error}
+            <Dropdown
+              placeholder='pilih jabatan'
+              fluid
+              selection
+              options={jabatanOptions}
+              value={this.state.jabatan}
+              onChange={(e, data) => {
+                // console.log(e);
+                // console.log(data);
+                this._onChangeInputText('jabatan', data.value);
+                }}
+              error={this.state.jabatan_error}
             />
+            {/* <Form.Input
+              label='jabatan'
+              placeholder='jabatan'
+              value={this.state.jabatan}
+              name='jabatan'
+              onChange={e => this._onChangeInputText('jabatan', e.target.value)}
+              error={this.state.jabatan_error}
+            /> */}
           </Form.Field>
           <Form.Field>
             <Form.Input
-              label='NIS'
-              placeholder='NIS'
-              value={this.state.nis}
-              name='nis'
-              onChange={e => this._onChangeInputText('nis', e.target.value)}
-              error={this.state.nis_error}
+              label='nip'
+              placeholder='nip'
+              value={this.state.nip}
+              name='nip'
+              onChange={e => this._onChangeInputText('nip', e.target.value)}
+              error={this.state.nip_error}
             />
           </Form.Field>
           <Form.Field>

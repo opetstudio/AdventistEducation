@@ -1,32 +1,38 @@
 import React, { Component } from 'react';
-import { Button, Header, Image, Modal, Form, Checkbox, Message } from 'semantic-ui-react';
+import { Button, Form, Message, Confirm, Dropdown } from 'semantic-ui-react';
 
-import {
-  openImageApi
-} from '../api';
+import { kelasOptions } from '../common';
 
+const FIELDS = {
+  name: '',
+  last_name: '',
+  kelas: '',
+  nis: '',
+  id: '',
+  _id: '',
+  photo: '',
+  new_photo_path: ''
+};
+const FIELDS_ERROR_FLAG = {
+  name_error: false,
+  last_name_error: false,
+  kelas_error: false,
+  nis_error: false,
+  id_error: false
+};
 const INITIAL_STATE = {
+  ...FIELDS,
+  ...FIELDS_ERROR_FLAG,
   detailData: {},
   newData: {},
   isFormOk: true,
   isSuccess: false,
   isError: false,
   formMessage: 'Masukan data dengan baik dan benar.',
-  name: '',
-  name_error: false,
-  last_name: '',
-  last_name_error: false,
-  kelas: '',
-  kelas_error: false,
-  nis: '',
-  nis_error: false,
-  id: '',
-  _id: '',
-  id_error: false,
-  photo: '',
   photo_path: '',
-  new_photo_path: ''
+  openConfirmDelete: false
 };
+
 
 export default class FormInputSiswa extends Component {
   constructor(props) {
@@ -41,6 +47,11 @@ export default class FormInputSiswa extends Component {
     this._renderButtonSubmit = this._renderButtonSubmit.bind(this);
     this._resetState = this._resetState.bind(this);
     this._onChangeInputPhoto = this._onChangeInputPhoto.bind(this);
+
+    this._onClickButtonDeleteData = this._onClickButtonDeleteData.bind(this);
+    this._openConfirmDelete = this._openConfirmDelete.bind(this);
+    this._onCancelConfirmDelete = this._onCancelConfirmDelete.bind(this);
+    this._onOkConfirmDelete = this._onOkConfirmDelete.bind(this);
   }
   componentWillMount() {
     this._resetState();
@@ -92,13 +103,7 @@ export default class FormInputSiswa extends Component {
       case 'nis': this.setState({ nis: value, nis_error: false }); break;
       case 'id': this.setState({ id: value, id_error: false }); break;
       case 'photo':
-
-        // this._onChangeInputPhoto(value.path);
-        // openImageApi(value.path).then((response) => {
           this.setState({ photo: value.name, photo_path: value.path });
-        //     // dispatch({ type: SET_MODAL_FORM_PHOTO, payload: response.message });
-        //     // `data:image/png;base64, ${action.payload}`
-        // });
       break;
       default:
         return true;
@@ -145,6 +150,19 @@ export default class FormInputSiswa extends Component {
         });
         this.props.onClickButtonSaveData(newData, this._saveDataResponse);
     }
+  }
+  _onClickButtonDeleteData() {
+    this._openConfirmDelete();
+  }
+  _openConfirmDelete() {
+    this.setState({ openConfirmDelete: true });
+  }
+  _onCancelConfirmDelete() {
+    this.setState({ openConfirmDelete: false });
+  }
+  _onOkConfirmDelete() {
+    // this.setState({ openConfirmDelete: false });
+    this.props.onClickButtonDeleteData(this.state.detailData);
   }
   _onClickButtonUpdateData() {
     const newData = {};
@@ -196,18 +214,34 @@ export default class FormInputSiswa extends Component {
     // alert(this.state._id);
     if (this.state._id && this.state._id !== '') {
       return (
-        <Button
-          type='submit'
-          onClick={() => this._onClickButtonUpdateData()}
-        >
-          Update
-        </Button>
+        <div>
+          <Button
+            type='submit'
+            onClick={() => this._onClickButtonUpdateData()}
+            positive
+          >
+            Update
+          </Button>
+          <Button
+            type='submit'
+            onClick={() => this._onClickButtonDeleteData()}
+            negative
+          >
+            Hapus
+          </Button>
+          <Confirm
+            open={this.state.openConfirmDelete}
+            onCancel={this._onCancelConfirmDelete}
+            onConfirm={this._onOkConfirmDelete}
+          />
+        </div>
       );
     }
     return (
       <Button
         type='submit'
         onClick={() => this._onClickButtonSaveData()}
+        positive
       >
         Submit
       </Button>
@@ -247,14 +281,27 @@ export default class FormInputSiswa extends Component {
             />
           </Form.Field>
           <Form.Field>
-            <Form.Input
+            <Dropdown
+              placeholder='pilih kelas'
+              fluid
+              selection
+              options={kelasOptions}
+              value={this.state.kelas}
+              onChange={(e, data) => {
+                // console.log(e);
+                // console.log(data);
+                this._onChangeInputText('kelas', data.value);
+                }}
+              error={this.state.jabatan_error}
+            />
+            {/* <Form.Input
               label='Kelas'
               placeholder='Kelas'
               value={this.state.kelas}
               name='kelas'
               onChange={e => this._onChangeInputText('kelas', e.target.value)}
               error={this.state.kelas_error}
-            />
+            /> */}
           </Form.Field>
           <Form.Field>
             <Form.Input

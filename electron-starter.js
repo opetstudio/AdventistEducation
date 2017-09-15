@@ -1,15 +1,18 @@
 
 const electron = require('electron');
+// const Menu = require('menu');
 const ipcMain = electron.ipcMain;
 // const remote = electron.remote;
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.
+// const BrowserWindow = require('browser-window');
 const BrowserWindow = electron.BrowserWindow;
-const env = process.env.NODE_ENV;
-// const env = 'development';
+const Menu = electron.Menu;
+// const env = process.env.NODE_ENV;
+const env = 'production';
 
-// document.getElementById('close-btn').addEventListener("click", function (e) {
+// document.getElementById('close-btn').addEventListener('click', function (e) {
 //        var window = remote.getCurrentWindow();
 //        window.close();
 //   });
@@ -23,12 +26,13 @@ const url = require('url');
 let mainWindow;
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 1120, height: 800 });
+  mainWindow = new BrowserWindow({
+    width: 1120, height: 800, frame: false, minWidth: 800, minHeight: 800 });
   // and load the index.html of the app.
   if (env === 'production') {
     mainWindow.loadURL(url.format({
       // pathname: path.join(__dirname, 'public/index.desktop.html'),
-      pathname: path.join(__dirname, '../build/index.html'),
+      pathname: path.join(__dirname, 'build/index.html'),
       protocol: 'file:',
       slashes: true
     }));
@@ -52,6 +56,28 @@ function createWindow() {
     // when you should delete the corresponding element.
     mainWindow = null;
   });
+
+  // Create the Application's main menu
+    const template = [{
+        label: 'Application',
+        submenu: [
+            { label: 'About Application', selector: 'orderFrontStandardAboutPanel:' },
+            { type: 'separator' },
+            { label: 'Quit', accelerator: 'Command+Q', click: () => { app.quit(); } }
+        ] }, {
+        label: 'Edit',
+        submenu: [
+            { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
+            { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
+            { type: 'separator' },
+            { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
+            { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+            { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
+            { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
+        ] }
+    ];
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
 // This method will be called when Electron has finished
@@ -87,14 +113,41 @@ exports.pong = arg => {
 const route_users = require('./server/electron/routes/UsersRoute');
 const route_absen = require('./server/electron/routes/AbsenRoute');
 const route_siswa = require('./server/electron/routes/SiswaRoute');
+const route_util = require('./server/electron/routes/UtilRoute');
+const route_gurustaff = require('./server/electron/routes/GurustaffRoute');
 
 ipcMain.on('/user-detail', route_users.userDetail);
 ipcMain.on('/save-user', route_users.saveUser);
-ipcMain.on('/save-absen', route_absen.saveAbsen);
+// ipcMain.on('/save-absen', route_absen.saveAbsen);
+
+//students
 ipcMain.on('/save-siswa', route_siswa.saveSiswa);
 ipcMain.on('/update-siswa', route_siswa.updateSiswa);
 ipcMain.on('/fetchAllDataSiswaApi', route_siswa.fetchAllDataSiswaApi);
-ipcMain.on('/fetchAllDataAbsenSiswaApi', route_absen.fetchAllDataAbsenSiswaApi);
-ipcMain.on('/fetchAllDataAbsenGuruApi', route_absen.fetchAllDataAbsenGuruApi);
-ipcMain.on('/openImageApi', route_siswa.openImageApi);
-ipcMain.on('/closeImageApi', route_siswa.closeImageApi);
+// ipcMain.on('/fetchAllDataAbsenSiswaApi', route_absen.fetchAllDataAbsenSiswaApi);
+// ipcMain.on('/fetchAllDataAbsenGuruApi', route_absen.fetchAllDataAbsenGuruApi);
+ipcMain.on('/siswaDeleteDataApi', route_siswa.siswaDeleteDataApi);
+
+//util
+ipcMain.on('/openImageApi', route_util.openImageApi);
+ipcMain.on('/closeImageApi', route_util.closeImageApi);
+
+
+function routeOne(routeName, theRoute) {
+  ipcMain.on(`/${routeName}`, theRoute[routeName]);
+}
+
+function route(entityName, theRoute) {
+  routeOne(`${entityName}CreateDataApi`, theRoute);
+  routeOne(`${entityName}UpdateDataApi`, theRoute);
+  routeOne(`${entityName}DeleteDataApi`, theRoute);
+  routeOne(`${entityName}FetchAllApi`, theRoute);
+  if (entityName === 'absen') {
+    routeOne(`${entityName}FetchAllApiGurustaff`, theRoute);
+    routeOne(`${entityName}FetchAllApiSiswa`, theRoute);
+  }
+}
+
+route('gurustaff', route_gurustaff);
+route('absen', route_absen);
+// route('absen', route_absen);

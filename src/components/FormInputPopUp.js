@@ -4,7 +4,7 @@ import { Button, Header, Image, Modal } from 'semantic-ui-react';
 
 // import { openImageApi, closeImageApi } from '../api';
 
-// const photoProfile = require('../img/photoProfile.png');
+// const photoProfile = require('../img/photoprofile.png');
 // ../img/U2NyZWVuc2hvdCBhdCBTZXAgMDMgMjMtNTctMTQucG5n.png
 
 
@@ -131,7 +131,7 @@ class FormInputPopUp extends Component {
           open={this.state.open}
           onClose={this._onCloseModal}
         >
-          <Modal.Header>Masukan data-data siswa dengan baik dan benar.</Modal.Header>
+          <Modal.Header>Form Entri Data</Modal.Header>
           <Modal.Content image>
             <Image
               id="imgDisplay"

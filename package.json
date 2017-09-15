@@ -20,13 +20,17 @@
     "build-webdesk": "npm run build-css && react-scripts build",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
     "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electron Tutorial App\"",
-    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
+    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds",
+    "packing-mac": "npm-run-all -p build-web package-mac",
+    "packing-win": "npm-run-all -p build-web package-win",
+    "packing-linux": "npm-run-all -p build-web package-linux"
   },
   "dependencies": {
     "@shoutem/ui": "^0.21.3",
     "app-root-path": "^2.0.1",
     "base-64": "^0.1.0",
     "bootstrap": "^3.3.7",
+    "browser-window": "^0.4.0",
     "classnames": "^2.2.5",
     "electron": "~1.6.2",
     "electronify-server": "^0.6.2",
@@ -35,6 +39,7 @@
     "fs": "0.0.1-security",
     "history": "^4.7.1",
     "lodash": "^4.17.4",
+    "menu": "^0.2.5",
     "moment": "^2.18.1",
     "nedb": "^1.8.0",
     "node-sass-chokidar": "0.0.3",
@@ -74,7 +79,7 @@
     "react-scripts": "1.0.13",
     "react-test-renderer": "16.0.0-alpha.12"
   },
-  "main": "src/electron-starter.js",
+  "main": "electron-starter.js",
   "jest": {
     "preset": "react-native"
   },

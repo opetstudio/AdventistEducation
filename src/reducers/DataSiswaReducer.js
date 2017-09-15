@@ -8,6 +8,11 @@ import {
   UPDATE_DATA_SISWA,
   UPDATE_DATA_SISWA_ERROR,
   UPDATE_DATA_SISWA_INTERNAL_ERROR,
+  SISWA_DELETE_DATA_IN_PROGRESS,
+  SISWA_DELETE_DATA_SUCCESS,
+  SISWA_DELETE_DATA_ERROR,
+  SISWA_DELETE_DATA_INTERNAL_ERROR,
+
   FETCH_ONE_DATA_SISWA,
   OPEN_MODAL_FORM_UPDATE_DATA_SISWA,
   SET_MODAL_FORM_PHOTO,
@@ -19,6 +24,7 @@ const INITIAL_STATE = {
   ListDataSiswa: [],
   saveDataInProgress: false,
   updateDataInProgress: false,
+  deleteDataInProgress: false,
   formSiswaMessage: '',
   submitDataSiswaStatus: false,
   dataDetail: {},
@@ -163,6 +169,55 @@ export default (state = INITIAL_STATE, action) => {
         isFormModalError: !action.payload.status,
         isFormModalSuccess: action.payload.status
       };
+
+    case SISWA_DELETE_DATA_IN_PROGRESS:
+      return {
+        ...state,
+        deleteDataInProgress: true
+      };
+    case SISWA_DELETE_DATA_SUCCESS:
+      // state.listData.push(action.payload);
+      // console.log('current state data==>', state.listData);
+      // console.log('old data==>', action.oldData);
+      // console.log('new data==>', action.payload.updatedData);
+      console.log('indexOf data==>', state.ListDataSiswa.indexOf(action.oldData));
+      // state.listData.slice(state.listData.indexOf(action.oldData) + 1);
+      state.ListDataSiswa.splice(state.ListDataSiswa.indexOf(action.oldData), 1);
+      // state.listData.push(action.payload.updatedData);
+
+      return {
+        ...state,
+        deleteDataInProgress: false,
+        formMessage: action.payload.message,
+        submitDataStatus: action.payload.status,
+        dataDetail: {},
+        formModalOpen: false,
+        isFormModalError: false,
+        isFormModalSuccess: false
+      };
+    case SISWA_DELETE_DATA_ERROR:
+      // state.listData.push(action.payload);
+      return {
+        ...state,
+        deleteDataInProgress: false,
+        // dataDetail: action.payload.updatedData,
+        formMessage: action.payload.message,
+        submitDataStatus: action.payload.status,
+        isFormModalError: !action.payload.status,
+        isFormModalSuccess: action.payload.status
+      };
+    case SISWA_DELETE_DATA_INTERNAL_ERROR:
+      // state.listData.push(action.payload);
+      return {
+        ...state,
+        deleteDataInProgress: false,
+        // dataDetail: action.payload.updatedData,
+        formMessage: action.payload.message,
+        submitDataStatus: action.payload.status,
+        isFormModalError: !action.payload.status,
+        isFormModalSuccess: action.payload.status
+      };
+
     default:
       return state;
   }

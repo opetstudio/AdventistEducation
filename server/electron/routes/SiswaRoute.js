@@ -58,6 +58,11 @@ function set_new_photo_path(photoPath, neDBDataPath) {
   // }
   return newPath;
 }
+function delete_photo(photoPath) {
+  if (fs.existsSync(photoPath)) {
+    fs.unlinkSync(photoPath);
+  }
+}
 module.exports.openImageApi = function (event, photoPath) {
   console.log('openImageApi==>', photoPath);
   // console.log('appRoot==>', appRoot);
@@ -291,6 +296,33 @@ module.exports.updateSiswa = function (event, arg1, _id, neDBDataPath) {
             event.sender.send('/update-siswa-response', '1', 'berhasil update data', updatedData);
           });
         });
+      });
+    });
+};
+module.exports.siswaDeleteDataApi = function (event, arg1, neDBDataPath) {
+  const responseRoute = '/siswaDeleteDataApiResponse';
+  const tableName = 'siswa';
+  // const dataObj = JSON.parse(arg1);
+  const dataObj = arg1;
+  const storage = new Datastore({ filename: `${neDBDataPath}${tableName}.db`, autoload: true });
+    storage.findOne({ _id: dataObj._id }, (err0, doc0) => {
+      if (!doc0) {
+        return event.sender.send(responseRoute,
+          '0', 'Gagal delete. Data current tidak ditemukan.'
+        );
+      }
+      const dataDetail = doc0; //old Data
+      const updatedData = _.merge(dataDetail, dataObj);
+      storage.remove({ _id: dataDetail._id }, {}, (err2, numRemoved) => {
+        console.log('total data deleted=', numRemoved);
+        if (err2) {
+          return event.sender.send(responseRoute,
+            '0', `Gagal delete. msg: ${err2}`,
+            updatedData
+          );
+        }
+        delete_photo(updatedData.new_photo_path);
+        event.sender.send(responseRoute, '1', 'berhasil delete', updatedData);
       });
     });
 };

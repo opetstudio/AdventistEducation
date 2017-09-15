@@ -78,6 +78,22 @@ export const updateSiswaApi = (data, _id, neDBDataPath) =>
     });
   });
 
+//delete
+export const deleteDataApi = (data, neDBDataPath) =>
+  new Promise((resolve) => {
+    if (ipcRenderer !== null) {
+        ipcRenderer.send('/siswaDeleteDataApi', data, neDBDataPath);
+    }
+    ipcRenderer.on('/siswaDeleteDataApiResponse', (event, status, message, updatedData) => {
+        // console.log(message); // logs out "Hello second window!"
+        if (status === '1') {
+            resolve({ status: true, message, updatedData });
+        } else {
+            resolve({ status: false, message, updatedData });
+        }
+    });
+  });
+
 export const fetchAllDataSiswaApi = neDBDataPath =>
   new Promise((resolve) => {
     if (ipcRenderer !== null) {

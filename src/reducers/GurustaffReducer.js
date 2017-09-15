@@ -1,26 +1,31 @@
 import {
-  SAVE_DATA_SISWA_IN_PROGRESS,
-  SAVE_DATA_SISWA,
-  SAVE_DATA_SISWA_ERROR,
-  SAVE_DATA_SISWA_INTERNAL_ERROR,
-  FETCH_ALL_DATA_SISWA,
-  UPDATE_DATA_SISWA_IN_PROGRESS,
-  UPDATE_DATA_SISWA,
-  UPDATE_DATA_SISWA_ERROR,
-  UPDATE_DATA_SISWA_INTERNAL_ERROR,
-  FETCH_ONE_DATA_SISWA,
-  OPEN_MODAL_FORM_UPDATE_DATA_SISWA,
-  SET_MODAL_FORM_PHOTO,
-  CLOSE_MODAL_FORM,
-  OPEN_MODAL_FORM
+  GURUSTAFF_SAVE_DATA_IN_PROGRESS,
+  GURUSTAFF_SAVE_DATA_SUCCESS,
+  GURUSTAFF_SAVE_DATA_ERROR,
+  GURUSTAFF_SAVE_DATA_INTERNAL_ERROR,
+  GURUSTAFF_FETCH_ALL,
+  GURUSTAFF_UPDATE_DATA_IN_PROGRESS,
+  GURUSTAFF_UPDATE_DATA_SUCCESS,
+  GURUSTAFF_UPDATE_DATA_ERROR,
+  GURUSTAFF_UPDATE_DATA_INTERNAL_ERROR,
+  GURUSTAFF_DELETE_DATA_IN_PROGRESS,
+  GURUSTAFF_DELETE_DATA_SUCCESS,
+  GURUSTAFF_DELETE_DATA_ERROR,
+  GURUSTAFF_DELETE_DATA_INTERNAL_ERROR,
+  GURUSTAFF_FETCH_ONE,
+  GURUSTAFF_OPEN_MODAL_FORM_UPDATE,
+  GURUSTAFF_SET_MODAL_FORM_PHOTO,
+  GURUSTAFF_CLOSE_MODAL_FORM,
+  GURUSTAFF_OPEN_MODAL_FORM
 } from '../constants';
 
 const INITIAL_STATE = {
-  ListDataSiswa: [],
+  listData: [],
   saveDataInProgress: false,
   updateDataInProgress: false,
-  formSiswaMessage: '',
-  submitDataSiswaStatus: false,
+  deleteDataInProgress: false,
+  formMessage: '',
+  submitDataStatus: false,
   dataDetail: {},
   formModalOpen: false,
   isFormModalError: false,
@@ -30,136 +35,174 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case SAVE_DATA_SISWA_IN_PROGRESS:
-      console.log('SAVE_DATA_SISWA_IN_PROGRESS');
+    case GURUSTAFF_SAVE_DATA_IN_PROGRESS:
       return {
         ...state,
         saveDataInProgress: true
       };
-    case UPDATE_DATA_SISWA_IN_PROGRESS:
-      console.log('SAVE_DATA_SISWA_IN_PROGRESS');
+    case GURUSTAFF_UPDATE_DATA_IN_PROGRESS:
       return {
         ...state,
         updateDataInProgress: true
       };
-    case FETCH_ALL_DATA_SISWA:
-      console.log('SAVE_DATA_SISWA_IN_PROGRESS');
+    case GURUSTAFF_FETCH_ALL:
       return {
         ...state,
         saveDataInProgress: false,
-        ListDataSiswa: action.payload
+        listData: action.payload
       };
-    case FETCH_ONE_DATA_SISWA:
-      console.log('FETCH_ONE_DATA_SISWA');
+    case GURUSTAFF_FETCH_ONE:
       return {
         ...state,
         dataDetail: action.payload
       };
-    case OPEN_MODAL_FORM_UPDATE_DATA_SISWA:
-      console.log('OPEN_MODAL_FORM_UPDATE_DATA_SISWA');
+    case GURUSTAFF_OPEN_MODAL_FORM_UPDATE:
       return {
         ...state,
         dataDetail: action.payload,
         formModalOpen: true,
-        formSiswaMessage: 'Input data siswa dengan baik dan benar.',
+        formMessage: 'Masukan data dengan baik dan benar.',
         isFormModalError: false
       };
-    case CLOSE_MODAL_FORM:
-      console.log('CLOSE_MODAL_FORM');
+    case GURUSTAFF_CLOSE_MODAL_FORM:
       return {
         ...state,
         dataDetail: {},
         formModalOpen: false,
-        formSiswaMessage: '',
+        formMessage: '',
         isFormModalError: false,
         isFormModalSuccess: false
       };
-    case OPEN_MODAL_FORM:
-      console.log('CLOSE_MODAL_FORM');
+    case GURUSTAFF_OPEN_MODAL_FORM:
       return {
         ...state,
         dataDetail: {},
         detailPhotoBuffer: '',
         formModalOpen: true,
-        formSiswaMessage: 'Input data siswa dengan baik dan benar.',
+        formMessage: 'Input data siswa dengan baik dan benar.',
         isFormModalError: false
       };
-    case SET_MODAL_FORM_PHOTO:
-      console.log('SET_MODAL_FORM_PHOTO');
-      // `data:image/png;base64, ${response.message}`
+    case GURUSTAFF_SET_MODAL_FORM_PHOTO:
       return {
         ...state,
         detailPhotoBuffer: `data:image/png;base64, ${action.payload}`
       };
-    case SAVE_DATA_SISWA:
-    console.log('SAVE_DATA_SISWA');
-      state.ListDataSiswa.push(action.payload.newDoc);
+    case GURUSTAFF_SAVE_DATA_SUCCESS:
+      state.listData.push(action.payload.newDoc);
+      return {
+        ...state,
+        dataDetail: action.payload.newDoc,
+        saveDataInProgress: false,
+        // isFormModalError: !action.payload.status,
+        // isFormModalSuccess: action.payload.status,
+        formMessage: action.payload.message,
+        formModalOpen: false,
+        isFormModalError: false,
+        isFormModalSuccess: false
+      };
+    case GURUSTAFF_SAVE_DATA_ERROR:
       return {
         ...state,
         dataDetail: action.payload.newDoc,
         saveDataInProgress: false,
         isFormModalError: !action.payload.status,
         isFormModalSuccess: action.payload.status,
-        formSiswaMessage: action.payload.message
+        formMessage: action.payload.message
       };
-    case SAVE_DATA_SISWA_ERROR:
-    console.log('SAVE_DATA_SISWA_ERROR');
+    case GURUSTAFF_SAVE_DATA_INTERNAL_ERROR:
       return {
         ...state,
         dataDetail: action.payload.newDoc,
         saveDataInProgress: false,
         isFormModalError: !action.payload.status,
         isFormModalSuccess: action.payload.status,
-        formSiswaMessage: action.payload.message
+        formMessage: action.payload.message
       };
-    case SAVE_DATA_SISWA_INTERNAL_ERROR:
-      console.log('SAVE_DATA_SISWA_INTERNAL_ERROR');
-      return {
-        ...state,
-        dataDetail: action.payload.newDoc,
-        saveDataInProgress: false,
-        isFormModalError: !action.payload.status,
-        isFormModalSuccess: action.payload.status,
-        formSiswaMessage: action.payload.message
-      };
-    case UPDATE_DATA_SISWA:
-      // state.ListDataSiswa.push(action.payload);
-      console.log('current state data==>', state.ListDataSiswa);
+    case GURUSTAFF_UPDATE_DATA_SUCCESS:
+      // state.listData.push(action.payload);
+      console.log('current state data==>', state.listData);
       console.log('old data==>', action.oldData);
       console.log('new data==>', action.payload.updatedData);
-      console.log('indexOf data==>', state.ListDataSiswa.indexOf(action.oldData));
-      // state.ListDataSiswa.slice(state.ListDataSiswa.indexOf(action.oldData) + 1);
-      state.ListDataSiswa.splice(state.ListDataSiswa.indexOf(action.oldData), 1);
-      state.ListDataSiswa.push(action.payload.updatedData);
+      console.log('indexOf data==>', state.listData.indexOf(action.oldData));
+      // state.listData.slice(state.listData.indexOf(action.oldData) + 1);
+      state.listData.splice(state.listData.indexOf(action.oldData), 1);
+      state.listData.push(action.payload.updatedData);
 
       return {
         ...state,
         updateDataInProgress: false,
-        formSiswaMessage: action.payload.message,
-        submitDataSiswaStatus: action.payload.status,
+        formMessage: action.payload.message,
+        submitDataStatus: action.payload.status,
         dataDetail: action.payload.updatedData,
         isFormModalError: !action.payload.status,
         isFormModalSuccess: action.payload.status
       };
-    case UPDATE_DATA_SISWA_ERROR:
-      // state.ListDataSiswa.push(action.payload);
+    case GURUSTAFF_UPDATE_DATA_ERROR:
+      // state.listData.push(action.payload);
       return {
         ...state,
         updateDataInProgress: false,
         dataDetail: action.payload.updatedData,
-        formSiswaMessage: action.payload.message,
-        submitDataSiswaStatus: action.payload.status,
+        formMessage: action.payload.message,
+        submitDataStatus: action.payload.status,
         isFormModalError: !action.payload.status,
         isFormModalSuccess: action.payload.status
       };
-    case UPDATE_DATA_SISWA_INTERNAL_ERROR:
-      // state.ListDataSiswa.push(action.payload);
+    case GURUSTAFF_UPDATE_DATA_INTERNAL_ERROR:
+      // state.listData.push(action.payload);
       return {
         ...state,
         updateDataInProgress: false,
         dataDetail: action.payload.updatedData,
-        formSiswaMessage: action.payload.message,
-        submitDataSiswaStatus: action.payload.status,
+        formMessage: action.payload.message,
+        submitDataStatus: action.payload.status,
+        isFormModalError: !action.payload.status,
+        isFormModalSuccess: action.payload.status
+      };
+    case GURUSTAFF_DELETE_DATA_IN_PROGRESS:
+      return {
+        ...state,
+        deleteDataInProgress: true
+      };
+    case GURUSTAFF_DELETE_DATA_SUCCESS:
+      // state.listData.push(action.payload);
+      // console.log('current state data==>', state.listData);
+      // console.log('old data==>', action.oldData);
+      // console.log('new data==>', action.payload.updatedData);
+      console.log('indexOf data==>', state.listData.indexOf(action.oldData));
+      // state.listData.slice(state.listData.indexOf(action.oldData) + 1);
+      state.listData.splice(state.listData.indexOf(action.oldData), 1);
+      // state.listData.push(action.payload.updatedData);
+
+      return {
+        ...state,
+        deleteDataInProgress: false,
+        formMessage: action.payload.message,
+        submitDataStatus: action.payload.status,
+        dataDetail: {},
+        formModalOpen: false,
+        isFormModalError: false,
+        isFormModalSuccess: false
+      };
+    case GURUSTAFF_DELETE_DATA_ERROR:
+      // state.listData.push(action.payload);
+      return {
+        ...state,
+        deleteDataInProgress: false,
+        // dataDetail: action.payload.updatedData,
+        formMessage: action.payload.message,
+        submitDataStatus: action.payload.status,
+        isFormModalError: !action.payload.status,
+        isFormModalSuccess: action.payload.status
+      };
+    case GURUSTAFF_DELETE_DATA_INTERNAL_ERROR:
+      // state.listData.push(action.payload);
+      return {
+        ...state,
+        deleteDataInProgress: false,
+        // dataDetail: action.payload.updatedData,
+        formMessage: action.payload.message,
+        submitDataStatus: action.payload.status,
         isFormModalError: !action.payload.status,
         isFormModalSuccess: action.payload.status
       };

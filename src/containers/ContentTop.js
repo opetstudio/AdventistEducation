@@ -24,21 +24,22 @@ class ContentTop extends Component {
     let profilePict;
     let contentTopMenu;
     if (this.props.withProfilePicture) {
-      profilePict = <ProfilePicture />;
-    }
-
-    if (this.props.withProfilePicture) {
-      profilePict = <ProfilePicture />;
+      profilePict = <ProfilePicture photoBuffer={this.props.SettingReducer.noPhoto} />;
     }
     if (this.props.withContentTopMenu) {
       contentTopMenu = <ContentTopMenu />;
     }
+    const fullName = this.props.userFullName || this.props.sessionReducer.username
     console.log(this.props.withProfilePicture);
     return (
       <div className={'contentTop'}>
         <div className={'profileInfoRight'}>
           {profilePict}
-          <ContentTopCaption withAbsenMessageError={this.props.withAbsenMessageError} />
+          <ContentTopCaption
+            withAbsenMessageError={this.props.withAbsenMessageError}
+            userFullName={fullName}
+            youAreLate={this.props.youAreLate}
+          />
         </div>
         {contentTopMenu}
       </div>
@@ -54,7 +55,8 @@ function mapStateToProps(state) {
   return {
     dataUsersReducer: state.dataUsersReducer,
     sessionReducer: state.sessionReducer,
-    appReducer: state.appReducer
+    appReducer: state.appReducer,
+    SettingReducer: state.SettingReducer
   };
 }
 

@@ -14,13 +14,13 @@ export default class ContentTopCaption extends Component {
   }
   render() {
     let absenMessageError;
-    if (this.props.withAbsenMessageError) {
+    if (this.props.withAbsenMessageError && this.props.youAreLate) {
       absenMessageError = this.renderMessageAbsen();
     }
     return (
       <div style={styles.contentTopCaption}>
         <h3>Good Morning,</h3>
-        <h1>Nofrets Poai</h1>
+        <h1>{this.props.userFullName}</h1>
         {absenMessageError}
       </div>
     );

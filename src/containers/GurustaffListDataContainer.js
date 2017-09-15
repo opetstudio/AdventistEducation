@@ -6,34 +6,31 @@ import _ from 'lodash';
 import GurustaffTable from '../components/GurustaffTable';
 import ListData from '../components/ListData';
 import {
-  fetchAllDataSiswa,
+  fetchAll,
   openModalFormUpdateData
-} from '../actions/DataSiswaAction';
+} from '../actions/GurustaffAction';
 // import './ContentTop.css';
 
 class GurustaffListDataContainer extends Component {
   constructor(props) {
     super(props);
     this.handleUserInput = this.handleUserInput.bind(this);
-    this._fetchAllDataSiswaResponse = this._fetchAllDataSiswaResponse.bind(this);
-    this._onClickEditSiswa = this._onClickEditSiswa.bind(this);
+    this._onClickEdit = this._onClickEdit.bind(this);
+    this._setDataSource = this._setDataSource.bind(this);
   }
   componentWillMount() {
-    // console.log('[ListDataSiswa.componentWillMount]');
+    // console.log('[listData.componentWillMount]');
     // console.log('[neDBDataPath]', this.props.SettingReducer.neDBDataPath);
     this.setState({
       filterText: '',
-      students: []
+      listData: []
     });
     //get data dari server
-    this.props.fetchAllDataSiswa(
-      this.props.SettingReducer.neDBDataPath,
-      this._fetchAllDataSiswaResponse
-    );
-    this._setDataSourceStudents(this.props.students);
+    this.props.fetchAll(this.props.SettingReducer.neDBDataPath);
+    this._setDataSource(this.props.listData);
   }
   componentWillReceiveProps(nextProps) {
-    this._setDataSourceStudents(nextProps.students);
+    this._setDataSource(nextProps.listData);
   }
 
   handleUserInput(filterText) {
@@ -41,19 +38,14 @@ class GurustaffListDataContainer extends Component {
       filterText
     });
   }
-  _setDataSourceStudents(students) {
-    this.setState({ students });
+  _setDataSource(listData) {
+    this.setState({ listData });
   }
-  _fetchAllDataSiswaResponse(e, o) {
-    console.log('[ListDataSiswa._fetchAllDataSiswaResponse]');
-  }
-  _onClickEditSiswa(row) {
-    //fetch data detail
+
+  _onClickEdit(row) {
     this.props.openModalFormUpdateData(row);
-    // this.props.onClickEditSiswa();
   }
   render() {
-    console.log('ListDataSiswa Render');
     return (
       <ListData
         title="Guru dan Staff"
@@ -61,12 +53,12 @@ class GurustaffListDataContainer extends Component {
         filterTextInput='filterTextInputGurustaff'
         onUserInput={this.handleUserInput}
         filterTextValue={this.state.filterText}
-        listData={this.state.students}
+        listData={this.state.listData}
       >
         <GurustaffTable
-          listData={this.state.students}
+          listData={this.state.listData}
           filterTextValue={this.state.filterText}
-          onClickEditSiswa={this._onClickEditSiswa}
+          onClickEdit={this._onClickEdit}
         />
       </ListData>
     );
@@ -74,13 +66,13 @@ class GurustaffListDataContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  // const students = _.map(state.DataSiswaReducer.ListDataSiswa, (val, uid) => {
+  // const students = _.map(state.GurustaffReducer.listData, (val, uid) => {
   //   console.log('');
   //   return { ...val, uid };
   // });
   return {
-    students: state.DataSiswaReducer.ListDataSiswa,
-    DataSiswaReducer: state.DataSiswaReducer,
+    listData: state.GurustaffReducer.listData,
+    GurustaffReducer: state.GurustaffReducer,
     SettingReducer: state.SettingReducer
     // dataUsersReducer: state.dataUsersReducer,
     // sessionReducer: state.sessionReducer,
@@ -92,7 +84,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      fetchAllDataSiswa,
+      fetchAll,
       openModalFormUpdateData
     },
     dispatch

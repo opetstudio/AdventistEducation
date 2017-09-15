@@ -5,14 +5,13 @@ import { Button } from 'semantic-ui-react';
 class GurustaffTable extends Component {
   constructor(props) {
     super(props);
-    this._onClickEditSiswa = this._onClickEditSiswa.bind(this);
+    this._onClickEdit = this._onClickEdit.bind(this);
   }
-  _onClickEditSiswa(row) {
-    this.props.onClickEditSiswa(row);
+  _onClickEdit(row) {
+    this.props.onClickEdit(row);
   }
   render() {
     const rows = [];
-    console.log('SiswaTable===>', this.props);
     if (this.props.listData) {
       this.props.listData.forEach((row) => {
         if (
@@ -22,13 +21,13 @@ class GurustaffTable extends Component {
           return;
         }
         rows.push(
-          <tr key={row.nis} >
+          <tr key={row.nip} >
             <td>{row.name} {row.last_name}</td>
-            <td>{row.kelas}</td>
-            <td>{row.nis}</td>
+            <td>{row.jabatan}</td>
+            <td>{row.nip}</td>
             <td>
               <Button
-                onClick={() => { this._onClickEditSiswa(row); }}
+                onClick={() => { this._onClickEdit(row); }}
               >
                 Edit
               </Button>
@@ -42,8 +41,8 @@ class GurustaffTable extends Component {
         <thead>
           <tr>
             <th>Nama</th>
-            <th>Kelas</th>
-            <th>Nis</th>
+            <th>Jabatan</th>
+            <th>NIP</th>
             <th>Act</th>
           </tr>
         </thead>

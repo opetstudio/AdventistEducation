@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { Route, HashRouter, BrowserRouter } from 'react-router-dom';
+import {
+  Route,
+  HashRouter, 
+  // BrowserRouter
+} from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 // import { ConnectedRouter } from 'react-router-redux';

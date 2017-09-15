@@ -4,13 +4,14 @@
 
 @import "./variable.scss";
 
-.headerMenuWrapper {
-  color: #333;
-  //height: 50px;
-}
+// .headerMenuWrapper {
+//   color: #333;
+//   //height: 50px;
+// }
 
 .containerWrapper {
   margin-left: $leftside-width;
+  margin-top: $statusbar-height;
 }
 .ContentWrapper {
   padding: 10px;
