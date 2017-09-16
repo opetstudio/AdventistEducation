@@ -76,6 +76,10 @@ export const updateDataSiswa = (_id, oldData, data, neDBDataPath, callback) => {
             //   payload: saveDataResponse,
             //   oldData });
         } else {
+            saveDataResponse.updatedData = {
+              ...oldData,
+              ...data
+            };
             dispatch({ type: UPDATE_DATA_SISWA_ERROR, payload: saveDataResponse });
         }
         // callback({

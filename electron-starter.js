@@ -1,5 +1,7 @@
 
 const electron = require('electron');
+// const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer');
+// import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 // const Menu = require('menu');
 const ipcMain = electron.ipcMain;
 // const remote = electron.remote;
@@ -9,8 +11,8 @@ const app = electron.app;
 // const BrowserWindow = require('browser-window');
 const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu;
-// const env = process.env.NODE_ENV;
-const env = 'production';
+const env = process.env.NODE_ENV;
+// const env = 'production';
 
 // document.getElementById('close-btn').addEventListener('click', function (e) {
 //        var window = remote.getCurrentWindow();
@@ -24,7 +26,31 @@ const url = require('url');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+
+
+const installExtensions = () => {
+  // installExtension(REACT_DEVELOPER_TOOLS)
+  //     .then((name) => console.log(`Added Extension:  ${name}`))
+  //     .catch((err) => console.log('An error occurred: ', err));
+  // installExtension(REDUX_DEVTOOLS)
+  //     .then((name) => console.log(`Added Extension:  ${name}`))
+  //     .catch((err) => console.log('An error occurred: ', err));
+  const installer = require('electron-devtools-installer');
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  const extensions = [
+    'REACT_DEVELOPER_TOOLS',
+    'REDUX_DEVTOOLS'
+  ];
+
+  return Promise
+    .all(extensions.map(name => installer.default(installer[name], forceDownload)))
+    .catch(console.log);
+};
 function createWindow() {
+  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+     installExtensions();
+  }
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1120, height: 800, frame: false, minWidth: 800, minHeight: 800 });
@@ -38,7 +64,7 @@ function createWindow() {
     }));
   } else {
     // and load the index.html of the app.
-    mainWindow.loadURL('http://localhost:3006');
+    mainWindow.loadURL('http://localhost:3000');
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
   }
@@ -111,6 +137,7 @@ exports.pong = arg => {
     console.log(arg);
 };
 const route_users = require('./server/electron/routes/UsersRoute');
+const route_user = require('./server/electron/routes/UserRoute');
 const route_absen = require('./server/electron/routes/AbsenRoute');
 const route_siswa = require('./server/electron/routes/SiswaRoute');
 const route_util = require('./server/electron/routes/UtilRoute');
@@ -150,4 +177,5 @@ function route(entityName, theRoute) {
 
 route('gurustaff', route_gurustaff);
 route('absen', route_absen);
+route('user', route_user);
 // route('absen', route_absen);

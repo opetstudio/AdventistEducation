@@ -3,6 +3,13 @@ export const jabatanOptions = [
   { text: 'Guru', value: 'guru' },
   { text: 'Staff', value: 'staff' }
 ];
+export const userRoleOptions = [
+  { text: 'Root', value: 100 },
+  { text: 'Admin', value: 200 },
+  { text: 'Guru', value: 300 },
+  { text: 'Staff', value: 400 },
+  { text: 'Siswa', value: 500 }
+];
 export const kelasOptions = [
   { text: '1', value: '1' },
   { text: '2', value: '2' },

@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { Button, Form, Message, Confirm, Dropdown } from 'semantic-ui-react';
+import _ from 'lodash';
 
-import { jabatanOptions } from '../common';
+import { userRoleOptions } from '../common';
 
 const FIELDS = {
   name: '',
   last_name: '',
-  jabatan: '',
-  nip: '',
+  user_role: '',
+  username: '',
+  password: '',
   id: '',
   _id: '',
   photo: '',
@@ -16,8 +18,9 @@ const FIELDS = {
 const FIELDS_ERROR_FLAG = {
   name_error: false,
   last_name_error: false,
-  jabatan_error: false,
-  nip_error: false,
+  user_role_error: false,
+  username_error: false,
+  password_error: false,
   id_error: false
 };
 const INITIAL_STATE = {
@@ -30,10 +33,11 @@ const INITIAL_STATE = {
   isError: false,
   formMessage: 'Masukan data dengan baik dan benar.',
   photo_path: '',
-  openConfirmDelete: false
+  openConfirmDelete: false,
+  usersessionDetail: {}
 };
 
-export default class GurustaffForm extends Component {
+export default class UserForm extends Component {
   constructor(props) {
     super(props);
     this._onChangeInputText = this._onChangeInputText.bind(this);
@@ -51,6 +55,7 @@ export default class GurustaffForm extends Component {
     this._openConfirmDelete = this._openConfirmDelete.bind(this);
     this._onCancelConfirmDelete = this._onCancelConfirmDelete.bind(this);
     this._onOkConfirmDelete = this._onOkConfirmDelete.bind(this);
+    this._checkPasswordMandatory = this._checkPasswordMandatory.bind(this);
   }
   componentWillMount() {
     this._resetState();
@@ -58,7 +63,8 @@ export default class GurustaffForm extends Component {
     this.setState({
       formMessage: this.props.formMessage,
       isSuccess: this.props.isFormModalSuccess,
-      isError: this.props.isFormError
+      isError: this.props.isFormError,
+      usersessionDetail: this.props.usersessionDetail
     });
   }
   componentWillReceiveProps(nextProps) {
@@ -67,7 +73,8 @@ export default class GurustaffForm extends Component {
     this.setState({
       formMessage: nextProps.formMessage,
       isSuccess: nextProps.isFormModalSuccess,
-      isError: nextProps.isFormError
+      isError: nextProps.isFormError,
+      usersessionDetail: nextProps.usersessionDetail
     });
   }
   _resetState() {
@@ -82,10 +89,12 @@ export default class GurustaffForm extends Component {
         name_error: false,
         last_name: dataDetail.last_name,
         last_name_error: false,
-        jabatan: dataDetail.jabatan,
-        jabatan_error: false,
-        nip: dataDetail.nip,
-        nip_error: false,
+        user_role: dataDetail.user_role,
+        user_role_error: false,
+        username: dataDetail.username,
+        username_error: false,
+        password: dataDetail.password,
+        password_error: false,
         id: dataDetail.id,
         _id: dataDetail._id,
         photo: dataDetail.photo,
@@ -98,8 +107,11 @@ export default class GurustaffForm extends Component {
     switch (key) {
       case 'name': this.setState({ name: value, name_error: false }); break;
       case 'last_name': this.setState({ last_name: value, last_name_error: false }); break;
-      case 'jabatan': this.setState({ jabatan: value, jabatan_error: false }); break;
-      case 'nip': this.setState({ nip: value, nip_error: false }); break;
+      case 'user_role':
+        console.log(`user role onchange key=${key} value=${value}`);
+        this.setState({ user_role: value, user_role_error: false }); break;
+      case 'username': this.setState({ username: value, username_error: false }); break;
+      case 'password': this.setState({ password: value, password_error: false }); break;
       case 'id': this.setState({ id: value, id_error: false }); break;
       case 'photo':
           this.setState({ photo: value.name, photo_path: value.path });
@@ -114,7 +126,12 @@ export default class GurustaffForm extends Component {
     } else if (fieldValue && fieldValue.length > 0) {
       newData[fieldKey] = fieldValue;
       return true;
+    } else if(fieldValue) {
+      //untuk number
+      newData[fieldKey] = fieldValue;
+      return true;
     }
+    console.log(`${fieldName} not ok. key=${fieldKey} value=${fieldValue}`);
         this._setError(fieldName, fieldKey);
         return false;
   }
@@ -123,9 +140,15 @@ export default class GurustaffForm extends Component {
     isFormOk = this._checkField(isFormOk, newData, 'name', this.state.name, 'NAMA');
     isFormOk = this._checkField(isFormOk, newData, 'last_name',
                                 this.state.last_name, 'NAMA AKHIR');
-    isFormOk = this._checkField(isFormOk, newData, 'jabatan', this.state.jabatan, 'JABATAN');
-    isFormOk = this._checkField(isFormOk, newData, 'nip', this.state.nip, 'NIP');
+    isFormOk = this._checkField(isFormOk, newData, 'user_role', this.state.user_role, 'USER_ROLE');
+    isFormOk = this._checkField(isFormOk, newData, 'username', this.state.username, 'USERNAME');
+    // isFormOk = this._checkField(isFormOk, newData, 'password', this.state.password, 'PASSWORD');
     isFormOk = this._checkField(isFormOk, newData, 'id', this.state.id, 'ID');
+    return isFormOk;
+  }
+  _checkPasswordMandatory(newData) {
+    let isFormOk = true;
+    isFormOk = this._checkField(isFormOk, newData, 'password', this.state.password, 'PASSWORD');
     return isFormOk;
   }
   _onClickButtonSaveData() {
@@ -142,6 +165,9 @@ export default class GurustaffForm extends Component {
       } else {
         newData.photo_path = '';
       }
+
+      //cek password harus diisi
+      if(isFormOk) isFormOk = this._checkPasswordMandatory(newData);
 
     if (isFormOk) {
         this.setState({
@@ -246,7 +272,16 @@ export default class GurustaffForm extends Component {
       </Button>
     );
   }
+
   render() {
+    let passwordLabel = 'Password';
+    if (this.state._id && this.state._id !== '') {
+      passwordLabel = 'Password (kosongkan jika tidak ingin ganti password)';
+    }
+    // userRoleOptions
+    const userRoleOptionsFiltered = _.compact(
+      _.map(userRoleOptions, (v) => { if(v.value > this.state.usersessionDetail.user_role) return v;  return null; })
+    );
     return (
         <Form
           success={this.state.isSuccess}
@@ -279,19 +314,20 @@ export default class GurustaffForm extends Component {
             />
           </Form.Field>
           <Form.Field>
+            <label>User Role</label>
             <Dropdown
-              label='pilih jabatan'
-              placeholder='pilih jabatan'
+
+              placeholder='pilih user role'
               fluid
               selection
-              options={jabatanOptions}
-              value={this.state.jabatan}
+              options={userRoleOptionsFiltered}
+              value={this.state.user_role}
               onChange={(e, data) => {
                 // console.log(e);
-                // console.log(data);
-                this._onChangeInputText('jabatan', data.value);
+                console.log(data);
+                this._onChangeInputText('user_role', data.value);
                 }}
-              error={this.state.jabatan_error}
+              error={this.state.user_role_error}
             />
             {/* <Form.Input
               label='jabatan'
@@ -304,12 +340,21 @@ export default class GurustaffForm extends Component {
           </Form.Field>
           <Form.Field>
             <Form.Input
-              label='nip'
-              placeholder='nip'
-              value={this.state.nip}
-              name='nip'
-              onChange={e => this._onChangeInputText('nip', e.target.value)}
-              error={this.state.nip_error}
+              label='Username'
+              placeholder='username'
+              value={this.state.username}
+              name='username'
+              onChange={e => this._onChangeInputText('username', e.target.value)}
+              error={this.state.username_error}
+            />
+          </Form.Field>
+          <Form.Field>
+            <Form.Input
+              label={passwordLabel}
+              placeholder='password'
+              name='password'
+              onChange={e => this._onChangeInputText('password', e.target.value)}
+              error={this.state.password_error}
             />
           </Form.Field>
           <Form.Field>

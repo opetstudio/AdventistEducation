@@ -3,19 +3,17 @@ import b64 from 'base-64';
 import {
   LOADING_DATA_USERS_IN_PROGRESS,
   MODIFY_LOADING_DATA_USERS_IN_PROGRESS,
-  LOADING_DATA_USERS_DONE,
-  SETTING_SET_NO_PHOTO
+  LOADING_DATA_USERS_DONE
 } from '../constants';
-
-import {
-  openImageApi
-} from '../api';
 
 export const modifyLoadingDataUsersInProgress = (status) => {
   console.log('modifyLoadingDataUsersInProgress');
   return dispatch => {
     dispatch({ type: MODIFY_LOADING_DATA_USERS_IN_PROGRESS, payload: status });
   };
+};
+const loadingDataUsersDone = (dispatch, users) => {
+  dispatch({ type: LOADING_DATA_USERS_DONE, payload: users });
 };
 export const loadingDataUsers = () => {
   console.log('loadingDataUsers');
@@ -32,8 +30,4 @@ export const loadingDataUsers = () => {
     //   .then(value => loginUserSuccess(dispatch))
     //   .catch(error => loginUserError(error, dispatch));
   };
-};
-
-const loadingDataUsersDone = (dispatch, users) => {
-  dispatch({ type: LOADING_DATA_USERS_DONE, payload: users });
 };

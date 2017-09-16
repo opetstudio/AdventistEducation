@@ -7,10 +7,11 @@ import { saveDataSetting } from '../actions/SettingAction';
 import './SettingForm.css';
 
 
-class SettingForm extends Component {
+class SettingFormContainer extends Component {
   constructor(props) {
     super(props);
     this._onChangeInputNeDbDataPath = this._onChangeInputNeDbDataPath.bind(this);
+    this._onChangeInputPassword = this._onChangeInputPassword.bind(this);
     this._saveDataSettingResponse = this._saveDataSettingResponse.bind(this);
   }
   componentWillMount() {
@@ -19,11 +20,22 @@ class SettingForm extends Component {
       isSuccess: false,
       isError: false,
       formMessage: 'Masukan data dengan baik dan benar.',
+      password: this.props.sessionReducer.userDetail.password
+    });
+  }
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      password: nextProps.sessionReducer.userDetail.password
     });
   }
   _onChangeInputNeDbDataPath(value) {
     this.setState({
       neDBDataPath: value
+    });
+  }
+  _onChangeInputPassword(value) {
+    this.setState({
+      password: value
     });
   }
   _onClickButtonSaveDataSetting() {
@@ -62,6 +74,19 @@ class SettingForm extends Component {
               onChange={e => this._onChangeInputNeDbDataPath(e.target.value)}
             />
           </Form.Field>
+          <Form.Field>
+            <label>Edit Password</label>
+            <Input
+              loading={false}
+              // icon='user'
+              // iconPosition='left'
+              placeholder='password baru'
+              value={this.state.neDBDataPath}
+              name='password'
+              ref='password'
+              onChange={e => this._onChangeInputPassword(e.target.value)}
+            />
+          </Form.Field>
           {/* <Form.Field>
             <Checkbox label='I agree to the Terms and Conditions' />
           </Form.Field> */}
@@ -83,7 +108,8 @@ function mapStateToProps(state) {
   //   return { ...val, uid };
   // });
   return {
-    SettingReducer: state.SettingReducer
+    SettingReducer: state.SettingReducer,
+    sessionReducer: state.sessionReducer,
   };
 }
 
@@ -101,4 +127,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SettingForm);
+)(SettingFormContainer);

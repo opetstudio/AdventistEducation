@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import FormInputPopUp from '../components/FormInputPopUp';
-import GurustaffForm from '../components/GurustaffForm';
+import UserForm from '../components/UserForm';
 
 import {
   createData,
@@ -12,11 +12,11 @@ import {
   openModalForm,
   onChangeInputPhoto,
   deleteData
-} from '../actions/GurustaffAction';
+} from '../actions/UserAction';
 
 const photoProfile = require('../img/photoprofile.png');
 
-class GurustaffFormpopupContainer extends Component {
+class UserFormpopupContainer extends Component {
   constructor(props) {
     super(props);
     this._onClickButtonSaveData = this._onClickButtonSaveData.bind(this);
@@ -30,12 +30,12 @@ class GurustaffFormpopupContainer extends Component {
     this.setState({
       neDBDataPath: this.props.SettingReducer.neDBDataPath,
       // imgSrc: '',
-      open: this.props.GurustaffReducer.formModalOpen,
-      isFormError: this.props.GurustaffReducer.isFormModalError,
-      isFormModalSuccess: this.props.GurustaffReducer.isFormModalSuccess,
-      formMessage: this.props.GurustaffReducer.formMessage,
-      detailData: this.props.GurustaffReducer.dataDetail,
-      detailPhotoBuffer: this.props.GurustaffReducer.detailPhotoBuffer
+      open: this.props.UserReducer.formModalOpen,
+      isFormError: this.props.UserReducer.isFormModalError,
+      isFormModalSuccess: this.props.UserReducer.isFormModalSuccess,
+      formMessage: this.props.UserReducer.formMessage,
+      detailData: this.props.UserReducer.dataDetail,
+      detailPhotoBuffer: this.props.UserReducer.detailPhotoBuffer
     });
     this.props.closeModalForm();
   }
@@ -43,14 +43,14 @@ class GurustaffFormpopupContainer extends Component {
     this.setState({
       neDBDataPath: nextProps.SettingReducer.neDBDataPath,
       // imgSrc: '',
-      open: nextProps.GurustaffReducer.formModalOpen,
-      isFormError: nextProps.GurustaffReducer.isFormModalError,
-      isFormModalSuccess: nextProps.GurustaffReducer.isFormModalSuccess,
-      formMessage: nextProps.GurustaffReducer.formMessage,
-      detailData: nextProps.GurustaffReducer.dataDetail,
-      detailPhotoBuffer: nextProps.GurustaffReducer.detailPhotoBuffer
+      open: nextProps.UserReducer.formModalOpen,
+      isFormError: nextProps.UserReducer.isFormModalError,
+      isFormModalSuccess: nextProps.UserReducer.isFormModalSuccess,
+      formMessage: nextProps.UserReducer.formMessage,
+      detailData: nextProps.UserReducer.dataDetail,
+      detailPhotoBuffer: nextProps.UserReducer.detailPhotoBuffer
     });
-    if (nextProps.GurustaffReducer.formModalOpen) {
+    if (nextProps.UserReducer.formModalOpen) {
       //load message
     }
   }
@@ -86,7 +86,7 @@ class GurustaffFormpopupContainer extends Component {
         imgSrc={imgSrc}
         onCloseModal={this._onCloseModal}
       >
-        <GurustaffForm
+        <UserForm
           onClickButtonSaveData={this._onClickButtonSaveData}
           onClickButtonUpdateData={this._onClickButtonUpdateData}
           onClickButtonDeleteData={this._onClickButtonDeleteData}
@@ -96,6 +96,7 @@ class GurustaffFormpopupContainer extends Component {
           formMessage={this.state.formMessage}
           detailData={this.state.detailData}
           onChangeInputPhoto={this._onChangeInputPhoto}
+          usersessionDetail={this.props.sessionReducer.userDetail}
         />
       </FormInputPopUp>
     );
@@ -109,7 +110,8 @@ function mapStateToProps(state) {
   // });
   return {
     SettingReducer: state.SettingReducer,
-    GurustaffReducer: state.GurustaffReducer
+    UserReducer: state.UserReducer,
+    sessionReducer: state.sessionReducer
   };
 }
 
@@ -132,4 +134,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(GurustaffFormpopupContainer);
+)(UserFormpopupContainer);

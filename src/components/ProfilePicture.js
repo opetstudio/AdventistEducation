@@ -6,11 +6,10 @@ const photoProfile = require('../img/no_photo.png');
 
 
 export default class ProfilePicture extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   // this._handleError = this._handleError.bind(this);
-  //
-  // }
+  constructor(props) {
+    super(props);
+    this._handleError = this._handleError.bind(this);
+  }
   componentWillMount() {
     this.setState({
       photo: this.props.photoBuffer
@@ -22,12 +21,12 @@ export default class ProfilePicture extends Component {
       photo: nextProps.photoBuffer
     });
   }
-  // _handleError(e) {
-  //   console.log('=====>>>>>>e: ', e.target.src);
-  //   this.setState({
-  //     photo: photoProfile
-  //   });
-  // }
+  _handleError(e) {
+    // console.log('=====>>>>>>e: ', e.target.src);
+    this.setState({
+      photo: photoProfile
+    });
+  }
   render() {
     console.log('[ProfilePicture] render photoprofile,', this.props);
     // let photo = photoProfile;
@@ -37,8 +36,9 @@ export default class ProfilePicture extends Component {
     return (
       <div className={'profilePictureWrapper'} style={{ width: this.props.widthPicture }}>
         <img
-          src={photoProfile}
+          src={this.state.photo}
           style={{ width: this.props.widthPicture }}
+          onError={this._handleError}
           alt=""
         />
       </div>

@@ -13,7 +13,7 @@ import Header from '../containers/Header';
 import Sidebar from '../containers/Sidebar';
 // import RedirectIfNotLogin from '../containers/RedirectIfNotLogin';
 import KickOutIfNotLogin from '../containers/KickOutIfNotLogin';
-import SettingForm from '../containers/SettingForm';
+import SettingFormContainer from '../containers/SettingFormContainer';
 import './Setting.css';
 // import '../stylesheets/pages/login/Login.css';
 
@@ -59,7 +59,7 @@ export default class Setting extends Component {
           {/* <ContentTop withProfilePicture withContentTopMenu /> */}
           <div className='ContentWrapper'>
             <div className='SettingFormSpace'>
-              <SettingForm />
+              <SettingFormContainer />
             </div>
           </div>
         </div>

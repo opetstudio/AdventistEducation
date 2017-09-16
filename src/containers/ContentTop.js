@@ -29,7 +29,7 @@ class ContentTop extends Component {
     if (this.props.withContentTopMenu) {
       contentTopMenu = <ContentTopMenu />;
     }
-    const fullName = this.props.userFullName || this.props.sessionReducer.username
+    const fullName = this.props.userFullName || this.props.sessionReducer.userDetail.name + ' ' + this.props.sessionReducer.userDetail.last_name;
     console.log(this.props.withProfilePicture);
     return (
       <div className={'contentTop'}>
@@ -39,6 +39,7 @@ class ContentTop extends Component {
             withAbsenMessageError={this.props.withAbsenMessageError}
             userFullName={fullName}
             youAreLate={this.props.youAreLate}
+            usersessionDetail={this.props.sessionReducer.userDetail}
           />
         </div>
         {contentTopMenu}

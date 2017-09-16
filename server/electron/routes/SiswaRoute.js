@@ -5,6 +5,8 @@ const fs = require('fs');
 const b64 = require('base-64');
 const _ = require('lodash');
 const appRoot = require('app-root-path');
+const path = require('path');
+
 // os.platform()
 // console.log('oooooossssss====>', os.platform());
 // 'aix'
@@ -15,10 +17,12 @@ const appRoot = require('app-root-path');
 // 'sunos'
 // 'win32'
 const Datastore = require('nedb');
+const config = require('../config');
 
 module.exports.fetchAllDataSiswaApi = function (event, neDBDataPath) {
   console.log('fetchAllDataSiswaApi==>', neDBDataPath);
-  const storage = new Datastore({ filename: `${neDBDataPath}siswa.db`, autoload: true });
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, 'siswa.db'), autoload: true });
   storage.find({}, (err, doc) => {
     // console.log('doc==>', doc);
     event.sender.send('/fetchAllDataSiswaApi-response', err, JSON.stringify(doc));
@@ -41,6 +45,7 @@ function upload_photo(photoPath, new_photo_path) {
   return newPath;
 }
 function set_new_photo_path(photoPath, neDBDataPath) {
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
   let newPath = '';
   // if (fs.existsSync(photoPath)) {
       // Do something
@@ -53,7 +58,7 @@ function set_new_photo_path(photoPath, neDBDataPath) {
 
       const now = new Date().getTime();
 
-      newPath = `${neDBDataPath}${now}-${newName}.${photoExt}`;
+      newPath = path.join(neDBDataPath, `${now}-${newName}.${photoExt}`);
       // fs.createReadStream(photoPath).pipe(fs.createWriteStream(newPath));
   // }
   return newPath;
@@ -109,7 +114,8 @@ module.exports.closeImageApi = function (event, photoPath) {
 module.exports.saveSiswa = function (event, arg1, neDBDataPath) {
   console.log('saveSiswa==>', arg1);
   const dataObj = JSON.parse(arg1);
-  const storage = new Datastore({ filename: `${neDBDataPath}siswa.db`, autoload: true });
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, 'siswa.db'), autoload: true });
   if (!dataObj.nis) {
     return event.sender.send('/save-siswa-response',
       '0', 'Gagal input data. "NIS" tidak boleh kosong', dataObj
@@ -186,7 +192,8 @@ module.exports.updateSiswa = function (event, arg1, _id, neDBDataPath) {
   console.log('updateSiswa==>', arg1);
   console.log('updateSiswa old _id==>', _id);
   const dataObj = JSON.parse(arg1);
-  const storage = new Datastore({ filename: `${neDBDataPath}siswa.db`, autoload: true });
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, 'siswa.db'), autoload: true });
   // Using a unique constraint with the index
   // storage.ensureIndex({ fieldName: 'nis', unique: true }, err => {
   //   console.log(err);
@@ -304,25 +311,26 @@ module.exports.siswaDeleteDataApi = function (event, arg1, neDBDataPath) {
   const tableName = 'siswa';
   // const dataObj = JSON.parse(arg1);
   const dataObj = arg1;
-  const storage = new Datastore({ filename: `${neDBDataPath}${tableName}.db`, autoload: true });
-    storage.findOne({ _id: dataObj._id }, (err0, doc0) => {
-      if (!doc0) {
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, 'siswa.db'), autoload: true });
+  storage.findOne({ _id: dataObj._id }, (err0, doc0) => {
+    if (!doc0) {
+      return event.sender.send(responseRoute,
+        '0', 'Gagal delete. Data current tidak ditemukan.'
+      );
+    }
+    const dataDetail = doc0; //old Data
+    const updatedData = _.merge(dataDetail, dataObj);
+    storage.remove({ _id: dataDetail._id }, {}, (err2, numRemoved) => {
+      console.log('total data deleted=', numRemoved);
+      if (err2) {
         return event.sender.send(responseRoute,
-          '0', 'Gagal delete. Data current tidak ditemukan.'
+          '0', `Gagal delete. msg: ${err2}`,
+          updatedData
         );
       }
-      const dataDetail = doc0; //old Data
-      const updatedData = _.merge(dataDetail, dataObj);
-      storage.remove({ _id: dataDetail._id }, {}, (err2, numRemoved) => {
-        console.log('total data deleted=', numRemoved);
-        if (err2) {
-          return event.sender.send(responseRoute,
-            '0', `Gagal delete. msg: ${err2}`,
-            updatedData
-          );
-        }
-        delete_photo(updatedData.new_photo_path);
-        event.sender.send(responseRoute, '1', 'berhasil delete', updatedData);
-      });
+      delete_photo(updatedData.new_photo_path);
+      event.sender.send(responseRoute, '1', 'berhasil delete', updatedData);
     });
+  });
 };

@@ -12,8 +12,20 @@ import {
   submitUsernamePasswordSession
  } from '../actions/LoginAction';
 import { gotoSubAdminPage, setCurrentPagePath } from '../actions/AdminAction';
+import { fetchAllStatic } from '../actions/UserAction';
 
 class LoginBox extends Component {
+  constructor(props) {
+    super(props);
+    console.log('');
+    this.renderErrorMessage = this.renderErrorMessage.bind(this);
+  }
+  componentWillMount() {
+    this.props.fetchAllStatic(this.props.UserReducer.listData);
+  }
+  componentWillReceiveProps(nextProps) {
+
+  }
   renderErrorMessage() {
     if (this.props.sessionReducer.loginErrorMessage !== '') {
       return (
@@ -56,7 +68,7 @@ class LoginBox extends Component {
               onClick={() => this.props.submitUsernamePasswordSession(
                 this.props.sessionReducer.username,
                 this.props.sessionReducer.password,
-                this.props.dataUsersReducer.dataUsers
+                this.props.UserReducer.listData
               )}
               primary
             >
@@ -82,7 +94,8 @@ function mapStateToProps(state) {
   return {
     appReducer: state.appReducer,
     dataUsersReducer: state.dataUsersReducer,
-    sessionReducer: state.sessionReducer
+    sessionReducer: state.sessionReducer,
+    UserReducer: state.UserReducer
   };
 }
 
@@ -93,7 +106,8 @@ function mapDispatchToProps(dispatch) {
     modificationPasswordSession,
     submitUsernamePasswordSession,
     gotoSubAdminPage,
-    setCurrentPagePath
+    setCurrentPagePath,
+    fetchAllStatic
   }, dispatch);
 
   // return {

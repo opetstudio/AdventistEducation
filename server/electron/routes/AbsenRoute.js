@@ -2,14 +2,19 @@ const fs = require('fs');
 const b64 = require('base-64');
 const _ = require('lodash');
 const Datastore = require('nedb');
+const path = require('path');
+const config = require('../config');
 
 const entityName = 'absen';
 const tableName = 'absen';
 
+
 module.exports[`${entityName}FetchAllApi`] = function (event, neDBDataPath, entity) {
   console.log(`FetchAllApi entity=${entity} path=${neDBDataPath}`);
   const responseRoute = `/${entityName}FetchAllApiResponse`;
-  const storage = new Datastore({ filename: `${neDBDataPath}${entity}.db`, autoload: true });
+
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
   storage.find({}, (err, doc) => {
     console.log(`FetchAllApi entity=${entity} path=${neDBDataPath} result=`, doc);
     // event.sender.send(responseRoute, err, JSON.stringify(doc));
@@ -19,7 +24,8 @@ module.exports[`${entityName}FetchAllApi`] = function (event, neDBDataPath, enti
 module.exports[`${entityName}FetchAllApiGurustaff`] = function (event, neDBDataPath, entity) {
   console.log(`FetchAllApiGurustaff entity=${entity} path=${neDBDataPath}`);
   const responseRoute = `/${entityName}FetchAllApiGurustaffResponse`;
-  const storage = new Datastore({ filename: `${neDBDataPath}${entity}.db`, autoload: true });
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
   storage.find({}, (err, doc) => {
     console.log(`FetchAllApiGurustaff entity=${entity} path=${neDBDataPath} result=`, doc);
     // event.sender.send(responseRoute, err, JSON.stringify(doc));
@@ -29,7 +35,8 @@ module.exports[`${entityName}FetchAllApiGurustaff`] = function (event, neDBDataP
 module.exports[`${entityName}FetchAllApiSiswa`] = function (event, neDBDataPath, entity) {
   console.log(`FetchAllApiSiswa entity=${entity} path=${neDBDataPath}`);
   const responseRoute = `/${entityName}FetchAllApiSiswaResponse`;
-  const storage = new Datastore({ filename: `${neDBDataPath}${entity}.db`, autoload: true });
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
   storage.find({}, (err, doc) => {
     console.log(`FetchAllApiSiswa entity=${entity} path=${neDBDataPath} result=`, doc);
     // event.sender.send(responseRoute, err, JSON.stringify(doc));
@@ -59,6 +66,7 @@ function delete_photo(photoPath) {
 }
 function set_new_photo_path(photoPath, neDBDataPath) {
   let newPath = '';
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
   // if (fs.existsSync(photoPath)) {
       // Do something
       //fs.unlinkSync(photoPath);
@@ -70,7 +78,7 @@ function set_new_photo_path(photoPath, neDBDataPath) {
 
       const now = new Date().getTime();
 
-      newPath = `${neDBDataPath}${now}-${newName}.${photoExt}`;
+      newPath = path.join(neDBDataPath, `${now}-${newName}.${photoExt}`);
       // fs.createReadStream(photoPath).pipe(fs.createWriteStream(newPath));
   // }
   return newPath;
@@ -120,10 +128,11 @@ module.exports.closeImageApi = function (event, photoPath) {
 };
 module.exports[`${entityName}CreateDataApi`] = function (event, arg1, neDBDataPath, entity) {
   // console.log(`${entityName}CreateDataApi`, arg1);
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
   const responseRoute = `/${entityName}CreateDataApiResponse`;
   const dataObj = JSON.parse(arg1);
   console.log(`${entityName}CreateDataApi dataObj`, dataObj);
-  const storage = new Datastore({ filename: `${neDBDataPath}${entity}.db`, autoload: true });
 
   if (!dataObj.id) {
     return event.sender.send(responseRoute,
@@ -160,7 +169,8 @@ module.exports[`${entityName}CreateDataApi`] = function (event, arg1, neDBDataPa
 module.exports[`${entityName}UpdateDataApi`] = function (event, arg1, _id, neDBDataPath) {
   const responseRoute = `/${entityName}UpdateDataApiResponse`;
   const dataObj = JSON.parse(arg1);
-  const storage = new Datastore({ filename: `${neDBDataPath}${tableName}.db`, autoload: true });
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, `${tableName}.db`), autoload: true });
     storage.findOne({ _id }, (err0, doc0) => {
       if (!doc0) {
         return event.sender.send(responseRoute,
@@ -261,7 +271,8 @@ module.exports[`${entityName}DeleteDataApi`] = function (event, arg1, neDBDataPa
   const responseRoute = `/${entityName}DeleteDataApiResponse`;
   // const dataObj = JSON.parse(arg1);
   const dataObj = arg1;
-  const storage = new Datastore({ filename: `${neDBDataPath}${tableName}.db`, autoload: true });
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, `${tableName}.db`), autoload: true });
     storage.findOne({ _id: dataObj._id }, (err0, doc0) => {
       if (!doc0) {
         return event.sender.send(responseRoute,

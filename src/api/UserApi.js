@@ -3,24 +3,24 @@ let ipcRenderer = {
   send: () => {},
   on: () => {}
 };
-const entityName = 'absen';
+const entityName = 'user';
 if (window.require) {
     ipcRenderer = window.require('electron').ipcRenderer;
 }
 //CREATE
 export const createDataApi = (data, neDBDataPath, entity) =>
   new Promise((resolve) => {
-    console.log('AbsenApi createDataApi');
+    console.log('createDataApi');
     if (ipcRenderer !== null) {
-        console.log('AbsenApi send data');
+        console.log('UserApi send data');
         ipcRenderer.send(`/${entityName}CreateDataApi`, data, neDBDataPath, entity);
         ipcRenderer.on(`/${entityName}CreateDataApiResponse`, (event, status, message, newDoc) => {
             // console.log(message); // logs out "Hello second window!"
             if (status === '1') {
-                console.log('AbsenApi send data success');
+                console.log('UserApi send data success');
                 resolve({ status: true, message, newDoc });
             } else {
-              console.log('AbsenApi send data failed, ', message);
+              console.log('UserApi send data failed, ', message);
               resolve({ status: false, message, newDoc });
             }
         });

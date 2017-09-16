@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Route,
-  HashRouter, 
+  HashRouter,
   // BrowserRouter
 } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -18,6 +18,7 @@ import AbsenPage from './pages/Absen';
 import SettingPage from './pages/Setting';
 import DaftarSiswaPage from './pages/DaftarSiswa';
 import GurustaffScene from './pages/GurustaffScene';
+import UserScene from './pages/UserScene';
 
 import './global.css';
 
@@ -41,6 +42,7 @@ class RouterWeb extends Component {
               <Route path="/setting" component={SettingPage} />
               <Route path="/daftar-siswa" component={DaftarSiswaPage} />
               <Route path="/daftar-gurustaff" component={GurustaffScene} />
+              <Route path="/daftar-user" component={UserScene} />
             </div>
          </HashRouter>
      </Provider>

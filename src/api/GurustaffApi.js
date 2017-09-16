@@ -1,5 +1,8 @@
 // let remote = null;
-let ipcRenderer = null;
+let ipcRenderer = {
+  send: () => {},
+  on: () => {}
+};
 if (window.require) {
     // remote = window.require('electron').remote;
     ipcRenderer = window.require('electron').ipcRenderer;

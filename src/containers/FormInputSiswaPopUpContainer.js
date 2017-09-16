@@ -14,7 +14,7 @@ import {
   onChangeInputPhoto
 } from '../actions/DataSiswaAction';
 
-const photoProfile = require('../img/photoProfile.png');
+const photoProfile = require('../img/photoprofile.png');
 
 class FormInputSiswaPopUpContainer extends Component {
   constructor(props) {

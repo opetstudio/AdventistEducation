@@ -85,6 +85,12 @@ class Sidebar extends Component {
           style={style.sideMenu}
         />
         <Menu.Item
+          name='Profil User'
+          active={activeItem === '/daftar-user'}
+          onClick={() => this.gotoPage('/daftar-user')}
+          style={style.sideMenu}
+        />
+        <Menu.Item
           name='Pengaturan'
           active={activeItem === '/setting'}
           // onClick={() => this.props.gotoSubAdminPage('absendigital')}
@@ -110,10 +116,10 @@ class Sidebar extends Component {
     const { activeItem } = this.state;
     // console.log('activeItem====>', activeItem);
 
-    let photo = this.state.noPhoto;
-    if (this.props.photoBuffer && this.props.photoBuffer !== '') {
-      photo = this.props.photoBuffer;
-    }
+    // let photo = this.state.noPhoto;
+    // if (this.props.photoBuffer && this.props.photoBuffer !== '') {
+    //   photo = this.props.photoBuffer;
+    // }
 
     if (this.state.redirect) {
       return <Redirect push to={this.state.pagePath} />;
@@ -124,7 +130,7 @@ class Sidebar extends Component {
         sidebarContent = (
             <ProfilePicture
               widthPicture={this.props.widthPicture}
-              photoBuffer={photo}
+              photoBuffer={this.props.photoBuffer}
             />
           );
         backButton = (

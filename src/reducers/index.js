@@ -18,6 +18,7 @@ import DataSiswaReducer from './DataSiswaReducer';
 import GurustaffReducer from './GurustaffReducer';
 import AbsenReducer from './AbsenReducer';
 import DataAbsenReducer from './DataAbsenReducer';
+import UserReducer from './UserReducer';
 
 const rootReducer = combineReducers({
   appReducer,
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   DataAbsenReducer,
   GurustaffReducer,
   AbsenReducer,
+  UserReducer,
   router
 });
 export default rootReducer;

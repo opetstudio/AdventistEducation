@@ -44,6 +44,12 @@ export function logOut() {
   //   type: SESSION_LOG_OUT
   // };
 }
+const submitUsernamePasswordSessionSuccess = (dispatch, user) => {
+  dispatch({ type: SUCCESS_LOGIN_SESSION, payload: user });
+};
+const submitUsernamePasswordSessionFailed = (dispatch) => {
+  dispatch({ type: FAILED_LOGIN_SESSION });
+};
 
 export function submitUsernamePasswordSession(username, password, users) {
   console.log(`submitUsernamePasswordSession ${username} ${password}`);
@@ -51,7 +57,8 @@ export function submitUsernamePasswordSession(username, password, users) {
     dispatch({ type: SESSION_LOGIN_IN_PROGRESS, payload: true });
     const gotcha = _.find(users, { username, password: b64.encode(password) });
     if (gotcha) {
-      submitUsernamePasswordSessionSuccess(dispatch);
+      console.log('submitUsernamePasswordSession dapat user=>', gotcha);
+      submitUsernamePasswordSessionSuccess(dispatch, gotcha);
     } else {
       submitUsernamePasswordSessionFailed(dispatch);
     }
@@ -64,9 +71,3 @@ export function submitUsernamePasswordSession(username, password, users) {
     //   .catch(error => loginUserError(error, dispatch));
   };
 }
-const submitUsernamePasswordSessionSuccess = (dispatch) => {
-  dispatch({ type: SUCCESS_LOGIN_SESSION });
-};
-const submitUsernamePasswordSessionFailed = (dispatch) => {
-  dispatch({ type: FAILED_LOGIN_SESSION });
-};

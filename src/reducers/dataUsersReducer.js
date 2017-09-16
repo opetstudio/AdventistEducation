@@ -1,3 +1,4 @@
+import b64 from 'base-64';
 import {
   LOADING_DATA_USERS_IN_PROGRESS,
   LOADING_DATA_USERS_DONE,
@@ -6,7 +7,11 @@ import {
 
 const INITIAL_STATE = {
   loadingDataUsersInProgress: true,
-  dataUsers: []
+  dataUsers: [
+    { username: 'opetstudio', password: b64.encode('123456') },
+    { username: 'root', password: b64.encode('Password123') },
+    { username: 'vina', password: b64.encode('123456') }
+  ]
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -25,7 +30,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loadingDataUsersInProgress: false,
-        dataUsers: action.payload
+        // dataUsers: action.payload
       };
     default:
       return state;

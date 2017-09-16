@@ -24,6 +24,8 @@ const initialSession = {
 const initialSessionWebDesk = {
   dateTimeLogin: 0,
   isLogin: false,
+  user_role: '',
+  userDetail: {},
   username: '',
   password: '',
   submitLoginUserPassInProgress: false,
@@ -92,6 +94,8 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         dateTimeLogin: new Date().getTime(),
         isLogin: true,
+        user_role: action.payload.user_role,
+        userDetail: action.payload,
         loginErrorMessage: '',
         submitLoginUserPassInProgress: false };
     case SESSION_LOG_OUT:

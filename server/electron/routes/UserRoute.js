@@ -5,17 +5,44 @@ const Datastore = require('nedb');
 const path = require('path');
 const config = require('../config');
 
-const entityName = 'gurustaff';
-const tableName = 'gurustaff';
+const entityName = 'user';
+const tableName = 'user';
 
-module.exports[`${entityName}FetchAllApi`] = function (event, neDBDataPath) {
+
+module.exports[`${entityName}FetchAllApi`] = function (event, neDBDataPath, entity) {
+  console.log(`FetchAllApi entity=${entity} path=${neDBDataPath}`);
   const responseRoute = `/${entityName}FetchAllApiResponse`;
+  entity = entity || entityName;
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${tableName}.db`), autoload: true });
-  console.log(path.join(neDBDataPath, `${tableName}.db`));
+  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
   storage.find({}, (err, doc) => {
-    console.log('doc==>', doc);
-    event.sender.send(responseRoute, err, JSON.stringify(doc));
+    console.log(`FetchAllApi entity=${entity} path=${neDBDataPath} result=`, doc);
+    // event.sender.send(responseRoute, err, JSON.stringify(doc));
+    event.sender.send(responseRoute, err, doc);
+  });
+};
+module.exports[`${entityName}FetchAllApiGurustaff`] = function (event, neDBDataPath, entity) {
+  entity = entity || entityName;
+  console.log(`FetchAllApiGurustaff entity=${entity} path=${neDBDataPath}`);
+  const responseRoute = `/${entityName}FetchAllApiGurustaffResponse`;
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
+  storage.find({}, (err, doc) => {
+    console.log(`FetchAllApiGurustaff entity=${entity} path=${neDBDataPath} result=`, doc);
+    // event.sender.send(responseRoute, err, JSON.stringify(doc));
+    event.sender.send(responseRoute, err, doc);
+  });
+};
+module.exports[`${entityName}FetchAllApiSiswa`] = function (event, neDBDataPath, entity) {
+  entity = entity || entityName;
+  console.log(`FetchAllApiSiswa entity=${entity} path=${neDBDataPath}`);
+  const responseRoute = `/${entityName}FetchAllApiSiswaResponse`;
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
+  storage.find({}, (err, doc) => {
+    console.log(`FetchAllApiSiswa entity=${entity} path=${neDBDataPath} result=`, doc);
+    // event.sender.send(responseRoute, err, JSON.stringify(doc));
+    event.sender.send(responseRoute, err, doc);
   });
 };
 function upload_photo(photoPath, new_photo_path) {
@@ -101,42 +128,19 @@ module.exports.closeImageApi = function (event, photoPath) {
     '0', 'image not closed'
   );
 };
-module.exports[`${entityName}CreateDataApi`] = function (event, arg1, neDBDataPath) {
+module.exports[`${entityName}CreateDataApi`] = function (event, arg1, neDBDataPath, entity) {
+  entity = entity || entityName;
+  // console.log(`${entityName}CreateDataApi`, arg1);
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
   const responseRoute = `/${entityName}CreateDataApiResponse`;
   const dataObj = JSON.parse(arg1);
-  neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${tableName}.db`), autoload: true });
+  console.log(`${entityName}CreateDataApi dataObj`, dataObj);
 
-  if (!dataObj.nip) {
-    return event.sender.send(responseRoute,
-      '0', 'Gagal input data. "NIP" tidak boleh kosong', dataObj
-    );
-  }
   if (!dataObj.id) {
     return event.sender.send(responseRoute,
       '0', 'Gagal input data. "ID" tidak boleh kosong', dataObj
     );
-  }
-  if (!dataObj.name) {
-    return event.sender.send(responseRoute,
-      '0', 'Gagal input data. "NAMA" tidak boleh kosong', dataObj
-    );
-  }
-  if (!dataObj.last_name) {
-    return event.sender.send(responseRoute,
-      '0', 'Gagal input data. "NAMA AKHIR" tidak boleh kosong', dataObj
-    );
-  }
-  if (!dataObj.jabatan) {
-    return event.sender.send(responseRoute,
-      '0', 'Gagal input data. "jabatan" tidak boleh kosong', dataObj
-    );
-  }
-  let new_photo_path = '';
-  if (dataObj.photo_path !== '') {
-    new_photo_path = set_new_photo_path(dataObj.photo_path, neDBDataPath);
-    dataObj.new_photo_path = new_photo_path;
-    upload_photo(dataObj.photo_path, new_photo_path);
   }
   // Using a unique constraint with the index
   // storage.ensureIndex({ fieldName: 'nip', unique: true }, err => {
@@ -150,34 +154,40 @@ module.exports[`${entityName}CreateDataApi`] = function (event, arg1, neDBDataPa
     // });
     // storage.removeIndex('nip');
     // storage.ensureIndex({ fieldName: 'nip', unique: true });
-    storage.findOne({ id: dataObj.id }, (err, doc) => {
-      if (doc) {
+  let new_photo_path = '';
+  if (dataObj.photo_path !== '') {
+    new_photo_path = set_new_photo_path(dataObj.photo_path, neDBDataPath);
+    dataObj.new_photo_path = new_photo_path;
+    upload_photo(dataObj.photo_path, new_photo_path);
+  }
+  storage.findOne({ id: dataObj.id }, (err, doc) => {
+    if (doc) {
+      return event.sender.send(responseRoute,
+        '0', `Gagal input data. ID ${doc.id} telah terpakai.`, dataObj
+      );
+    }
+    storage.findOne({ username: dataObj.username }, (err1, doc1) => {
+      if (doc1) {
         return event.sender.send(responseRoute,
-          '0', `Gagal input data. ID ${doc.id} telah terpakai.`, dataObj
+          '0', `Gagal input data. USERNAME ${doc1.username} telah terpakai.`, dataObj
         );
       }
-      storage.findOne({ nip: dataObj.nip }, (err1, doc1) => {
-        if (doc1) {
+      storage.insert(dataObj, (err2, newDoc) => {
+        // Callback is optional
+        // newDoc is the newly inserted document, including its _id
+        // newDoc has no key called notToBeSaved since its value was undefined
+        // console.log('err', err);
+        // console.log('newDoc', newDoc);
+        // ipcMain.send(responseRoute, 'berhasil input data');
+        if (err2) {
           return event.sender.send(responseRoute,
-            '0', `Gagal input data. NIP ${doc1.nip} telah terpakai.`, dataObj
+            '0', `Gagal input data. msg: ${err2}`, dataObj
           );
         }
-        storage.insert(dataObj, (err2, newDoc) => {
-          // Callback is optional
-          // newDoc is the newly inserted document, including its _id
-          // newDoc has no key called notToBeSaved since its value was undefined
-          // console.log('err', err);
-          console.log('newDoc', newDoc);
-          // ipcMain.send(responseRoute, 'berhasil input data');
-          if (err2) {
-            return event.sender.send(responseRoute,
-              '0', `Gagal input data. msg: ${err2}`, dataObj
-            );
-          }
-          event.sender.send(responseRoute, '1', 'berhasil input data', newDoc);
-        });
+        event.sender.send(responseRoute, '1', 'berhasil input data', newDoc);
       });
     });
+  });
 };
 module.exports[`${entityName}UpdateDataApi`] = function (event, arg1, _id, neDBDataPath) {
   const responseRoute = `/${entityName}UpdateDataApiResponse`;
@@ -208,39 +218,6 @@ module.exports[`${entityName}UpdateDataApi`] = function (event, arg1, _id, neDBD
       }
 
       const updatedData = _.merge(dataDetail, dataObj);
-
-
-      if (!dataObj.nip) {
-        return event.sender.send(responseRoute,
-          '0', 'Gagal input data. "NIP" tidak boleh kosong',
-          updatedData
-        );
-      }
-      if (!dataObj.id) {
-        return event.sender.send(responseRoute,
-          '0', 'Gagal input data. "ID" tidak boleh kosong',
-          updatedData
-        );
-      }
-      if (!dataObj.name) {
-        return event.sender.send(responseRoute,
-          '0', 'Gagal input data. "NAMA" tidak boleh kosong',
-          updatedData
-        );
-      }
-      if (!dataObj.last_name) {
-        return event.sender.send(responseRoute,
-          '0', 'Gagal input data. "NAMA AKHIR" tidak boleh kosong',
-          updatedData
-        );
-      }
-      if (!dataObj.jabatan) {
-        return event.sender.send(responseRoute,
-          '0', 'Gagal input data. "JABATAN" tidak boleh kosong',
-          updatedData
-        );
-      }
-
       storage.findOne({ id: dataObj.id }, (err, doc) => {
         if (doc && dataDetail._id !== doc._id) {
           return event.sender.send(responseRoute,
@@ -248,36 +225,38 @@ module.exports[`${entityName}UpdateDataApi`] = function (event, arg1, _id, neDBD
             updatedData
           );
         }
-        storage.findOne({ nip: dataObj.nip }, (err1, doc1) => {
-          if (doc1 && dataDetail._id !== doc1._id) {
+        storage.findOne({ username: dataObj.username }, (err, doc) => {
+          if (doc && dataDetail.username !== doc.username) {
             return event.sender.send(responseRoute,
-              '0', `Gagal input data. nip ${doc1.nip} telah terpakai.`,
+              '0', `Gagal input data. USERNAME ${doc.username} telah terpakai.`,
               updatedData
             );
           }
-          storage.update({ _id }, { $set: dataObj }, {}, (err2, totalUpdated) => {
-            // Callback is optional
-            // newDoc is the newly inserted document, including its _id
-            // newDoc has no key called notToBeSaved since its value was undefined
-            // console.log('err', err);
-            console.log('totalUpdated', totalUpdated);
-            if (err2) {
-              return event.sender.send(responseRoute,
-                '0', `Gagal update data. msg: ${err2}`,
-                updatedData
-              );
-            }
-            if (gantiPhoto) {
-              upload_photo(dataObj.photo_path, dataObj.new_photo_path);
-            }
+            storage.update({ _id }, { $set: dataObj }, {}, (err2, totalUpdated) => {
+              // Callback is optional
+              // newDoc is the newly inserted document, including its _id
+              // newDoc has no key called notToBeSaved since its value was undefined
+              // console.log('err', err);
+              console.log('totalUpdated', totalUpdated);
+              if (err2) {
+                return event.sender.send(responseRoute,
+                  '0', `Gagal update data. msg: ${err2}`,
+                  updatedData
+                );
+              }
+              if (gantiPhoto) {
+                upload_photo(dataObj.photo_path, dataObj.new_photo_path);
+              }
 
-            // const updatedData = {};
-            // _.extend(updatedData, dataDetail, dataObj);
+              // const updatedData = {};
+              // _.extend(updatedData, dataDetail, dataObj);
 
-            event.sender.send(responseRoute, '1', 'berhasil update data', updatedData);
+              event.sender.send(responseRoute, '1', 'berhasil update data', updatedData);
+            });
           });
         });
-      });
+
+
     });
 };
 module.exports[`${entityName}DeleteDataApi`] = function (event, arg1, neDBDataPath) {
