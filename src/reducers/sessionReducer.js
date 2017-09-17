@@ -13,7 +13,9 @@ import {
   MODIFICATION_USERNAME_SESSION,
   SESSION_LOGIN_IN_PROGRESS,
   FAILED_LOGIN_SESSION,
-  SESSION_LOG_OUT
+  SESSION_LOG_OUT,
+  SESSION_UPDATE_DATA_DETAIL,
+  SESSION_SET_PHOTO_PROFILE_BUFFER
 } from '../constants';
 
 const initialSession = {
@@ -29,7 +31,8 @@ const initialSessionWebDesk = {
   username: '',
   password: '',
   submitLoginUserPassInProgress: false,
-  loginErrorMessage: ''
+  loginErrorMessage: '',
+  detailPhotoBuffer: ''
 };
 
 const initialLoginWithPhoneNumberState = {
@@ -55,6 +58,11 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         reSmsVerificationCodeInProgress: false,
         submitPhoneNumberInProgress: false
+      };
+    case SESSION_SET_PHOTO_PROFILE_BUFFER:
+      return {
+        ...state,
+        detailPhotoBuffer: `data:image/png;base64, ${action.payload}`
       };
     case SUBMIT_PHONE_NUMBER_IN_PROGRESS:
       return {
@@ -98,6 +106,11 @@ export default (state = INITIAL_STATE, action) => {
         userDetail: action.payload,
         loginErrorMessage: '',
         submitLoginUserPassInProgress: false };
+    case SESSION_UPDATE_DATA_DETAIL:
+      return {
+        ...state,
+        userDetail: action.payload.updatedData
+      };
     case SESSION_LOG_OUT:
       return {
         ...state,

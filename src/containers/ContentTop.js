@@ -9,6 +9,8 @@ import * as AdminAction from '../actions/AdminAction';
 
 import './ContentTop.css';
 
+const no_photo = require('../img/no_photo.png');
+
 class ContentTop extends Component {
   componentWillMount() {
     // this.setState({
@@ -24,12 +26,12 @@ class ContentTop extends Component {
     let profilePict;
     let contentTopMenu;
     if (this.props.withProfilePicture) {
-      profilePict = <ProfilePicture photoBuffer={this.props.SettingReducer.noPhoto} />;
+      profilePict = <ProfilePicture photoBuffer={this.props.sessionReducer.detailPhotoBuffer} />;
     }
     if (this.props.withContentTopMenu) {
       contentTopMenu = <ContentTopMenu />;
     }
-    const fullName = this.props.userFullName || this.props.sessionReducer.userDetail.name + ' ' + this.props.sessionReducer.userDetail.last_name;
+    const fullName = this.props.userFullName || this.props.sessionReducer.userDetail.name;
     console.log(this.props.withProfilePicture);
     return (
       <div className={'contentTop'}>

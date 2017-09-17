@@ -6,7 +6,6 @@ import { userRoleOptions } from '../common';
 
 const FIELDS = {
   name: '',
-  last_name: '',
   user_role: '',
   username: '',
   password: '',
@@ -17,7 +16,6 @@ const FIELDS = {
 };
 const FIELDS_ERROR_FLAG = {
   name_error: false,
-  last_name_error: false,
   user_role_error: false,
   username_error: false,
   password_error: false,
@@ -56,6 +54,9 @@ export default class UserForm extends Component {
     this._onCancelConfirmDelete = this._onCancelConfirmDelete.bind(this);
     this._onOkConfirmDelete = this._onOkConfirmDelete.bind(this);
     this._checkPasswordMandatory = this._checkPasswordMandatory.bind(this);
+
+    this._renderFormFieldUserRole = this._renderFormFieldUserRole.bind(this);
+    this._renderForm = this._renderForm.bind(this);
   }
   componentWillMount() {
     this._resetState();
@@ -87,14 +88,10 @@ export default class UserForm extends Component {
         newData: {},
         name: dataDetail.name,
         name_error: false,
-        last_name: dataDetail.last_name,
-        last_name_error: false,
         user_role: dataDetail.user_role,
         user_role_error: false,
         username: dataDetail.username,
         username_error: false,
-        password: dataDetail.password,
-        password_error: false,
         id: dataDetail.id,
         _id: dataDetail._id,
         photo: dataDetail.photo,
@@ -106,7 +103,6 @@ export default class UserForm extends Component {
   _onChangeInputText(key, value) {
     switch (key) {
       case 'name': this.setState({ name: value, name_error: false }); break;
-      case 'last_name': this.setState({ last_name: value, last_name_error: false }); break;
       case 'user_role':
         console.log(`user role onchange key=${key} value=${value}`);
         this.setState({ user_role: value, user_role_error: false }); break;
@@ -138,8 +134,6 @@ export default class UserForm extends Component {
   _thisCheckMandatory(newData) {
     let isFormOk = true;
     isFormOk = this._checkField(isFormOk, newData, 'name', this.state.name, 'NAMA');
-    isFormOk = this._checkField(isFormOk, newData, 'last_name',
-                                this.state.last_name, 'NAMA AKHIR');
     isFormOk = this._checkField(isFormOk, newData, 'user_role', this.state.user_role, 'USER_ROLE');
     isFormOk = this._checkField(isFormOk, newData, 'username', this.state.username, 'USERNAME');
     // isFormOk = this._checkField(isFormOk, newData, 'password', this.state.password, 'PASSWORD');
@@ -154,6 +148,10 @@ export default class UserForm extends Component {
   _onClickButtonSaveData() {
     const newData = {};
     let isFormOk = true;
+    if(this.state.username === 'root'){
+      isFormOk = false;
+      this._setError('USERNAME', 'username');
+    }
     const createdon = new Date().getTime();
     newData.modifiedon = createdon;
     console.log('this.props===>', this.props);
@@ -204,6 +202,9 @@ export default class UserForm extends Component {
     } else {
       newData.photo_path = '';
     }
+    if (this.state.password && this.state.password !== '') {
+      if(isFormOk) isFormOk = this._checkPasswordMandatory(newData);
+    }
     if (isFormOk) {
         this.setState({
           newData
@@ -237,6 +238,17 @@ export default class UserForm extends Component {
   }
   _renderButtonSubmit() {
     // alert(this.state._id);
+    if (this.state._id && this.state._id !== '' && this.props.isUpdateProfile) {
+      return (
+        <Button
+          type='submit'
+          onClick={() => this._onClickButtonUpdateData()}
+          positive
+        >
+          Update
+        </Button>
+      );
+    }
     if (this.state._id && this.state._id !== '') {
       return (
         <div>
@@ -272,16 +284,149 @@ export default class UserForm extends Component {
       </Button>
     );
   }
+  _renderFormFieldUserRole(userRoleOptionsFiltered) {
+    const opt = userRoleOptions;
+    const userRole = _.find(opt, { value: this.state.user_role} );
+    //100 = root
+    if(userRole && this.props.isUpdateProfile && this.state.user_role !== 100){
+      return (
+        <input type="text" name="user_role" value={userRole.text} readOnly />
+      );
+    }
+    return (
+      <Dropdown
+        placeholder='pilih user role'
+        fluid
+        selection
+        options={userRoleOptionsFiltered}
+        value={this.state.user_role}
+        onChange={(e, data) => {
+          // console.log(e);
+          console.log(data);
+          this._onChangeInputText('user_role', data.value);
+          }}
+        error={this.state.user_role_error}
+      />
+    );
 
-  render() {
+  }
+
+  _renderForm(){
     let passwordLabel = 'Password';
     if (this.state._id && this.state._id !== '') {
       passwordLabel = 'Password (kosongkan jika tidak ingin ganti password)';
     }
     // userRoleOptions
-    const userRoleOptionsFiltered = _.compact(
-      _.map(userRoleOptions, (v) => { if(v.value > this.state.usersessionDetail.user_role) return v;  return null; })
+    let userRoleOptionsFiltered = userRoleOptions;
+    if(this.state.user_role !== 100){
+      userRoleOptionsFiltered = _.compact(
+        _.map(userRoleOptions, (v) => { if(v.value > this.state.usersessionDetail.user_role) return v;  return null; })
+      );
+    }
+
+    if(false){
+      return (
+        <Form.Field>
+          <Form.Input
+            label={passwordLabel}
+            placeholder='password'
+            name='password'
+            value={this.state.password}
+            onChange={e => this._onChangeInputText('password', e.target.value)}
+            error={this.state.password_error}
+          />
+        </Form.Field>
+      );
+    }
+    return (
+      <div>
+        <Form.Field>
+          <Form.Input
+            label='Nama'
+            placeholder='nama'
+            value={this.state.name}
+            name='name'
+            onChange={e => this._onChangeInputText('name', e.target.value)}
+            error={this.state.name_error}
+          />
+        </Form.Field>
+        <Form.Field>
+          <label>User Role</label>
+          {this._renderFormFieldUserRole(userRoleOptionsFiltered)}
+          {/* <Form.Input
+            label='jabatan'
+            placeholder='jabatan'
+            value={this.state.jabatan}
+            name='jabatan'
+            onChange={e => this._onChangeInputText('jabatan', e.target.value)}
+            error={this.state.jabatan_error}
+          /> */}
+        </Form.Field>
+        <Form.Field>
+          <Form.Input
+            label='Username'
+            placeholder='username'
+            value={this.state.username}
+            name='username'
+            onChange={e => this._onChangeInputText('username', e.target.value)}
+            error={this.state.username_error}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Form.Input
+            label={passwordLabel}
+            placeholder='password'
+            name='password'
+            value={this.state.password}
+            onChange={e => this._onChangeInputText('password', e.target.value)}
+            error={this.state.password_error}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Form.Input
+            label='ID'
+            placeholder='input menggunakan barcode scanner atau input manual'
+            value={this.state.id}
+            name='id'
+            onChange={e => this._onChangeInputText('id', e.target.value)}
+            error={this.state.id_error}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Form.Input
+            label='Photo'
+            type="file"
+            name="photo"
+            id="photo"
+            // value={this.state.photo}
+            onChange={
+              e => {
+                // console.log('e.target.files[0]==>', e.target.files[0]);
+                // const file = e.target.files[0];
+                // const reader = new FileReader();
+                // reader.readAsDataURL(file);
+                const input = e.target;
+                const reader = new FileReader();
+                reader.onload = () => {
+                  const dataURL = reader.result;
+                  const output = document.getElementById('imgDisplay');
+                  const img = output.getElementsByTagName('img')[0];
+                  img.src = dataURL;
+                  // const src = output.getElementsByTagName('img').getAttribute('src');
+                  // output.src = dataURL;
+                  // console.log('====>>>', img);
+                };
+                reader.readAsDataURL(input.files[0]);
+                this._onChangeInputText('photo', e.target.files[0]);
+              }
+            }
+          />
+        </Form.Field>
+      </div>
     );
+  }
+
+  render() {
     return (
         <Form
           success={this.state.isSuccess}
@@ -293,110 +438,7 @@ export default class UserForm extends Component {
             header='Form Input Data'
             content={this.state.formMessage}
           />
-          <Form.Field>
-            <Form.Input
-              label='Nama'
-              placeholder='nama'
-              value={this.state.name}
-              name='name'
-              onChange={e => this._onChangeInputText('name', e.target.value)}
-              error={this.state.name_error}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label='Nama Akhir'
-              placeholder='nama akhir'
-              value={this.state.last_name}
-              name='last_name'
-              onChange={e => this._onChangeInputText('last_name', e.target.value)}
-              error={this.state.last_name_error}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>User Role</label>
-            <Dropdown
-
-              placeholder='pilih user role'
-              fluid
-              selection
-              options={userRoleOptionsFiltered}
-              value={this.state.user_role}
-              onChange={(e, data) => {
-                // console.log(e);
-                console.log(data);
-                this._onChangeInputText('user_role', data.value);
-                }}
-              error={this.state.user_role_error}
-            />
-            {/* <Form.Input
-              label='jabatan'
-              placeholder='jabatan'
-              value={this.state.jabatan}
-              name='jabatan'
-              onChange={e => this._onChangeInputText('jabatan', e.target.value)}
-              error={this.state.jabatan_error}
-            /> */}
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label='Username'
-              placeholder='username'
-              value={this.state.username}
-              name='username'
-              onChange={e => this._onChangeInputText('username', e.target.value)}
-              error={this.state.username_error}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label={passwordLabel}
-              placeholder='password'
-              name='password'
-              onChange={e => this._onChangeInputText('password', e.target.value)}
-              error={this.state.password_error}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label='ID'
-              placeholder='input menggunakan barcode scanner atau input manual'
-              value={this.state.id}
-              name='id'
-              onChange={e => this._onChangeInputText('id', e.target.value)}
-              error={this.state.id_error}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Form.Input
-              label='Photo'
-              type="file"
-              name="photo"
-              id="photo"
-              // value={this.state.photo}
-              onChange={
-                e => {
-                  // console.log('e.target.files[0]==>', e.target.files[0]);
-                  // const file = e.target.files[0];
-                  // const reader = new FileReader();
-                  // reader.readAsDataURL(file);
-                  const input = e.target;
-                  const reader = new FileReader();
-                  reader.onload = () => {
-                    const dataURL = reader.result;
-                    const output = document.getElementById('imgDisplay');
-                    const img = output.getElementsByTagName('img')[0];
-                    img.src = dataURL;
-                    // const src = output.getElementsByTagName('img').getAttribute('src');
-                    // output.src = dataURL;
-                    // console.log('====>>>', img);
-                  };
-                  reader.readAsDataURL(input.files[0]);
-                  this._onChangeInputText('photo', e.target.files[0]);
-                }
-              }
-            />
-          </Form.Field>
+          {this._renderForm()}
           {/* <Form.Field>
             <Checkbox label='I agree to the Terms and Conditions' />
           </Form.Field> */}

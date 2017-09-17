@@ -11,31 +11,28 @@ class SettingFormContainer extends Component {
   constructor(props) {
     super(props);
     this._onChangeInputNeDbDataPath = this._onChangeInputNeDbDataPath.bind(this);
-    this._onChangeInputPassword = this._onChangeInputPassword.bind(this);
     this._saveDataSettingResponse = this._saveDataSettingResponse.bind(this);
   }
   componentWillMount() {
     this.setState({
       neDBDataPath: this.props.SettingReducer.neDBDataPath,
-      isSuccess: false,
-      isError: false,
-      formMessage: 'Masukan data dengan baik dan benar.',
+      isError: this.props.UserReducer.isFormModalError,
+      isSuccess: this.props.UserReducer.isFormModalSuccess,
+      formMessage: this.props.UserReducer.formMessage,
       password: this.props.sessionReducer.userDetail.password
     });
   }
   componentWillReceiveProps(nextProps){
     this.setState({
-      password: nextProps.sessionReducer.userDetail.password
+      password: nextProps.sessionReducer.userDetail.password,
+      formMessage: nextProps.UserReducer.formMessage,
+      isError: this.props.UserReducer.isFormModalError,
+      isSuccess: this.props.UserReducer.isFormModalSuccess
     });
   }
   _onChangeInputNeDbDataPath(value) {
     this.setState({
       neDBDataPath: value
-    });
-  }
-  _onChangeInputPassword(value) {
-    this.setState({
-      password: value
     });
   }
   _onClickButtonSaveDataSetting() {
@@ -74,19 +71,6 @@ class SettingFormContainer extends Component {
               onChange={e => this._onChangeInputNeDbDataPath(e.target.value)}
             />
           </Form.Field>
-          <Form.Field>
-            <label>Edit Password</label>
-            <Input
-              loading={false}
-              // icon='user'
-              // iconPosition='left'
-              placeholder='password baru'
-              value={this.state.neDBDataPath}
-              name='password'
-              ref='password'
-              onChange={e => this._onChangeInputPassword(e.target.value)}
-            />
-          </Form.Field>
           {/* <Form.Field>
             <Checkbox label='I agree to the Terms and Conditions' />
           </Form.Field> */}
@@ -110,6 +94,7 @@ function mapStateToProps(state) {
   return {
     SettingReducer: state.SettingReducer,
     sessionReducer: state.sessionReducer,
+    UserReducer: state.UserReducer
   };
 }
 

@@ -17,7 +17,9 @@ import {
   USER_OPEN_MODAL_FORM_UPDATE,
   USER_SET_MODAL_FORM_PHOTO,
   USER_CLOSE_MODAL_FORM,
-  USER_OPEN_MODAL_FORM
+  USER_OPEN_MODAL_FORM,
+  USER_OPEN_FORM_UPDATE,
+  USER_REDUCER_RESET
 } from '../constants';
 
 const INITIAL_STATE = {
@@ -36,6 +38,10 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case USER_REDUCER_RESET:
+      return {
+        ...INITIAL_STATE
+      };
     case USER_SAVE_DATA_IN_PROGRESS:
       return {
         ...state,
@@ -70,6 +76,14 @@ export default (state = INITIAL_STATE, action) => {
         formModalOpen: true,
         formMessage: 'Masukan data dengan baik dan benar.',
         isFormModalError: false
+      };
+    case USER_OPEN_FORM_UPDATE:
+      return {
+        ...state,
+        dataDetail: action.payload,
+        formMessage: 'Masukan data dengan baik dan benar.',
+        isFormModalError: false,
+        isFormModalSuccess: false
       };
     case USER_CLOSE_MODAL_FORM:
       return {

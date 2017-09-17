@@ -15,8 +15,14 @@ import {
   SESSION_LOGIN_IN_PROGRESS,
   FAILED_LOGIN_SESSION,
   SUCCESS_LOGIN_SESSION,
-  SESSION_LOG_OUT
+  SESSION_LOG_OUT,
+  SESSION_SET_PHOTO_PROFILE_BUFFER
 } from '../constants';
+
+import {
+  openImageApi
+}
+from '../api';
 
 export function modificationUsernameSession(text) {
   // console.log(`login.modificationPhoneNumber ${text}`);
@@ -58,6 +64,9 @@ export function submitUsernamePasswordSession(username, password, users) {
     const gotcha = _.find(users, { username, password: b64.encode(password) });
     if (gotcha) {
       console.log('submitUsernamePasswordSession dapat user=>', gotcha);
+      openImageApi(gotcha.new_photo_path).then((response) => {
+          dispatch({ type: SESSION_SET_PHOTO_PROFILE_BUFFER, payload: response.message });
+      });
       submitUsernamePasswordSessionSuccess(dispatch, gotcha);
     } else {
       submitUsernamePasswordSessionFailed(dispatch);

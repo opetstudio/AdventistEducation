@@ -216,8 +216,11 @@ module.exports[`${entityName}UpdateDataApi`] = function (event, arg1, _id, neDBD
         console.log('ganti photo ==>', dataObj.photo_path);
         dataObj.new_photo_path = new_photo_path;
       }
-
+      console.log('dataDetail=>', dataDetail);
+      console.log('dataObj=>', dataObj);
       const updatedData = _.merge(dataDetail, dataObj);
+      console.log('updatedData=>', updatedData);
+
       storage.findOne({ id: dataObj.id }, (err, doc) => {
         if (doc && dataDetail._id !== doc._id) {
           return event.sender.send(responseRoute,
@@ -226,7 +229,7 @@ module.exports[`${entityName}UpdateDataApi`] = function (event, arg1, _id, neDBD
           );
         }
         storage.findOne({ username: dataObj.username }, (err, doc) => {
-          if (doc && dataDetail.username !== doc.username) {
+          if (doc && dataDetail._id !== doc._id) {
             return event.sender.send(responseRoute,
               '0', `Gagal input data. USERNAME ${doc.username} telah terpakai.`,
               updatedData
@@ -250,6 +253,7 @@ module.exports[`${entityName}UpdateDataApi`] = function (event, arg1, _id, neDBD
 
               // const updatedData = {};
               // _.extend(updatedData, dataDetail, dataObj);
+              console.log('updated data=>', updatedData);
 
               event.sender.send(responseRoute, '1', 'berhasil update data', updatedData);
             });

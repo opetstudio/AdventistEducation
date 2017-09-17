@@ -21,7 +21,10 @@ import {
   USER_CLOSE_MODAL_FORM,
   USER_OPEN_MODAL_FORM,
   USER_SET_MODAL_FORM_PHOTO,
-  USER_FETCH_ALL_STATIC_DATA
+  USER_FETCH_ALL_STATIC_DATA,
+  USER_OPEN_FORM_UPDATE,
+  SESSION_UPDATE_DATA_DETAIL,
+  SESSION_SET_PHOTO_PROFILE_BUFFER
 }
 from '../constants';
 import {
@@ -64,10 +67,14 @@ export const createData = (data, neDBDataPath) => {
     });
   };
 };
-export const updateData = (_id, oldData, data, neDBDataPath) => {
-  console.log('updateData');
+export const updateData = (_id, oldData, data, neDBDataPath, isUpdateProfile) => {
+  console.log('updateData oldData=>', oldData);
+  console.log('updateData data=>', data);
   return (dispatch) => {
-    if(data.password && data.password !== '') data.password = b64.encode(data.password);
+    if(data.password && data.password !== ''){
+      console.log('rubah password ke ', data.password);
+      data.password = b64.encode(data.password);
+    }
     else {
       data = _.omit(data, ['password']);
     }
@@ -87,6 +94,17 @@ export const updateData = (_id, oldData, data, neDBDataPath) => {
             // dispatch({ type: USER_SET_MODAL_FORM_PHOTO,
             //   payload: saveDataResponse,
             //   oldData });
+            if(isUpdateProfile){
+              dispatch({ type: SESSION_UPDATE_DATA_DETAIL,
+                payload: saveDataResponse
+              });
+              if(saveDataResponse.updatedData.new_photo_path !== oldData.new_photo_path){
+                openImageApi(saveDataResponse.updatedData.new_photo_path).then((response) => {
+                    dispatch({ type: SESSION_SET_PHOTO_PROFILE_BUFFER, payload: response.message });
+                });
+              }
+            }
+
         } else {
             saveDataResponse.updatedData = {
               ...oldData,
@@ -107,6 +125,10 @@ export const updateData = (_id, oldData, data, neDBDataPath) => {
       });
     });
   };
+};
+export const updateUserProfile = (_id, oldData, data, neDBDataPath) => {
+  console.log('updateUserProfile');
+
 };
 export const onChangeInputPhoto = (photoPath) => {
   console.log('onChangeInputPhoto');
@@ -188,6 +210,17 @@ export const openModalFormUpdateData = (row) => {
   return (dispatch) => {
     if (row) {
       dispatch({ type: USER_OPEN_MODAL_FORM_UPDATE, payload: row });
+      openImageApi(row.new_photo_path).then((response) => {
+          dispatch({ type: USER_SET_MODAL_FORM_PHOTO, payload: response.message });
+      });
+    }
+  };
+};
+export const openFormUpdateData = (row) => {
+  console.log('openFormUpdateData.', row);
+  return (dispatch) => {
+    if (row) {
+      dispatch({ type: USER_OPEN_FORM_UPDATE, payload: row });
       openImageApi(row.new_photo_path).then((response) => {
           dispatch({ type: USER_SET_MODAL_FORM_PHOTO, payload: response.message });
       });

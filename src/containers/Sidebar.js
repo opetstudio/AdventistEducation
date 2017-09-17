@@ -19,6 +19,7 @@ class Sidebar extends Component {
     this.gotoPage = this.gotoPage.bind(this);
     this.handleItemClick = this.handleItemClick.bind(this);
     this.renderSideMenu = this.renderSideMenu.bind(this);
+    this._renderMenuEditProfile = this._renderMenuEditProfile.bind(this);
   }
   componentWillMount() {
     console.log('sidebar.js componentWillMount ====>>', this.props.SettingReducer);
@@ -44,6 +45,23 @@ class Sidebar extends Component {
         this.props.gotoSubAdminPage(pagePath);
         this.setState({ redirect: true, pagePath, activeItem: pagePath });
     }
+  }
+  _renderMenuEditProfile(activeItem) {
+    if(this.props.sessionReducer.userDetail.username=== 'root'){
+      return (
+        <div />
+      );
+    }
+    else
+      return (
+        <Menu.Item
+          name='Pengaturan Profile'
+          active={activeItem === '/edit-profile'}
+          // onClick={() => this.props.gotoSubAdminPage('absendigital')}
+          onClick={() => this.gotoPage('/edit-profile')}
+          style={style.sideMenu}
+        />
+      );
   }
   renderSideMenu(activeItem) {
     return (
@@ -79,24 +97,25 @@ class Sidebar extends Component {
           style={style.sideMenu}
         />
         <Menu.Item
-          name='Absen Digital'
-          active={activeItem === '/absendigital'}
-          onClick={() => this.gotoPage('/absendigital')}
-          style={style.sideMenu}
-        />
-        <Menu.Item
           name='Profil User'
           active={activeItem === '/daftar-user'}
           onClick={() => this.gotoPage('/daftar-user')}
           style={style.sideMenu}
         />
         <Menu.Item
-          name='Pengaturan'
+          name='Absen Digital'
+          active={activeItem === '/absendigital'}
+          onClick={() => this.gotoPage('/absendigital')}
+          style={style.sideMenu}
+        />
+        <Menu.Item
+          name='Pengaturan Sistem'
           active={activeItem === '/setting'}
           // onClick={() => this.props.gotoSubAdminPage('absendigital')}
           onClick={() => this.gotoPage('/setting')}
           style={style.sideMenu}
         />
+        {this._renderMenuEditProfile()}
         <Menu.Item
           name='Logout'
           active={activeItem === 'friends'}

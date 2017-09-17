@@ -1,0 +1,22 @@
+/*
+* containers/UserProfileFormContainer.scss
+*/
+// @import '../global.scss';
+
+.userProfileFormContainerWrapper{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.userProfileFormContainerPhotoDisplayWrapper{
+  display: block;
+  max-width: 50%;
+  flex: 0 1 auto;
+  position: relative;
+  margin-left: 20px;
+}
+.userProfileFormContainerUserFormWrapper{
+  width: 100%;
+  flex-grow: 0 1 auto;
+  display: block;
+}

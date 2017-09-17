@@ -19,6 +19,7 @@ import SettingPage from './pages/Setting';
 import DaftarSiswaPage from './pages/DaftarSiswa';
 import GurustaffScene from './pages/GurustaffScene';
 import UserScene from './pages/UserScene';
+import EditProfileScene from './pages/EditProfileScene';
 
 import './global.css';
 
@@ -43,6 +44,7 @@ class RouterWeb extends Component {
               <Route path="/daftar-siswa" component={DaftarSiswaPage} />
               <Route path="/daftar-gurustaff" component={GurustaffScene} />
               <Route path="/daftar-user" component={UserScene} />
+              <Route path="/edit-profile" component={EditProfileScene} />
             </div>
          </HashRouter>
      </Provider>
