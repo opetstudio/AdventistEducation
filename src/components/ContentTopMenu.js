@@ -62,8 +62,8 @@ export default class ContentTopMenu extends Component {
               onMouseLeave={this._onMouseLeaveLeftMenu.bind(this)}
             >
               <Button.Group vertical style={{ width: '100%' }}>
-                <Button style={{ borderRadius: 0, background: '#a1a1a1' }}>Check In</Button>
-                <Button style={{ borderRadius: 0, background: '#c26bd7' }}>Check Out</Button>
+                <Button onClick={()=>this.props.onClickSubmenu('set-absen-mode-to-checkout')} style={{ borderRadius: 0, background: '#a1a1a1' }}>Check In</Button>
+                <Button onClick={()=>this.props.onClickSubmenu('set-absen-mode-to-checkin')} style={{ borderRadius: 0, background: '#c26bd7' }}>Check Out</Button>
               </Button.Group>
             </div>
             <div
@@ -73,8 +73,8 @@ export default class ContentTopMenu extends Component {
               onMouseLeave={this._onMouseLeaveRightMenu.bind(this)}
             >
               <Button.Group vertical style={{ width: '100%' }}>
-                <Button style={{ borderRadius: 0, background: '#a1a1a1' }}>Siswa</Button>
-                <Button style={{ borderRadius: 0, background: '#c26bd7' }}>Guru</Button>
+                <Button onClick={()=>this.props.onClickSubmenu('rekap-siswa')} style={{ borderRadius: 0, background: '#a1a1a1' }}>Siswa</Button>
+                <Button onClick={()=>this.props.onClickSubmenu('rekap-gurustaff')} style={{ borderRadius: 0, background: '#c26bd7' }}>Guru</Button>
               </Button.Group>
             </div>
           </div>

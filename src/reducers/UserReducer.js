@@ -21,6 +21,7 @@ import {
   USER_OPEN_FORM_UPDATE,
   USER_REDUCER_RESET
 } from '../constants';
+import { REHYDRATE } from 'redux-persist/constants'; //persist/REHYDRATE
 
 const INITIAL_STATE = {
   listData: [],
@@ -38,6 +39,10 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    // case REHYDRATE:
+    //   return {
+    //     ...INITIAL_STATE
+      // };
     case USER_REDUCER_RESET:
       return {
         ...INITIAL_STATE

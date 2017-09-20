@@ -19,6 +19,7 @@ import {
   CLOSE_MODAL_FORM,
   OPEN_MODAL_FORM
 } from '../constants';
+import { REHYDRATE } from 'redux-persist/constants'; //persist/REHYDRATE
 
 const INITIAL_STATE = {
   ListDataSiswa: [],
@@ -36,6 +37,11 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    // case REHYDRATE:
+    //   console.log('===>', REHYDRATE);
+    //   return {
+    //     ...INITIAL_STATE
+    //   };
     case SAVE_DATA_SISWA_IN_PROGRESS:
       console.log('SAVE_DATA_SISWA_IN_PROGRESS');
       return {

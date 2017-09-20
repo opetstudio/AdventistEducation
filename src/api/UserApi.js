@@ -1,11 +1,16 @@
 // let remote = null;
+import fetch from 'isomorphic-fetch';
+
 let ipcRenderer = {
   send: () => {},
   on: () => {}
 };
 const entityName = 'user';
+let server = '';
+// window && window.process && window.process.type
 if (window.require) {
     ipcRenderer = window.require('electron').ipcRenderer;
+    server = 'electron';
 }
 //CREATE
 export const createDataApi = (data, neDBDataPath, entity) =>
@@ -31,22 +36,37 @@ export const createDataApi = (data, neDBDataPath, entity) =>
 //READ
 export const fetchAllApi = (neDBDataPath, entity) =>
   new Promise((resolve) => {
-    if (ipcRenderer !== null) {
-        ipcRenderer.send(`/${entityName}FetchAllApi`, neDBDataPath, entity);
+    const routeName = `/${entityName}FetchAllApi`;
+    const resp = (o) => {
+      resolve(o);
+    };
+    // return fetch(`https://www.reddit.com/r/${subreddit}.json`)
+    //   .then(response => response.json())
+    //   .then(json => dispatch(receivePosts(subreddit, json)))
+    if(server === 'electron'){
+      ipcRenderer.send(routeName, neDBDataPath, entity);
+      ipcRenderer.on(`${routeName}Response`, (event, e, o) => resp({ e, o }));
     }
-    ipcRenderer.on(`/${entityName}FetchAllApiResponse`, (event, e, o) => {
-        console.log(`fetchAllApiResponse o=${entity}`, o);
-        resolve({ e, o });
-    });
+    else{
+      fetch(`/${entityName}FetchAllApi`).then(response => {
+        console.log(response);
+        resp();
+      });
+    }
   });
 export const fetchAllApiGurustaff = (neDBDataPath, entity) =>
   new Promise((resolve) => {
+    const resp = (o) => {
+      resolve(o);
+    };
+
+
     if (ipcRenderer !== null) {
         ipcRenderer.send(`/${entityName}FetchAllApiGurustaff`, neDBDataPath, entity);
     }
     ipcRenderer.on(`/${entityName}FetchAllApiGurustaffResponse`, (event, e, o) => {
         console.log(`FetchAllApiGurustaffResponse o=${entity}`, o);
-        resolve({ e, o });
+        resp({ e, o });
     });
   });
 export const fetchAllApiSiswa = (neDBDataPath, entity) =>

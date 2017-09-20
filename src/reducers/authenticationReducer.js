@@ -48,6 +48,8 @@ const initialState = {
 
 const authenticationReducer = (state = initialState, action) => {
   console.log(action);
+  console.log(action);
+  console.log(action);
   switch (action.type) {
     case RESET_AUTHENTICATION_REDUCER:
     return initialState;

@@ -1,17 +1,23 @@
 import {
   SAVE_SETTING,
-  SETTING_SET_NO_PHOTO
+  SETTING_SET_NO_PHOTO,
+  SETTING_SET_ABSEN_MODE
 } from '../constants';
 
 import {
   openImageApi
 } from '../api';
 
-export const saveDataSetting = (data, callback) => {
+export const saveDataSetting = (data) => {
   console.log('saveDataSetting');
   return dispatch => {
-    dispatch({ type: SAVE_SETTING, data });
-    callback(true, 'success');
+    // const msg = status ? 'Data berhasil disimpan.' : message;
+    dispatch({ type: SAVE_SETTING, data, message: 'Data berhasil disimpan.' });
+  };
+};
+export const setAbsenMode = (mode) => {
+  return dispatch => {
+    dispatch({ type: SETTING_SET_ABSEN_MODE, payload: mode });
   };
 };
 export const settingSetNoPhoto = () => {

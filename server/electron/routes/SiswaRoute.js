@@ -6,6 +6,8 @@ const b64 = require('base-64');
 const _ = require('lodash');
 const appRoot = require('app-root-path');
 const path = require('path');
+const utils = require('../utils');
+// const model_siswa = require('../models/SiswaModel');
 
 // os.platform()
 // console.log('oooooossssss====>', os.platform());
@@ -19,10 +21,24 @@ const path = require('path');
 const Datastore = require('nedb');
 const config = require('../config');
 
+const entityName = 'siswa';
+const tableName = 'siswa';
+
+function createDB(pathDb){
+  return new Datastore({ filename: pathDb, autoload: true, timestampData: true, afterSerialization:utils._afterSerialization, beforeDeserialization:utils._beforeDeserialization });
+}
+
+const dataStore = createDB(path.join(`${tableName}.db`));
+function getDatastore(neDBDataPath, entity){
+  var pathDb = path.join(neDBDataPath, `${entity}.db`);
+  if(pathDb === dataStore.filename) return dataStore;
+  else return createDB(pathDb);
+}
+
 module.exports.fetchAllDataSiswaApi = function (event, neDBDataPath) {
   console.log('fetchAllDataSiswaApi==>', neDBDataPath);
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, 'siswa.db'), autoload: true });
+  const storage = getDatastore(neDBDataPath, tableName);
   storage.find({}, (err, doc) => {
     // console.log('doc==>', doc);
     event.sender.send('/fetchAllDataSiswaApi-response', err, JSON.stringify(doc));
@@ -115,7 +131,7 @@ module.exports.saveSiswa = function (event, arg1, neDBDataPath) {
   console.log('saveSiswa==>', arg1);
   const dataObj = JSON.parse(arg1);
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, 'siswa.db'), autoload: true });
+  const storage = getDatastore(neDBDataPath, tableName);
   if (!dataObj.nis) {
     return event.sender.send('/save-siswa-response',
       '0', 'Gagal input data. "NIS" tidak boleh kosong', dataObj
@@ -193,7 +209,7 @@ module.exports.updateSiswa = function (event, arg1, _id, neDBDataPath) {
   console.log('updateSiswa old _id==>', _id);
   const dataObj = JSON.parse(arg1);
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, 'siswa.db'), autoload: true });
+  const storage = getDatastore(neDBDataPath, tableName);
   // Using a unique constraint with the index
   // storage.ensureIndex({ fieldName: 'nis', unique: true }, err => {
   //   console.log(err);
@@ -308,11 +324,10 @@ module.exports.updateSiswa = function (event, arg1, _id, neDBDataPath) {
 };
 module.exports.siswaDeleteDataApi = function (event, arg1, neDBDataPath) {
   const responseRoute = '/siswaDeleteDataApiResponse';
-  const tableName = 'siswa';
   // const dataObj = JSON.parse(arg1);
   const dataObj = arg1;
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, 'siswa.db'), autoload: true });
+  const storage = getDatastore(neDBDataPath, tableName);
   storage.findOne({ _id: dataObj._id }, (err0, doc0) => {
     if (!doc0) {
       return event.sender.send(responseRoute,

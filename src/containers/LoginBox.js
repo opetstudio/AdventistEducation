@@ -12,7 +12,7 @@ import {
   submitUsernamePasswordSession
  } from '../actions/LoginAction';
 import { gotoSubAdminPage, setCurrentPagePath } from '../actions/AdminAction';
-import { fetchAllStatic } from '../actions/UserAction';
+import { fetchAll } from '../actions/UserAction';
 
 class LoginBox extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class LoginBox extends Component {
     this.renderErrorMessage = this.renderErrorMessage.bind(this);
   }
   componentWillMount() {
-    this.props.fetchAllStatic(this.props.UserReducer.listData);
+    this.props.fetchAll(this.props.SettingReducer.neDBDataPath, this.props.UserReducer.listData);
   }
   componentWillReceiveProps(nextProps) {
 
@@ -95,7 +95,8 @@ function mapStateToProps(state) {
     appReducer: state.appReducer,
     dataUsersReducer: state.dataUsersReducer,
     sessionReducer: state.sessionReducer,
-    UserReducer: state.UserReducer
+    UserReducer: state.UserReducer,
+    SettingReducer: state.SettingReducer
   };
 }
 
@@ -107,7 +108,7 @@ function mapDispatchToProps(dispatch) {
     submitUsernamePasswordSession,
     gotoSubAdminPage,
     setCurrentPagePath,
-    fetchAllStatic
+    fetchAll
   }, dispatch);
 
   // return {

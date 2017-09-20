@@ -72,12 +72,12 @@ class Sidebar extends Component {
           onClick={() => this.gotoPage('/admin')}
           style={style.sideMenu}
         />
-        <Menu.Item
+        {/* <Menu.Item
           name='Profil Sekolah'
           active={activeItem === 'messages'}
           onClick={this.handleItemClick}
           style={style.sideMenu}
-        />
+        /> */}
         <Menu.Item
           name='Profil Guru'
           active={activeItem === '/daftar-gurustaff'}

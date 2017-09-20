@@ -4,9 +4,21 @@ const _ = require('lodash');
 const Datastore = require('nedb');
 const path = require('path');
 const config = require('../config');
+const utils = require('../utils');
 
 const entityName = 'absen';
 const tableName = 'absen';
+
+function createDB(pathDb){
+  return new Datastore({ filename: pathDb, autoload: true, timestampData: true, afterSerialization:utils._afterSerialization, beforeDeserialization:utils._beforeDeserialization });
+}
+
+const dataStore = createDB(path.join(`${tableName}.db`));
+function getDatastore(neDBDataPath, entity){
+  var pathDb = path.join(neDBDataPath, `${entity}.db`);
+  if(pathDb === dataStore.filename) return dataStore;
+  else return createDB(pathDb);
+}
 
 
 module.exports[`${entityName}FetchAllApi`] = function (event, neDBDataPath, entity) {
@@ -14,7 +26,7 @@ module.exports[`${entityName}FetchAllApi`] = function (event, neDBDataPath, enti
   const responseRoute = `/${entityName}FetchAllApiResponse`;
 
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, entity);
   storage.find({}, (err, doc) => {
     console.log(`FetchAllApi entity=${entity} path=${neDBDataPath} result=`, doc);
     // event.sender.send(responseRoute, err, JSON.stringify(doc));
@@ -25,7 +37,7 @@ module.exports[`${entityName}FetchAllApiGurustaff`] = function (event, neDBDataP
   console.log(`FetchAllApiGurustaff entity=${entity} path=${neDBDataPath}`);
   const responseRoute = `/${entityName}FetchAllApiGurustaffResponse`;
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, entity);
   storage.find({}, (err, doc) => {
     console.log(`FetchAllApiGurustaff entity=${entity} path=${neDBDataPath} result=`, doc);
     // event.sender.send(responseRoute, err, JSON.stringify(doc));
@@ -36,7 +48,7 @@ module.exports[`${entityName}FetchAllApiSiswa`] = function (event, neDBDataPath,
   console.log(`FetchAllApiSiswa entity=${entity} path=${neDBDataPath}`);
   const responseRoute = `/${entityName}FetchAllApiSiswaResponse`;
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, entity);
   storage.find({}, (err, doc) => {
     console.log(`FetchAllApiSiswa entity=${entity} path=${neDBDataPath} result=`, doc);
     // event.sender.send(responseRoute, err, JSON.stringify(doc));
@@ -129,7 +141,7 @@ module.exports.closeImageApi = function (event, photoPath) {
 module.exports[`${entityName}CreateDataApi`] = function (event, arg1, neDBDataPath, entity) {
   // console.log(`${entityName}CreateDataApi`, arg1);
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, entity);
   const responseRoute = `/${entityName}CreateDataApiResponse`;
   const dataObj = JSON.parse(arg1);
   console.log(`${entityName}CreateDataApi dataObj`, dataObj);
@@ -170,7 +182,7 @@ module.exports[`${entityName}UpdateDataApi`] = function (event, arg1, _id, neDBD
   const responseRoute = `/${entityName}UpdateDataApiResponse`;
   const dataObj = JSON.parse(arg1);
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${tableName}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, tableName);
     storage.findOne({ _id }, (err0, doc0) => {
       if (!doc0) {
         return event.sender.send(responseRoute,
@@ -272,7 +284,7 @@ module.exports[`${entityName}DeleteDataApi`] = function (event, arg1, neDBDataPa
   // const dataObj = JSON.parse(arg1);
   const dataObj = arg1;
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${tableName}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, tableName);
     storage.findOne({ _id: dataObj._id }, (err0, doc0) => {
       if (!doc0) {
         return event.sender.send(responseRoute,

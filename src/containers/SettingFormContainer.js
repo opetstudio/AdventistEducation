@@ -11,23 +11,21 @@ class SettingFormContainer extends Component {
   constructor(props) {
     super(props);
     this._onChangeInputNeDbDataPath = this._onChangeInputNeDbDataPath.bind(this);
-    this._saveDataSettingResponse = this._saveDataSettingResponse.bind(this);
   }
   componentWillMount() {
     this.setState({
       neDBDataPath: this.props.SettingReducer.neDBDataPath,
-      isError: this.props.UserReducer.isFormModalError,
-      isSuccess: this.props.UserReducer.isFormModalSuccess,
-      formMessage: this.props.UserReducer.formMessage,
-      password: this.props.sessionReducer.userDetail.password
+      isError: this.props.SettingReducer.isFormModalError,
+      isSuccess: this.props.SettingReducer.isFormModalSuccess,
+      formMessage: this.props.SettingReducer.formMessage
     });
   }
   componentWillReceiveProps(nextProps){
     this.setState({
       password: nextProps.sessionReducer.userDetail.password,
-      formMessage: nextProps.UserReducer.formMessage,
-      isError: this.props.UserReducer.isFormModalError,
-      isSuccess: this.props.UserReducer.isFormModalSuccess
+      formMessage: nextProps.SettingReducer.formMessage,
+      isError: this.props.SettingReducer.isFormModalError,
+      isSuccess: this.props.SettingReducer.isFormModalSuccess
     });
   }
   _onChangeInputNeDbDataPath(value) {
@@ -38,14 +36,6 @@ class SettingFormContainer extends Component {
   _onClickButtonSaveDataSetting() {
     this.props.saveDataSetting({
       neDBDataPath: this.state.neDBDataPath
-    }, this._saveDataSettingResponse);
-  }
-  _saveDataSettingResponse(status, message) {
-    const msg = status ? 'Data berhasil disimpan.' : message;
-    this.setState({
-      isSuccess: status,
-      isError: !status,
-      formMessage: msg
     });
   }
   render() {

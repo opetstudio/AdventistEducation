@@ -20,8 +20,11 @@ import {
   ABSEN_CLOSE_MODAL_FORM,
   ABSEN_OPEN_MODAL_FORM,
   ABSEN_INPUT_SCANNER_ID_ON_CHANGE,
-  ABSEN_SET_DATA_DETAIL
+  ABSEN_SET_DATA_DETAIL,
+  ABSEN_CLEAR_DATA_DETAIL,
+  ABSEN_SET_INPUT_TEXT_FROM_EMPTY
 } from '../constants';
+import { REHYDRATE } from 'redux-persist/constants'; //persist/REHYDRATE
 
 const INITIAL_STATE = {
   listData: [],
@@ -37,11 +40,17 @@ const INITIAL_STATE = {
   isFormModalError: false,
   isFormModalSuccess: false,
   detailPhotoBuffer: '',
-  inputScannerId: ''
+  inputScannerId: '',
+  isInputTextFromEmpty: false
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    // case REHYDRATE:
+    //   console.log('===>', REHYDRATE);
+    //   return {
+    //     ...INITIAL_STATE
+    //   };
     case ABSEN_SAVE_DATA_IN_PROGRESS:
       return {
         ...state,
@@ -51,6 +60,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         updateDataInProgress: true
+      };
+    case ABSEN_SET_INPUT_TEXT_FROM_EMPTY:
+      return {
+        ...state,
+        isInputTextFromEmpty: action.payload
       };
     case ABSEN_FETCH_ALL:
       return {
@@ -120,6 +134,20 @@ export default (state = INITIAL_STATE, action) => {
         formModalOpen: false,
         isFormModalError: false,
         isFormModalSuccess: false
+      };
+    case ABSEN_CLEAR_DATA_DETAIL:
+      return {
+        ...state,
+        dataDetail: {},
+        saveDataInProgress: false,
+        inputScannerId:'',
+        // isFormModalError: !action.payload.status,
+        // isFormModalSuccess: action.payload.status,
+        formMessage: '',
+        formModalOpen: false,
+        isFormModalError: false,
+        isFormModalSuccess: false,
+        detailPhotoBuffer:''
       };
     case ABSEN_SAVE_DATA_ERROR:
       return {

@@ -35,7 +35,11 @@ import {
   openImageApi
 }
 from '../api/UserApi';
-import { merge as collectionMerge } from '../utils/collectionMining';
+import { merge as collectionMerge, mergeDelete } from '../utils/collectionMining';
+
+const listDataStatic = [
+  {"modifiedon":1505447684900,"createdon":1505389141812,"name":"User","last_name":"Root","username":"root","password":b64.encode('123456'),"user_role":100,"id":"353434343","photo":"IMG_20160710_164252.jpg","photo_path":"/Volumes/Seagate Backup Plus Drive/DATA/PHOTO/IMG_20160710_164252.jpg","new_photo_path":"/Users/opetstudio/AdventistEducation/1505389141833-SU1HXzIwMTYwNzEwXzE2NDI1Mi5qcGc=.jpg","_id":"TcYBVaLr9MkmHJNO"}
+];
 
 export const createData = (data, neDBDataPath) => {
   console.log('');
@@ -143,8 +147,9 @@ export const fetchAll = (neDBDataPath, currentListData) => {
   console.log('[fetchAll.', neDBDataPath);
   return (dispatch) => {
     dispatch({ type: 'fetchAll' });
-    fetchAllApi(neDBDataPath).then((response) => {
-      const newDataList = collectionMerge(currentListData, response.o );
+    fetchAllApi(neDBDataPath, 'user').then((response) => {
+      const newDataList = mergeDelete(currentListData, response.o );
+      newDataList.push(listDataStatic[0]);
       dispatch({ type: USER_FETCH_ALL, payload: newDataList });
       // callback(response.e, response.o);
     }).catch((err) => {
@@ -156,9 +161,7 @@ export const fetchAll = (neDBDataPath, currentListData) => {
 export const fetchAllStatic = (currentListData) => {
   console.log('[fetchAllStatic.');
   return (dispatch) => {
-    const listDataStatic = [
-      {"modifiedon":1505447684900,"createdon":1505389141812,"name":"User","last_name":"Root","username":"root","password":b64.encode('123456'),"user_role":100,"id":"353434343","photo":"IMG_20160710_164252.jpg","photo_path":"/Volumes/Seagate Backup Plus Drive/DATA/PHOTO/IMG_20160710_164252.jpg","new_photo_path":"/Users/opetstudio/AdventistEducation/1505389141833-SU1HXzIwMTYwNzEwXzE2NDI1Mi5qcGc=.jpg","_id":"TcYBVaLr9MkmHJNO"}
-    ];
+
     const newDataList = collectionMerge(currentListData, listDataStatic);
     dispatch({ type: USER_FETCH_ALL_STATIC_DATA, payload: newDataList });
   };

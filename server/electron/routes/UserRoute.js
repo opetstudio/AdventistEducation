@@ -4,17 +4,77 @@ const _ = require('lodash');
 const Datastore = require('nedb');
 const path = require('path');
 const config = require('../config');
+const utils = require('../utils');
+
+
+
+var crypto = require('crypto')
+    , UUID = require('node-uuid')
+    , ID_KEY = 'ID_KEY'
+    , VALUE_KEY = 'VALUE_KEY'
+    , ENCODING = 'base64' // 'hex'
+    , cipherType = 'aes-256-cbc' // 'des-ede3-cbc'
+    , bitAccessToken = 'tes'
+    , bitKeySecret = 'tos'
+    ;
 
 const entityName = 'user';
 const tableName = 'user';
 
+function cipherHelper(KEY, data) {
+  var cipherer = crypto.createCipher(cipherType, KEY)
+  , crypted
+  ;
+
+  try {
+  crypted = cipherer.update(JSON.stringify(data), 'utf8', ENCODING) + cipherer.final(ENCODING);
+  } catch(e) {
+  //console.error('[e] cipher');
+  //console.error(e);
+  return null;
+  }
+
+  return crypted;
+}
+
+function decipherHelper(KEY, data) {
+  var decipherer = crypto.createDecipher(cipherType, KEY), decrypted;
+
+  try {
+    decrypted  = JSON.parse(decipherer.update(data, ENCODING, 'utf8') + decipherer.final('utf8'));
+  } catch(e) {
+    //console.error('[e] decipher');
+    //console.error(e);
+    return null;
+  }
+
+  return decrypted;
+}
+
+function _afterSerialization(opt){
+  return utils._afterSerialization(opt);
+}
+function _beforeDeserialization(opt){
+  return utils._beforeDeserialization(opt);
+}
+function _onload(opt){
+  console.log('_onload', opt);
+}
+
+const dataStore = new Datastore({ filename: path.join(`${tableName}.db`), autoload: true, timestampData: true, onload:_onload, afterSerialization:_afterSerialization, beforeDeserialization:_beforeDeserialization });
+function getDatastore(neDBDataPath, entity){
+  var pathDb = path.join(neDBDataPath, `${entity}.db`);
+  if(pathDb === dataStore.filename) return dataStore;
+  else return new Datastore({ filename: pathDb, autoload: true, timestampData: true, onload:_onload, afterSerialization:_afterSerialization, beforeDeserialization:_beforeDeserialization });
+}
 
 module.exports[`${entityName}FetchAllApi`] = function (event, neDBDataPath, entity) {
   console.log(`FetchAllApi entity=${entity} path=${neDBDataPath}`);
   const responseRoute = `/${entityName}FetchAllApiResponse`;
   entity = entity || entityName;
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, entity);
+  // console.log('===========================>>>>>>>>>', storage);
   storage.find({}, (err, doc) => {
     console.log(`FetchAllApi entity=${entity} path=${neDBDataPath} result=`, doc);
     // event.sender.send(responseRoute, err, JSON.stringify(doc));
@@ -26,7 +86,7 @@ module.exports[`${entityName}FetchAllApiGurustaff`] = function (event, neDBDataP
   console.log(`FetchAllApiGurustaff entity=${entity} path=${neDBDataPath}`);
   const responseRoute = `/${entityName}FetchAllApiGurustaffResponse`;
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, entity);
   storage.find({}, (err, doc) => {
     console.log(`FetchAllApiGurustaff entity=${entity} path=${neDBDataPath} result=`, doc);
     // event.sender.send(responseRoute, err, JSON.stringify(doc));
@@ -38,7 +98,7 @@ module.exports[`${entityName}FetchAllApiSiswa`] = function (event, neDBDataPath,
   console.log(`FetchAllApiSiswa entity=${entity} path=${neDBDataPath}`);
   const responseRoute = `/${entityName}FetchAllApiSiswaResponse`;
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, entity);
   storage.find({}, (err, doc) => {
     console.log(`FetchAllApiSiswa entity=${entity} path=${neDBDataPath} result=`, doc);
     // event.sender.send(responseRoute, err, JSON.stringify(doc));
@@ -132,7 +192,7 @@ module.exports[`${entityName}CreateDataApi`] = function (event, arg1, neDBDataPa
   entity = entity || entityName;
   // console.log(`${entityName}CreateDataApi`, arg1);
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${entity}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, entity);
   const responseRoute = `/${entityName}CreateDataApiResponse`;
   const dataObj = JSON.parse(arg1);
   console.log(`${entityName}CreateDataApi dataObj`, dataObj);
@@ -140,6 +200,11 @@ module.exports[`${entityName}CreateDataApi`] = function (event, arg1, neDBDataPa
   if (!dataObj.id) {
     return event.sender.send(responseRoute,
       '0', 'Gagal input data. "ID" tidak boleh kosong', dataObj
+    );
+  }
+  if (dataObj.username === 'root') {
+    return event.sender.send(responseRoute,
+      '0', 'Gagal input data. "USERNAME" tidak boleh gunakan root', dataObj
     );
   }
   // Using a unique constraint with the index
@@ -193,7 +258,17 @@ module.exports[`${entityName}UpdateDataApi`] = function (event, arg1, _id, neDBD
   const responseRoute = `/${entityName}UpdateDataApiResponse`;
   const dataObj = JSON.parse(arg1);
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${tableName}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, tableName);
+  if (!dataObj.id) {
+    return event.sender.send(responseRoute,
+      '0', 'Gagal input data. "ID" tidak boleh kosong', dataObj
+    );
+  }
+  if (dataObj.username === 'root') {
+    return event.sender.send(responseRoute,
+      '0', 'Gagal input data. "USERNAME" tidak boleh gunakan root', dataObj
+    );
+  }
     storage.findOne({ _id }, (err0, doc0) => {
       if (!doc0) {
         return event.sender.send(responseRoute,
@@ -268,7 +343,7 @@ module.exports[`${entityName}DeleteDataApi`] = function (event, arg1, neDBDataPa
   // const dataObj = JSON.parse(arg1);
   const dataObj = arg1;
   neDBDataPath = neDBDataPath || config.defaultDataPath;
-  const storage = new Datastore({ filename: path.join(neDBDataPath, `${tableName}.db`), autoload: true });
+  const storage = getDatastore(neDBDataPath, tableName);
     storage.findOne({ _id: dataObj._id }, (err0, doc0) => {
       if (!doc0) {
         return event.sender.send(responseRoute,

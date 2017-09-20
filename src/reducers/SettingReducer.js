@@ -1,12 +1,17 @@
 import {
   SAVE_SETTING,
-  SETTING_SET_NO_PHOTO
+  SETTING_SET_NO_PHOTO,
+  SETTING_SET_ABSEN_MODE
 } from '../constants';
 
 const INITIAL_STATE = {
   neDBDataPath: '',
   photo_profile: '',
   noPhoto: '',
+  absenMode: 1, //1=checkin, 2=checkout
+  isFormModalError: false,
+  isFormModalSuccess: false,
+  formMessage: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -21,7 +26,15 @@ export default (state = INITIAL_STATE, action) => {
     case SAVE_SETTING:
       return {
         ...state,
-        neDBDataPath: action.data.neDBDataPath
+        neDBDataPath: action.data.neDBDataPath,
+        isFormModalError: false,
+        isFormModalSuccess: true,
+        formMessage: action.message
+      };
+    case SETTING_SET_ABSEN_MODE:
+      return {
+        ...state,
+        absenMode: action.payload
       };
     default:
       return state;

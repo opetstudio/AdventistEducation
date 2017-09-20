@@ -14,20 +14,25 @@ import Sidebar from '../containers/Sidebar';
 // import RedirectIfNotLogin from '../containers/RedirectIfNotLogin';
 import KickOutIfNotLogin from '../containers/KickOutIfNotLogin';
 // import '../stylesheets/pages/login/Login.css';
+import AbsenSiswaListDataContainer from '../containers/AbsenSiswaListDataContainer';
+import AbsenGurustaffListDataContainer from '../containers/AbsenGurustaffListDataContainer';
 
 
 export default class Admin extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   // this.setState({
-  //   //   menuVerticalLeftVisiblity: 'hidden'
-  //   // });
-  //   // console.log('');
-  // }
+  constructor(props) {
+    super(props);
+    this._renderContent = this._renderContent.bind(this);
+    this._gotoSubContent = this._gotoSubContent.bind(this);
+    // this.setState({
+    //   menuVerticalLeftVisiblity: 'hidden'
+    // });
+    // console.log('');
+  }
   componentWillMount() {
     this.setState({
       menuVerticalLeftVisibility: 'hidden',
-      menuVerticalRightVisibility: 'hidden'
+      menuVerticalRightVisibility: 'hidden',
+      submenu: 'rekap-siswa'
     });
     // this.props.setCurrentPagePath('/admin');
     // this.props.modificationTitleAdmin('HALAMAN ADMIN');
@@ -40,7 +45,43 @@ export default class Admin extends Component {
   //   //     ...this.state
   //   // };
   // }
-
+  _gotoSubContent(submenu){
+    this.setState({
+      submenu
+    });
+  }
+  _renderContent(){
+    switch(this.state.submenu){
+      case 'set-absen-mode-to-checkin':
+        return(
+          <div>
+            <h2>Ganti Mode Absen ke CHECK IN</h2>
+          </div>
+        );
+      case 'set-absen-mode-to-checkout':
+        return(
+          <div>
+            <h2>Ganti Mode Absen ke CHECK OUT</h2>
+          </div>
+        );
+      case 'rekap-gurustaff':
+      return(
+        <div className='liveReportAbsensiWrapper'>
+          <div className='liveReportGuruWrapper' style={{ width:'100%' }}>
+            <AbsenGurustaffListDataContainer />
+          </div>
+        </div>
+      );
+      default:
+        return(
+          <div className='liveReportAbsensiWrapper'>
+            <div className='liveReportGuruWrapper' style={{ width:'100%' }}>
+              <AbsenSiswaListDataContainer />
+            </div>
+          </div>
+        );
+    }
+  }
   render() {
     // console.log('props di halaman admin==>', this.props);
     // if (!(this.props.appReducer.current_sub_admin_path
@@ -57,7 +98,9 @@ export default class Admin extends Component {
           <ContentTop
             withProfilePicture
             withContentTopMenu
+            onClickSubmenu={this._gotoSubContent}
           />
+          {this._renderContent()}
         </div>
       </div>
     );

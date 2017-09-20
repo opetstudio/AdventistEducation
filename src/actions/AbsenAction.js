@@ -25,7 +25,9 @@ import {
 
   //OTHERS
   ABSEN_INPUT_SCANNER_ID_ON_CHANGE,
-  ABSEN_SET_DATA_DETAIL
+  ABSEN_SET_DATA_DETAIL,
+  ABSEN_CLEAR_DATA_DETAIL,
+  ABSEN_SET_INPUT_TEXT_FROM_EMPTY
 } from '../constants';
 import {
   createDataApi,
@@ -189,8 +191,14 @@ export const openModalFormUpdateData = (row) => {
     }
   };
 };
+export const clearDataDetailAbsen = () => ({ type: ABSEN_CLEAR_DATA_DETAIL });
 export const closeModalForm = () => ({ type: ABSEN_CLOSE_MODAL_FORM });
 export const openModalForm = () => ({ type: ABSEN_OPEN_MODAL_FORM });
+export const setInputTextFromEmpty = (flag) => {
+  return (dispatch) => {
+    dispatch({ type: ABSEN_SET_INPUT_TEXT_FROM_EMPTY, payload: flag });
+  };
+};
 export const onChangeInputScannerId = (id, dataDetail) => {
   // console.log('onChangeInputScannerId listDataGurustaff=>', listDataGurustaff);
   // console.log('onChangeInputScannerId listDataSiswa=>', listDataSiswa);

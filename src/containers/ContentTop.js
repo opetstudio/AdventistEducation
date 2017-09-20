@@ -6,12 +6,17 @@ import ProfilePicture from '../components/ProfilePicture';
 import ContentTopCaption from '../components/ContentTopCaption';
 import ContentTopMenu from '../components/ContentTopMenu';
 import * as AdminAction from '../actions/AdminAction';
+import { setAbsenMode } from '../actions/SettingAction';
 
 import './ContentTop.css';
 
 const no_photo = require('../img/no_photo.png');
 
 class ContentTop extends Component {
+  constructor(props){
+    super(props)
+    this._onClickSubmenu = this._onClickSubmenu.bind(this);
+  }
   componentWillMount() {
     // this.setState({
     //   menuVerticalLeftVisibility: 'hidden',
@@ -22,6 +27,12 @@ class ContentTop extends Component {
     // this.props.modificationTitleAdmin('ABSENSI DIGITAL');
     // console.log('list contacts via props==>', this.props.contacts);
   }
+  _onClickSubmenu(submenu){
+      if(submenu === 'set-absen-mode-to-checkout') this.props.setAbsenMode(2);
+      if(submenu === 'set-absen-mode-to-checkin') this.props.setAbsenMode(1);
+
+      this.props.onClickSubmenu(submenu);
+  }
   render() {
     let profilePict;
     let contentTopMenu;
@@ -29,7 +40,7 @@ class ContentTop extends Component {
       profilePict = <ProfilePicture photoBuffer={this.props.sessionReducer.detailPhotoBuffer} />;
     }
     if (this.props.withContentTopMenu) {
-      contentTopMenu = <ContentTopMenu />;
+      contentTopMenu = <ContentTopMenu onClickSubmenu={this._onClickSubmenu} />;
     }
     const fullName = this.props.userFullName || this.props.sessionReducer.userDetail.name;
     console.log(this.props.withProfilePicture);
@@ -65,7 +76,9 @@ function mapStateToProps(state) {
 
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(AdminAction, dispatch);
+  return bindActionCreators(
+    { ...AdminAction, setAbsenMode },
+    dispatch);
 
   // return {
   //   fetchData: () => dispatch(fetchData())

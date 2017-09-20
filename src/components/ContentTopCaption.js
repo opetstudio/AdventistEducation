@@ -3,23 +3,26 @@ import React, { Component } from 'react';
 import './ContentTopCaption.css';
 
 export default class ContentTopCaption extends Component {
-  renderMessageAbsen() {
+  renderMessageAbsen(msg) {
     return (
       <div>
         <br />
         <br />
-        <span>Sorry you're late</span>
+        <span>{msg}</span>
       </div>
     );
   }
   render() {
     let absenMessageError;
     if (this.props.withAbsenMessageError && this.props.youAreLate) {
-      absenMessageError = this.renderMessageAbsen();
+      absenMessageError = this.renderMessageAbsen("Sorry you're late");
+    }
+    else if(this.props.withAbsenMessageError && !this.props.youAreLate){
+      absenMessageError = this.renderMessageAbsen("Have a Nice Day");
     }
     return (
       <div style={styles.contentTopCaption}>
-        <h3>Good Morning,</h3>
+        <h3>HELLO,</h3>
         <h1>{this.props.userFullName}</h1>
         {absenMessageError}
       </div>

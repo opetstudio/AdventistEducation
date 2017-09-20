@@ -11,7 +11,7 @@ const app = electron.app;
 // const BrowserWindow = require('browser-window');
 const BrowserWindow = electron.BrowserWindow;
 const Menu = electron.Menu;
-const env = process.env.NODE_ENV;
+const env = process.env.NODE_ENV || 'production';
 // const env = 'production';
 
 // document.getElementById('close-btn').addEventListener('click', function (e) {

@@ -18,6 +18,7 @@ import {
   GURUSTAFF_CLOSE_MODAL_FORM,
   GURUSTAFF_OPEN_MODAL_FORM
 } from '../constants';
+import { REHYDRATE } from 'redux-persist/constants'; //persist/REHYDRATE
 
 const INITIAL_STATE = {
   listData: [],
@@ -35,6 +36,11 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    // case REHYDRATE:
+    // console.log('===>', REHYDRATE);
+    //   return {
+    //     ...INITIAL_STATE
+    //   };
     case GURUSTAFF_SAVE_DATA_IN_PROGRESS:
       return {
         ...state,
