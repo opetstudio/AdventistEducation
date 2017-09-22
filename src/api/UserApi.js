@@ -1,5 +1,5 @@
 // let remote = null;
-import fetch from 'isomorphic-fetch';
+// import fetch from 'isomorphic-fetch';
 
 let ipcRenderer = {
   send: () => {},
@@ -48,10 +48,11 @@ export const fetchAllApi = (neDBDataPath, entity) =>
       ipcRenderer.on(`${routeName}Response`, (event, e, o) => resp({ e, o }));
     }
     else{
-      fetch(`/${entityName}FetchAllApi`).then(response => {
-        console.log(response);
-        resp();
-      });
+      resp({});
+      // fetch(`/${entityName}FetchAllApi`).then(response => {
+      //   console.log(response);
+      //   resp();
+      // });
     }
   });
 export const fetchAllApiGurustaff = (neDBDataPath, entity) =>

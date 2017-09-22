@@ -169,9 +169,18 @@ function route(entityName, theRoute) {
   routeOne(`${entityName}UpdateDataApi`, theRoute);
   routeOne(`${entityName}DeleteDataApi`, theRoute);
   routeOne(`${entityName}FetchAllApi`, theRoute);
-  if (entityName === 'absen') {
-    routeOne(`${entityName}FetchAllApiGurustaff`, theRoute);
-    routeOne(`${entityName}FetchAllApiSiswa`, theRoute);
+
+  switch(entityName) {
+    case 'absen':
+      routeOne(`${entityName}FetchAllApiGurustaff`, theRoute);
+      routeOne(`${entityName}FetchAllApiSiswa`, theRoute);
+      break;
+    case 'gurustaff':
+      routeOne(`${entityName}FetchAllExportToCsvApi`, theRoute);
+      routeOne(`${entityName}FetchAllExportToXlsxApi`, theRoute);
+      break;
+    default:
+      return true;
   }
 }
 

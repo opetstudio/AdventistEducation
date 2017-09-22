@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 
 import { saveData } from '../actions/DataAbsenAction';
-import { onChangeInputScannerId, createData, clearDataDetailAbsen, setInputTextFromEmpty } from '../actions/AbsenAction';
+import { clearInputScannerId, onChangeInputScannerId, createData, clearDataDetailAbsen, setInputTextFromEmpty } from '../actions/AbsenAction';
 import { fetchAll as fetchAllGurustaff } from '../actions/GurustaffAction';
 import { fetchAllDataSiswa } from '../actions/DataSiswaAction';
 
@@ -68,7 +68,8 @@ class AbsenListenerContainer extends Component {
   }
   _clearAbsenDetail(){
     console.log('_clearAbsenDetail');
-    this._catchDataSourceAbsenDataDetail({},'');
+    // this._catchDataSourceAbsenDataDetail({},'');
+    this.props.clearInputScannerId();
   }
   _setDataSourceGurustaff(listDataGurustaff) {
     this.setState({ listDataGurustaff });
@@ -97,17 +98,24 @@ class AbsenListenerContainer extends Component {
     //     // this.setState({
     //     //   isInputTextFromEmpty: true
     //     // });
-        setTimeout(() => {
-          // self.setState({ isInputTextFromEmpty: false });
-          // this.props.setInputTextFromEmpty(true);
-          this._clearAbsenDetail();
-        }, 2000);
+        // setTimeout(() => {
+        //   // self.setState({ isInputTextFromEmpty: false });
+        //   // this.props.setInputTextFromEmpty(true);
+        //   this._clearAbsenDetail();
+        // }, 2000);
     //   }
-
+    if(value.length === 6) {
+      setTimeout(() => {
+        // self.setState({ isInputTextFromEmpty: false });
+        // this.props.setInputTextFromEmpty(true);
+        this._clearAbsenDetail();
+      }, 500);
+    }
     console.log(value);
     let l = 0;
     if (value !== null || value !== '') {
       l = value.length;
+      // if(l==6) this._clearAbsenDetail();
     }
     const id = value;
     const gurustaffRow = _.find(this.state.listDataGurustaff, { id });
@@ -203,6 +211,7 @@ function mapDispatchToProps(dispatch) {
     onChangeInputScannerId,
     fetchAllGurustaff,
     fetchAllDataSiswa,
+    clearInputScannerId,
     createData
   }, dispatch);
 

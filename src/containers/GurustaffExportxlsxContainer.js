@@ -1,0 +1,86 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Button, Header, Modal } from 'semantic-ui-react';
+
+import { fetchAllExportToXlsx } from '../actions/GurustaffAction';
+
+class GurustaffExportxlsxContainer extends Component {
+  constructor(props){
+    super(props);
+    this._onClickButtonTrigger = this._onClickButtonTrigger.bind(this);
+    this._onCloseModal = this._onCloseModal.bind(this);
+  }
+  componentWillMount(){
+    this.setState({
+      openModal:false,
+      // openModal:this.props.GurustaffExportcsvReducer.openModal,
+      exportToXlsxInMessage:this.props.GurustaffExportxlsxReducer.exportToXlsxInMessage
+    });
+  }
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      // openModal:nextProps.GurustaffExportcsvReducer.openModal,
+      exportToXlsxInMessage:nextProps.GurustaffExportxlsxReducer.exportToXlsxInMessage
+    });
+  }
+  _onCloseModal(){
+    this.setState({
+      openModal:false
+    });
+  }
+  _onClickButtonTrigger(){
+    this.setState({
+      openModal:true
+    });
+    this.props.fetchAllExportToXlsx(this.props.SettingReducer.neDBDataPath);
+  }
+  render(){
+    return(
+      <div>
+        <Button
+          onClick={() => {
+            this._onClickButtonTrigger();
+          }}
+        >
+          Export XLSX
+        </Button>
+        <Modal
+          open={this.state.openModal}
+          onClose={this._onCloseModal}
+        >
+          <Header icon='archive' content='Export to XLSX' />
+          <Modal.Content>
+            <p>{this.state.exportToXlsxInMessage}</p>
+          </Modal.Content>
+        </Modal>
+      </div>
+    );
+  }
+}
+
+function mapStateToProps(state) {
+  // const users = _.map(state.dataUsersReducer.dataUsers, (val, uid) => {
+  //   console.log('');
+  //   return { ...val, uid };
+  // });
+  return {
+    SettingReducer: state.SettingReducer,
+    GurustaffExportxlsxReducer: state.GurustaffExportxlsxReducer
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchAllExportToXlsx
+  }, dispatch);
+
+  // return {
+  //   fetchData: () => dispatch(fetchData())
+  // };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(GurustaffExportxlsxContainer);

@@ -4,6 +4,14 @@ import {
   GURUSTAFF_SAVE_DATA_INTERNAL_ERROR,
   GURUSTAFF_SAVE_DATA_IN_PROGRESS,
   GURUSTAFF_FETCH_ALL,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_CSV,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_CSV_SUCCESS,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_CSV_ERROR,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_CSV_FAILED,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX_SUCCESS,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX_ERROR,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX_FAILED,
   GURUSTAFF_FETCH_ONE,
   GURUSTAFF_UPDATE_DATA_IN_PROGRESS,
   GURUSTAFF_UPDATE_DATA_SUCCESS,
@@ -21,6 +29,8 @@ import {
   GURUSTAFF_SET_MODAL_FORM_PHOTO
 } from '../constants';
 import {
+  fetchAllExportToCsvApi,
+  fetchAllExportToXlsxApi,
   createDataApi,
   fetchAllApi,
   updateDataApi,
@@ -124,7 +134,32 @@ export const fetchOne = (row) => {
     dispatch({ type: GURUSTAFF_FETCH_ONE, payload: row });
   };
 };
-
+export const fetchAllExportToCsv = (neDBDataPath) => {
+  console.log('[fetchAllExportToCsv.', neDBDataPath);
+  return (dispatch) => {
+    dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_CSV, payload: 'Mohon tunggu. Data sedang di proses.' });
+    fetchAllExportToCsvApi(neDBDataPath).then((response) => {
+      if(response.status) dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_CSV_SUCCESS, payload: response.message });
+      else dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_CSV_FAILED, payload: response.message });
+    }).catch((err) => {
+    //   console.log('err:', err);
+      dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_CSV_ERROR, payload:err });
+    });
+  };
+};
+export const fetchAllExportToXlsx = (neDBDataPath) => {
+  console.log('[fetchAllExportToXlsx.', neDBDataPath);
+  return (dispatch) => {
+    dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX, payload: 'Mohon tunggu. Data sedang di proses.' });
+    fetchAllExportToXlsxApi(neDBDataPath).then((response) => {
+      if(response.status) dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX_SUCCESS, payload: response.message });
+      else dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX_FAILED, payload: response.message });
+    }).catch((err) => {
+    //   console.log('err:', err);
+      dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX_ERROR, payload:err });
+    });
+  };
+};
 //DELETE
 export const deleteData = (oldData, neDBDataPath) => {
   console.log('deleteData');

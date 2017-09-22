@@ -1,17 +1,15 @@
+// import fetch from 'isomorphic-fetch';
 // let remote = null;
 let ipcRenderer = {
   send: () => {},
   on: () => {}
 };
+let server = '';
+const entityName = 'gurustaff';
+// window && window.process && window.process.type
 if (window.require) {
-    // remote = window.require('electron').remote;
     ipcRenderer = window.require('electron').ipcRenderer;
-    ipcRenderer.on('message', (event, message) => {
-        console.log(message); // logs out "Hello second window!"
-    });
-    // console.log('remmmmoooooootottt===>', remote.getCurrentWindow());
-
-    //main = remote.require('../electron-starter.js');
+    server = 'electron';
 }
 
 const people = [
@@ -106,6 +104,48 @@ export const fetchAllApi = neDBDataPath =>
         // console.log('o==>', o);
         resolve({ e, o: JSON.parse(o) });
     });
+  });
+export const fetchAllExportToCsvApi = neDBDataPath =>
+  new Promise((resolve) => {
+    // console.log('entityName===>', entityName);
+    const routeName = "/gurustaffFetchAllExportToCsvApi";
+    const resp = (o) => {
+      resolve(o);
+    };
+    if(server === 'electron'){
+      if (ipcRenderer !== null) {
+        ipcRenderer.send(routeName, neDBDataPath);
+        ipcRenderer.on(`${routeName}Response`, (event, status, message) => { resp({ status, message }); });
+      }
+    }
+    else{
+      resp({});
+    // //   fetch(routeName).then(response => {
+    // //     console.log(response);
+    // //     resp();
+    // //   });
+    }
+  });
+export const fetchAllExportToXlsxApi = neDBDataPath =>
+  new Promise((resolve) => {
+    // console.log('entityName===>', entityName);
+    const routeName = `/${entityName}FetchAllExportToXlsxApi`;
+    const resp = (o) => {
+      resolve(o);
+    };
+    if(server === 'electron'){
+      if (ipcRenderer !== null) {
+        ipcRenderer.send(routeName, neDBDataPath);
+        ipcRenderer.on(`${routeName}Response`, (event, status, message) => { resp({ status, message }); });
+      }
+    }
+    else{
+      resp({});
+    // //   fetch(routeName).then(response => {
+    // //     console.log(response);
+    // //     resp();
+    // //   });
+    }
   });
 export const fetchAllDataAbsenSiswaApi = neDBDataPath =>
   new Promise((resolve) => {

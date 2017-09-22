@@ -199,6 +199,11 @@ export const setInputTextFromEmpty = (flag) => {
     dispatch({ type: ABSEN_SET_INPUT_TEXT_FROM_EMPTY, payload: flag });
   };
 };
+export const clearInputScannerId = () => {
+    return (dispatch) => {
+      dispatch({ type: ABSEN_INPUT_SCANNER_ID_ON_CHANGE, payload: '' });
+    };
+}
 export const onChangeInputScannerId = (id, dataDetail) => {
   // console.log('onChangeInputScannerId listDataGurustaff=>', listDataGurustaff);
   // console.log('onChangeInputScannerId listDataSiswa=>', listDataSiswa);

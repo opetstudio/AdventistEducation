@@ -156,7 +156,7 @@ class Sidebar extends Component {
           <Button
               fluid
               onClick={() => this.gotoPage('/login')}
-              style={{ position: 'absolute', bottom: 50 }}
+              style={{ position: 'absolute', bottom: 50, left: '10%', width: '80%' }}
           >
             Back
           </Button>

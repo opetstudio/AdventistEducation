@@ -11,8 +11,19 @@
 
 .containerWrapper {
   margin-left: $leftside-width;
-  margin-top: $statusbar-height;
+  padding-top: $statusbar-height;
+}
+.statusBarBacking {
+  height: $statusbar-height;
 }
 .ContentWrapper {
   padding: 10px;
+}
+ul.sceneButtonMenu{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  li{
+    display: inline-block;
+  }
 }

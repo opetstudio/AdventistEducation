@@ -65,6 +65,7 @@ export default class Login extends Component {
       <div>
         <KickInIfLogin />
         <Header currentPagePath='/login' adminTitle='LOGIN' />
+        <div className="statusBarBacking" />
         <div className={'headerTitleWrapper'}>
             <img className={'img_bigtitle'} src={big_title} alt='' />
         </div>
