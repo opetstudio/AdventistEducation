@@ -12,6 +12,7 @@ import KickOutIfNotLogin from '../containers/KickOutIfNotLogin';
 import GurustaffListDataContainer from '../containers/GurustaffListDataContainer';
 import GurustaffFormpopupContainer from '../containers/GurustaffFormpopupContainer';
 import GurustaffExportxlsxContainer from '../containers/GurustaffExportxlsxContainer';
+import GurustaffExportpdfContainer from '../containers/GurustaffExportpdfContainer';
 import './Setting.css';
 // import '../stylesheets/pages/login/Login.css';
 
@@ -31,6 +32,7 @@ export default class GurustaffScene extends Component {
             <ul className="sceneButtonMenu">
               <li><GurustaffFormpopupContainer /></li>
               <li><GurustaffExportxlsxContainer /></li>
+              <li><GurustaffExportpdfContainer /></li>
             </ul>
             <Divider />
             <GurustaffListDataContainer />

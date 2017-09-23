@@ -178,6 +178,7 @@ function route(entityName, theRoute) {
     case 'gurustaff':
       routeOne(`${entityName}FetchAllExportToCsvApi`, theRoute);
       routeOne(`${entityName}FetchAllExportToXlsxApi`, theRoute);
+      routeOne(`${entityName}FetchAllExportToPdfApi`, theRoute);
       break;
     default:
       return true;

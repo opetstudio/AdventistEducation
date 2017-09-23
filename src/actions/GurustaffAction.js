@@ -12,6 +12,10 @@ import {
   GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX_SUCCESS,
   GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX_ERROR,
   GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX_FAILED,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_PDF,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_PDF_SUCCESS,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_PDF_ERROR,
+  GURUSTAFF_FETCH_ALL_EXPORT_TO_PDF_FAILED,
   GURUSTAFF_FETCH_ONE,
   GURUSTAFF_UPDATE_DATA_IN_PROGRESS,
   GURUSTAFF_UPDATE_DATA_SUCCESS,
@@ -31,6 +35,7 @@ import {
 import {
   fetchAllExportToCsvApi,
   fetchAllExportToXlsxApi,
+  fetchAllExportToPdfApi,
   createDataApi,
   fetchAllApi,
   updateDataApi,
@@ -157,6 +162,19 @@ export const fetchAllExportToXlsx = (neDBDataPath) => {
     }).catch((err) => {
     //   console.log('err:', err);
       dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_XLSX_ERROR, payload:err });
+    });
+  };
+};
+export const fetchAllExportToPdf = (neDBDataPath) => {
+  console.log('[fetchAllExportToPdf.', neDBDataPath);
+  return (dispatch) => {
+    dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_PDF, payload: 'Mohon tunggu. Data sedang di proses.' });
+    fetchAllExportToPdfApi(neDBDataPath).then((response) => {
+      if(response.status) dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_PDF_SUCCESS, payload: response.message });
+      else dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_PDF_FAILED, payload: response.message });
+    }).catch((err) => {
+    //   console.log('err:', err);
+      dispatch({ type: GURUSTAFF_FETCH_ALL_EXPORT_TO_PDF_ERROR, payload:err });
     });
   };
 };

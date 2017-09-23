@@ -18,6 +18,7 @@ import DataSiswaReducer from './DataSiswaReducer';
 import GurustaffReducer from './GurustaffReducer';
 import GurustaffExportcsvReducer from './GurustaffExportcsvReducer';
 import GurustaffExportxlsxReducer from './GurustaffExportxlsxReducer';
+import GurustaffExportpdfReducer from './GurustaffExportpdfReducer';
 import AbsenReducer from './AbsenReducer';
 import DataAbsenReducer from './DataAbsenReducer';
 import UserReducer from './UserReducer';
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
   GurustaffReducer,
   GurustaffExportcsvReducer,
   GurustaffExportxlsxReducer,
+  GurustaffExportpdfReducer,
   AbsenReducer,
   UserReducer,
   router

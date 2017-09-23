@@ -1,5 +1,10 @@
 const fs = require('fs');
+const electron = require('electron');
 const b64 = require('base-64');
+const os = require('os');
+// const ipcMain = electron.ipcMain;
+const BrowserWindow = electron.BrowserWindow;
+const shell = electron.shell;
 const _ = require('lodash');
 const Datastore = require('nedb');
 const path = require('path');
@@ -214,6 +219,112 @@ module.exports[`${entityName}FetchAllExportToXlsxApi`] = function (event, neDBDa
                     XLSX.writeFile(wb, newFileXls, wopts);
                     event.sender.send(responseRoute, true, `Berhasil export data ke xlsx. FIle xlsx berada di ${newFileXls}`);
                     // XLSX.writeFile(wb, newFileXls, wopts);
+
+
+
+
+    // fs.writeFile(newFile, csv, function(err) {
+    //   if (err) event.sender.send(responseRoute, false, 'Gagal export data ke csv.');
+    //   return event.sender.send(responseRoute, true, `Berhasil export data ke csv. FIle csv berada di ${newFile}`);
+    // });
+    //export to csv
+    // event.sender.send(responseRoute, true, "Berhasil export data ke csv. FIle csv berada di");
+
+  });
+};
+module.exports[`${entityName}FetchAllExportToPdfApi`] = function (event, neDBDataPath) {
+  const responseRoute = `/${entityName}FetchAllExportToPdfApiResponse`;
+  neDBDataPath = neDBDataPath || config.defaultDataPath;
+  const storage = getDatastore(neDBDataPath, tableName);
+  console.log(path.join(neDBDataPath, `${tableName}.db`));
+  storage.find({}, (err, doc) => {
+    console.log('doc==>', doc);
+    var fields = ['name', 'nip', 'id'];
+    var nowUnixTime = new Date().getTime();
+    // var csv = json2csv({ data: doc, fields: fields });
+    // var newFile = path.join(neDBDataPath, `${tableName}_${nowUnixTime}.csv`);
+    // var newFileXls = path.join(neDBDataPath, `${tableName}_${nowUnixTime}.xlsx`);
+    var pdfPath = path.join(os.tmpdir(), `${tableName}_${nowUnixTime}.pdf`);
+    const win = BrowserWindow.fromWebContents(event.sender);
+    win.webContents.printToPDF({}, function(error, data){
+      if(error) return event.sender.send(responseRoute, false, error.message);
+      fs.writeFile(pdfPath, data, function(err){
+        if(err) return event.sender.send(responseRoute, false, err.message);
+        shell.openExternal('file://' + pdfPath);
+        event.sender.send(responseRoute, true, `Berhasil export data ke pdf. FIle pdf berada di ${pdfPath}`);
+      });
+    });
+    // var workbook = XLSX.readFile(newFileXls);
+    // var wopts = { bookType:'xlsx', bookSST:false, type:'binary' };
+    // var worksheet = XLSX.utils.table_to_book(document.getElementById('tableau'));
+    //   XLSX.writeFile(workbook, 'opettttt', wopts);
+
+
+    // var ws = XLSX.utils.json_to_sheet([
+    // {S:1,h:2,e:3,e_1:4,t:5,J:6,S_1:7},
+    // {S:2,h:3,e:4,e_1:5,t:6,J:7,S_1:8}
+    // ], {header:["S","h","e","e_1","t","J","S_1"]});
+    // XLSX.writeFile(workbook, newFileXls);
+
+
+                  /* original data */
+                  // var data = doc;
+                  // var rows = [];
+                  // var row = [];
+                  // doc.forEach(function(v,k){
+                  //   if(v){
+                  //       row.push(v.name);
+                  //       row.push(v.last_name);
+                  //       row.push(v.nis);
+                  //       row.push(v.id);
+                  //   }
+                  //   rows.push(row);
+                  // });
+                  // var data = doc;
+                  // // var data = rows;
+                  // // var data = [[1,2,3],[true, false, null, "sheetjs"],["foo","bar",new Date("2014-02-19T14:30Z"), "0.3"], ["baz", null, "qux"]]
+                  // var ws_name = "SheetJS";
+                  //
+                  // // function Workbook() {
+                  // // 	if(!(this instanceof Workbook)) return new Workbook();
+                  // // 	this.SheetNames = [];
+                  // // 	this.Sheets = {};
+                  // // }
+                  //
+                  // var wb = new utils.Workbook();
+                  // // var wb = new Workbook();
+                  // // var ws = sheet_from_array_of_arrays(data);
+                  // var xlsHeader = [
+                  //   {d:'nama saya',k:'name'},
+                  //   {d:'NIS',k:'nis'},
+                  //   {d:'new_photo_path',k:'new_photo_path'},
+                  //   {d:'NIP',k:'nip'},
+                  //   {d:'ID',k:'id'},
+                  //   {d:'Jabatan',k:'jabatan'}
+                  // ];
+                  // var ws = utils.sheet_from_array_of_objects(data,{header:xlsHeader});
+                  // // var ws = XLSX.utils.json_to_sheet([
+                  // //       {S:1,h:2,e:3,e_1:4,t:5,J:6,S_1:7},
+                  // //       {S:2,h:3,e:4,e_1:5,t:6,J:7,S_1:8}
+                  // //   ], {header:["S","h","e","e_1","t","J","S_1"]});
+                  //
+                  // /* add worksheet to workbook */
+                  // wb.SheetNames.push(ws_name);
+                  // wb.Sheets[ws_name] = ws;
+                  // // var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
+                  // // XLSX.writeFile(wb, 'opettttt', wbout);
+                  // // function s2ab(s) {
+                  // // 	var buf = new ArrayBuffer(s.length);
+                  // // 	var view = new Uint8Array(buf);
+                  // // 	for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+                  // // 	return buf;
+                  // // }
+                  // // saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), "test.xlsx")
+                  // var wopts = { bookType:'xlsx', bookSST:true, type:'binary' };
+                  // // var worksheet = XLSX.utils.table_to_book(document.getElementById('tableau'));
+                  //   XLSX.writeFile(wb, newFileXls, wopts);
+                  //   event.sender.send(responseRoute, true, `Berhasil export data ke xlsx. FIle xlsx berada di ${newFileXls}`);
+                  //   // XLSX.writeFile(wb, newFileXls, wopts);
 
 
 

@@ -147,6 +147,27 @@ export const fetchAllExportToXlsxApi = neDBDataPath =>
     // //   });
     }
   });
+export const fetchAllExportToPdfApi = neDBDataPath =>
+  new Promise((resolve) => {
+    // console.log('entityName===>', entityName);
+    const routeName = `/${entityName}FetchAllExportToPdfApi`;
+    const resp = (o) => {
+      resolve(o);
+    };
+    if(server === 'electron'){
+      if (ipcRenderer !== null) {
+        ipcRenderer.send(routeName, neDBDataPath);
+        ipcRenderer.on(`${routeName}Response`, (event, status, message) => { resp({ status, message }); });
+      }
+    }
+    else{
+      resp({});
+    // //   fetch(routeName).then(response => {
+    // //     console.log(response);
+    // //     resp();
+    // //   });
+    }
+  });
 export const fetchAllDataAbsenSiswaApi = neDBDataPath =>
   new Promise((resolve) => {
     if (ipcRenderer !== null) {
