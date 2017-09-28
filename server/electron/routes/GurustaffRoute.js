@@ -18,11 +18,11 @@ const entityName = 'gurustaff';
 const tableName = 'gurustaff';
 
 function createDB(pathDb){
-  return new Datastore({ filename: pathDb, autoload: true, timestampData: true, afterSerialization:utils._afterSerialization, beforeDeserialization:utils._beforeDeserialization });
+    return new Datastore({ filename: pathDb, autoload: true, timestampData: true, afterSerialization:utils._afterSerialization, beforeDeserialization:utils._beforeDeserialization });
 }
-
-const dataStore = createDB(path.join(`${tableName}.db`));
+const dataStore = new Datastore();
 function getDatastore(neDBDataPath, entity){
+  neDBDataPath = neDBDataPath || os.tmpdir();
   var pathDb = path.join(neDBDataPath, `${entity}.db`);
   if(pathDb === dataStore.filename) return dataStore;
   else return createDB(pathDb);
@@ -147,7 +147,8 @@ module.exports[`${entityName}FetchAllExportToXlsxApi`] = function (event, neDBDa
     var nowUnixTime = new Date().getTime();
     var csv = json2csv({ data: doc, fields: fields });
     var newFile = path.join(neDBDataPath, `${tableName}_${nowUnixTime}.csv`);
-    var newFileXls = path.join(neDBDataPath, `${tableName}_${nowUnixTime}.xlsx`);
+    // var newFileXls = path.join(neDBDataPath, `${tableName}_${nowUnixTime}.xlsx`);
+    var newFileXls = path.join(os.tmpdir(), `${tableName}_${nowUnixTime}.xlsx`);
     // var workbook = XLSX.readFile(newFileXls);
     // var wopts = { bookType:'xlsx', bookSST:false, type:'binary' };
     // var worksheet = XLSX.utils.table_to_book(document.getElementById('tableau'));
@@ -217,6 +218,7 @@ module.exports[`${entityName}FetchAllExportToXlsxApi`] = function (event, neDBDa
                   var wopts = { bookType:'xlsx', bookSST:true, type:'binary' };
                   // var worksheet = XLSX.utils.table_to_book(document.getElementById('tableau'));
                     XLSX.writeFile(wb, newFileXls, wopts);
+                    shell.openExternal('file://' + newFileXls);
                     event.sender.send(responseRoute, true, `Berhasil export data ke xlsx. FIle xlsx berada di ${newFileXls}`);
                     // XLSX.writeFile(wb, newFileXls, wopts);
 

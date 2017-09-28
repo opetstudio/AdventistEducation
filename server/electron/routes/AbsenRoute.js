@@ -1,5 +1,6 @@
 const fs = require('fs');
 const b64 = require('base-64');
+const os = require('os');
 const _ = require('lodash');
 const Datastore = require('nedb');
 const path = require('path');
@@ -10,11 +11,11 @@ const entityName = 'absen';
 const tableName = 'absen';
 
 function createDB(pathDb){
-  return new Datastore({ filename: pathDb, autoload: true, timestampData: true, afterSerialization:utils._afterSerialization, beforeDeserialization:utils._beforeDeserialization });
+    return new Datastore({ filename: pathDb, autoload: true, timestampData: true, afterSerialization:utils._afterSerialization, beforeDeserialization:utils._beforeDeserialization });
 }
-
-const dataStore = createDB(path.join(`${tableName}.db`));
+const dataStore = new Datastore();
 function getDatastore(neDBDataPath, entity){
+  neDBDataPath = neDBDataPath || os.tmpdir();
   var pathDb = path.join(neDBDataPath, `${entity}.db`);
   if(pathDb === dataStore.filename) return dataStore;
   else return createDB(pathDb);

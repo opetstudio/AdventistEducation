@@ -1,5 +1,6 @@
 const fs = require('fs');
 const b64 = require('base-64');
+const os = require('os');
 const _ = require('lodash');
 const Datastore = require('nedb');
 const path = require('path');
@@ -61,11 +62,16 @@ function _onload(opt){
   console.log('_onload', opt);
 }
 
-const dataStore = new Datastore({ filename: path.join(`${tableName}.db`), autoload: true, timestampData: true, onload:_onload, afterSerialization:_afterSerialization, beforeDeserialization:_beforeDeserialization });
+// const dataStore = new Datastore({ filename: path.join(`${tableName}.db`), autoload: true, timestampData: true, onload:_onload, afterSerialization:_afterSerialization, beforeDeserialization:_beforeDeserialization });
+function createDB(pathDb){
+    return new Datastore({ filename: pathDb, autoload: true, timestampData: true, afterSerialization:utils._afterSerialization, beforeDeserialization:utils._beforeDeserialization });
+}
+const dataStore = new Datastore();
 function getDatastore(neDBDataPath, entity){
+  neDBDataPath = neDBDataPath || os.tmpdir();
   var pathDb = path.join(neDBDataPath, `${entity}.db`);
   if(pathDb === dataStore.filename) return dataStore;
-  else return new Datastore({ filename: pathDb, autoload: true, timestampData: true, onload:_onload, afterSerialization:_afterSerialization, beforeDeserialization:_beforeDeserialization });
+  else return createDB(pathDb);
 }
 
 module.exports[`${entityName}FetchAllApi`] = function (event, neDBDataPath, entity) {

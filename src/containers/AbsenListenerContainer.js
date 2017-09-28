@@ -104,7 +104,7 @@ class AbsenListenerContainer extends Component {
         //   this._clearAbsenDetail();
         // }, 2000);
     //   }
-    if(value.length === 6) {
+    if(value.length === 10) {
       setTimeout(() => {
         // self.setState({ isInputTextFromEmpty: false });
         // this.props.setInputTextFromEmpty(true);
@@ -126,6 +126,11 @@ class AbsenListenerContainer extends Component {
         gurustaffRow
       );
       this._createDataAbsen(gurustaffRow, 'absenGurustaff');
+      setTimeout(() => {
+        // self.setState({ isInputTextFromEmpty: false });
+        // this.props.setInputTextFromEmpty(true);
+        this._clearAbsenDetail();
+      }, 500);
     } else {
       console.log('tidak dapat row gurustaffRow', gurustaffRow);
       const siswaRow = _.find(this.state.listDataSiswa, { id });

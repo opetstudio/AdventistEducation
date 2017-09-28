@@ -25,11 +25,11 @@ const entityName = 'siswa';
 const tableName = 'siswa';
 
 function createDB(pathDb){
-  return new Datastore({ filename: pathDb, autoload: true, timestampData: true, afterSerialization:utils._afterSerialization, beforeDeserialization:utils._beforeDeserialization });
+    return new Datastore({ filename: pathDb, autoload: true, timestampData: true, afterSerialization:utils._afterSerialization, beforeDeserialization:utils._beforeDeserialization });
 }
-
-const dataStore = createDB(path.join(`${tableName}.db`));
+const dataStore = new Datastore();
 function getDatastore(neDBDataPath, entity){
+  neDBDataPath = neDBDataPath || os.tmpdir();
   var pathDb = path.join(neDBDataPath, `${entity}.db`);
   if(pathDb === dataStore.filename) return dataStore;
   else return createDB(pathDb);
