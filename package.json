@@ -47,7 +47,7 @@
     "crypto": "^1.0.1",
     "css-loader": "0.28.4",
     "dotenv": "4.0.0",
-    "electron": "~1.6.2",
+    "electron": "~1.8.8",
     "electronify-server": "^0.6.2",
     "eslint": "4.4.1",
     "eslint-config-rallycoding": "^3.2.0",
