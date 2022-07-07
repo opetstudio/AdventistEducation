@@ -69,7 +69,7 @@
     "json2csv": "^3.11.2",
     "lodash": "^4.17.4",
     "menu": "^0.2.5",
-    "moment": "^2.18.1",
+    "moment": "^2.29.4",
     "nedb": "^1.8.0",
     "node-pre-gyp": "^0.6.37",
     "node-sass-chokidar": "0.0.3",
